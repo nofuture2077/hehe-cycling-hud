@@ -7,7 +7,12 @@ const sampleData: CyclingData = {
   maxSpeedKmh: 45,
   distanceKm: 42.7,
   splitDistanceKm: 12.3,
-  location: 'Zugspitze, Bavaria',
+  city: 'Zugspitze',
+  region: 'Bavaria',
+  country: 'Germany',
+  countryFlag: '🇩🇪',
+  temperatureC: 18,
+  localTime: '14:32',
   gradientPercent: 6.5,
   maxGradientPercent: 9.2,
   elevationGainM: 580,
@@ -16,6 +21,8 @@ const sampleData: CyclingData = {
   splitElevationLossM: 60,
   heartRateBpm: 145,
   powerWatts: 255,
+  sessionMaxHeartRateBpm: 168,
+  sessionMaxPowerWatts: 410,
 };
 
 function HudFrame({ children }: { children: React.ReactNode }) {

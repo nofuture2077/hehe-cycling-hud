@@ -22,6 +22,11 @@ export interface MoblinTelemetryData {
     area: string | null;
     city: string | null;
     neighborhood: string | null;
+    // seconds since the Swift reference date (2001-01-01T00:00:00Z), not the Unix epoch -
+    // JSONEncoder/JSONDecoder default to encoding Date as a Double in that reference
+    date: number | null;
+    // IANA identifier, e.g. "Europe/Berlin"
+    timezone: string | null;
     heartRates: Record<string, number | null>;
     activeEnergyBurned: number | null;
     workoutDistance: number | null;

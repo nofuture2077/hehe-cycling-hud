@@ -7,6 +7,12 @@ import { version } from '../../package.json';
 interface Sections {
   enabled: boolean;
   location: boolean;
+  locationCity: boolean;
+  locationRegion: boolean;
+  locationCountry: boolean;
+  locationFlag: boolean;
+  locationTemperature: boolean;
+  locationLocalTime: boolean;
   distance: boolean;
   speed: boolean;
   gradient: boolean;
@@ -21,6 +27,12 @@ interface Sections {
 const defaultSections: Sections = {
   enabled: true,
   location: true,
+  locationCity: true,
+  locationRegion: false,
+  locationCountry: false,
+  locationFlag: true,
+  locationTemperature: false,
+  locationLocalTime: false,
   distance: true,
   speed: true,
   gradient: true,
@@ -36,6 +48,12 @@ const defaultSections: Sections = {
 const CONFIG_KEYS: Record<keyof Sections, string> = {
   enabled: 'cyclingHudEnabled',
   location: 'cyclingHudLocation',
+  locationCity: 'cyclingHudLocationCity',
+  locationRegion: 'cyclingHudLocationRegion',
+  locationCountry: 'cyclingHudLocationCountry',
+  locationFlag: 'cyclingHudLocationFlag',
+  locationTemperature: 'cyclingHudLocationTemperature',
+  locationLocalTime: 'cyclingHudLocationLocalTime',
   distance: 'cyclingHudDistance',
   speed: 'cyclingHudSpeed',
   gradient: 'cyclingHudGradient',
@@ -251,9 +269,25 @@ function getQueryVariable(query: string, variable: string): string | undefined {
   return undefined;
 }
 
-function toLocation(t: MoblinTelemetryData): string {
-  const parts = [t.data.city, t.data.area, t.data.state, t.data.country].filter(Boolean);
-  return parts.length ? parts[0]! : '—';
+function str(value: string | null | undefined): string {
+  return value ?? '';
+}
+
+// Moblin's `date` is a Swift-encoded Date (seconds since 2001-01-01T00:00:00Z), not the Unix
+// epoch - RemoteControl.swift's JSONEncoder/JSONDecoder calls don't set a dateEncodingStrategy,
+// so Foundation falls back to that reference date
+const SWIFT_REFERENCE_DATE_UNIX_SECONDS = 978307200;
+
+function toLocalTime(dateSeconds: number | null, timezone: string | null): string {
+  if (dateSeconds === null || !timezone) return '';
+  const unixMs = (dateSeconds + SWIFT_REFERENCE_DATE_UNIX_SECONDS) * 1000;
+  try {
+    return new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: timezone })
+      .format(new Date(unixMs));
+  } catch {
+    // unknown/invalid IANA identifier
+    return '';
+  }
 }
 
 // telemetry fields can be null/missing on individual messages - fall back to 0 rather than crash on NaN
@@ -270,13 +304,24 @@ function firstHeartRate(heartRates: Record<string, number | null> | undefined): 
   return 0;
 }
 
-function toCyclingData(t: MoblinTelemetryData, maxSpeedKmh: number, maxGradientPercent: number): CyclingData {
+function toCyclingData(
+  t: MoblinTelemetryData,
+  maxSpeedKmh: number,
+  maxGradientPercent: number,
+  sessionMaxHeartRateBpm: number,
+  sessionMaxPowerWatts: number,
+): CyclingData {
   return {
     speedKmh: num(t.data.speed) * 3.6,
     maxSpeedKmh,
     distanceKm: num(t.data.distance) / 1000,
     splitDistanceKm: num(t.data.splitDistance) / 1000,
-    location: toLocation(t),
+    city: str(t.data.city),
+    region: str(t.data.state),
+    country: str(t.data.country),
+    countryFlag: str(t.data.countryFlag),
+    temperatureC: t.data.temperature ?? null,
+    localTime: toLocalTime(t.data.date, t.data.timezone),
     gradientPercent: num(t.data.slopePercent),
     maxGradientPercent,
     elevationGainM: num(t.data.altitudeAscent),
@@ -285,6 +330,8 @@ function toCyclingData(t: MoblinTelemetryData, maxSpeedKmh: number, maxGradientP
     splitElevationLossM: num(t.data.splitAltitudeDescent),
     heartRateBpm: firstHeartRate(t.data.heartRates),
     powerWatts: num(t.data.cyclingPower),
+    sessionMaxHeartRateBpm,
+    sessionMaxPowerWatts,
   };
 }
 
@@ -353,9 +400,13 @@ export function useMoblinCyclingHud(): {
   // whatever's still sitting in the buffer; reset on streamStartSignal like pause tracking
   const maxSpeedRef = useRef(0);
   const maxGradientRef = useRef(0);
+  const maxHeartRateSessionRef = useRef(0);
+  const maxPowerSessionRef = useRef(0);
   useEffect(() => {
     maxSpeedRef.current = 0;
     maxGradientRef.current = 0;
+    maxHeartRateSessionRef.current = 0;
+    maxPowerSessionRef.current = 0;
   }, [streamStartSignal]);
 
   // telemetry comes from HeheServer over a plain WebSocket, using the same
@@ -461,11 +512,21 @@ export function useMoblinCyclingHud(): {
           }));
           const speedKmh = num(msg.data.speed) * 3.6;
           const gradientPercent = num(msg.data.slopePercent);
+          const heartRateBpm = firstHeartRate(msg.data.heartRates);
+          const powerWatts = num(msg.data.cyclingPower);
           maxSpeedRef.current = Math.max(maxSpeedRef.current, speedKmh);
           maxGradientRef.current = Math.max(maxGradientRef.current, Math.abs(gradientPercent));
+          maxHeartRateSessionRef.current = Math.max(maxHeartRateSessionRef.current, heartRateBpm);
+          maxPowerSessionRef.current = Math.max(maxPowerSessionRef.current, powerWatts);
           bufferRef.current.push({
             t: Date.now(),
-            data: toCyclingData({ data: msg.data }, maxSpeedRef.current, maxGradientRef.current),
+            data: toCyclingData(
+              { data: msg.data },
+              maxSpeedRef.current,
+              maxGradientRef.current,
+              maxHeartRateSessionRef.current,
+              maxPowerSessionRef.current,
+            ),
           });
         }
       });
@@ -522,6 +583,12 @@ export function useMoblinCyclingHud(): {
       speed: sections.enabled && sections.speed,
       distance: sections.enabled && sections.distance,
       location: sections.enabled && sections.location,
+      locationCity: sections.locationCity,
+      locationRegion: sections.locationRegion,
+      locationCountry: sections.locationCountry,
+      locationFlag: sections.locationFlag,
+      locationTemperature: sections.locationTemperature,
+      locationLocalTime: sections.locationLocalTime,
       gradient: sections.enabled && sections.gradient,
       elevation: sections.enabled && sections.elevation,
       heartRate: sections.enabled && sections.heartRate,

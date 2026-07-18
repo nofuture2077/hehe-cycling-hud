@@ -10,7 +10,12 @@ const previewData: CyclingData = {
   maxSpeedKmh: 0,
   distanceKm: 0,
   splitDistanceKm: 0,
-  location: 'Tokyo, Japan',
+  city: 'Tokyo',
+  region: 'Tokyo',
+  country: 'Japan',
+  countryFlag: '🇯🇵',
+  temperatureC: 20,
+  localTime: '09:00',
   gradientPercent: 0,
   maxGradientPercent: 0,
   elevationGainM: 0,
@@ -19,6 +24,8 @@ const previewData: CyclingData = {
   splitElevationLossM: 0,
   heartRateBpm: 0,
   powerWatts: 0,
+  sessionMaxHeartRateBpm: 0,
+  sessionMaxPowerWatts: 0,
 };
 
 interface BannerProps {

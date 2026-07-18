@@ -46,7 +46,22 @@ export default function CyclingHud({
     <div className={styles.root} data-theme={config.theme}>
       {showTopChips && (
         <div className={`${styles.chipCluster} ${styles.topLeft}`}>
-          {visible.location && <LocationChip location={data.location} />}
+          {visible.location && (
+            <LocationChip
+              city={data.city}
+              region={data.region}
+              country={data.country}
+              countryFlag={data.countryFlag}
+              temperatureC={data.temperatureC}
+              localTime={data.localTime}
+              showCity={visible.locationCity}
+              showRegion={visible.locationRegion}
+              showCountry={visible.locationCountry}
+              showFlag={visible.locationFlag}
+              showTemperature={visible.locationTemperature}
+              showLocalTime={visible.locationLocalTime}
+            />
+          )}
           {(visible.distance || showElevation) && (
             <StatsCard
               showDistance={visible.distance}
@@ -73,6 +88,7 @@ export default function CyclingHud({
               backgroundPulseSeconds={heartbeatSeconds(data.heartRateBpm)}
               value={<NumberValue n={data.heartRateBpm} />}
               unit="bpm"
+              secondaryValue={visible.showMax ? <NumberValue n={data.sessionMaxHeartRateBpm} /> : undefined}
             />
           )}
           {showPower && (
@@ -83,6 +99,7 @@ export default function CyclingHud({
               backgroundPulseSeconds={powerZone(data.powerWatts, config.averagePowerWatts) >= 6 ? 0.6 : undefined}
               value={<NumberValue n={data.powerWatts} />}
               unit="W"
+              secondaryValue={visible.showMax ? <NumberValue n={data.sessionMaxPowerWatts} /> : undefined}
             />
           )}
           {showGradient && (

@@ -3,7 +3,12 @@ export interface CyclingData {
   maxSpeedKmh: number;
   distanceKm: number;
   splitDistanceKm: number;
-  location: string;
+  city: string;
+  region: string;
+  country: string;
+  countryFlag: string;
+  temperatureC: number | null;
+  localTime: string;
   gradientPercent: number;
   maxGradientPercent: number;
   elevationGainM: number;
@@ -12,12 +17,20 @@ export interface CyclingData {
   splitElevationLossM: number;
   heartRateBpm: number;
   powerWatts: number;
+  sessionMaxHeartRateBpm: number;
+  sessionMaxPowerWatts: number;
 }
 
 export interface CyclingHudVisibility {
   speed: boolean;
   distance: boolean;
   location: boolean;
+  locationCity: boolean;
+  locationRegion: boolean;
+  locationCountry: boolean;
+  locationFlag: boolean;
+  locationTemperature: boolean;
+  locationLocalTime: boolean;
   gradient: boolean;
   elevation: boolean;
   heartRate: boolean;
@@ -52,6 +65,12 @@ export const defaultConfig: CyclingHudConfig = {
     speed: true,
     distance: true,
     location: true,
+    locationCity: true,
+    locationRegion: false,
+    locationCountry: false,
+    locationFlag: true,
+    locationTemperature: false,
+    locationLocalTime: false,
     gradient: true,
     elevation: true,
     heartRate: true,
