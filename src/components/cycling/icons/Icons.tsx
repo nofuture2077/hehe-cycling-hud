@@ -75,6 +75,24 @@ export function IconClock() {
   );
 }
 
+// background silhouette for the heart rate gauge - fills the icon slot, tinted by currentColor
+export function IconHeart() {
+  return (
+    <svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor" stroke="none">
+      <path d="M12 21s-7.5-4.9-10-9.3C.4 8.6 1.7 5 5.2 4.2 7.6 3.6 10 4.8 12 7.5c2-2.7 4.4-3.9 6.8-3.3 3.5.8 4.8 4.4 3.2 7.5C19.5 16.1 12 21 12 21z" />
+    </svg>
+  );
+}
+
+// background silhouette for the power gauge
+export function IconBolt() {
+  return (
+    <svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor" stroke="none">
+      <path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z" />
+    </svg>
+  );
+}
+
 export function IconElevationDown() {
   return (
     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">

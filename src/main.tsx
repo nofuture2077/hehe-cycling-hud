@@ -17,6 +17,8 @@ const previewData: CyclingData = {
   elevationLossM: 0,
   splitElevationGainM: 0,
   splitElevationLossM: 0,
+  heartRateBpm: 0,
+  powerWatts: 0,
 };
 
 interface BannerProps {

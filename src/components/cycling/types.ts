@@ -10,6 +10,8 @@ export interface CyclingData {
   elevationLossM: number;
   splitElevationGainM: number;
   splitElevationLossM: number;
+  heartRateBpm: number;
+  powerWatts: number;
 }
 
 export interface CyclingHudVisibility {
@@ -18,6 +20,8 @@ export interface CyclingHudVisibility {
   location: boolean;
   gradient: boolean;
   elevation: boolean;
+  heartRate: boolean;
+  power: boolean;
   // when on, distance/elevation also show today's split values alongside the overall ones
   split: boolean;
   // when on, the speed/gradient gauges also show the ride's max as a secondary value
@@ -33,6 +37,9 @@ export interface CyclingHudConfig {
   gradientOnlyWhenMoving: boolean;
   // once a dynamic element drops below its threshold, it lingers this long before hiding
   hideLingerMs: number;
+  // personal baselines the heart rate/power gauges use to compute zones
+  maxHeartRateBpm: number;
+  averagePowerWatts: number;
 }
 
 export const defaultConfig: CyclingHudConfig = {
@@ -42,6 +49,8 @@ export const defaultConfig: CyclingHudConfig = {
     location: true,
     gradient: true,
     elevation: true,
+    heartRate: true,
+    power: true,
     split: false,
     showMax: false,
   },
@@ -49,6 +58,8 @@ export const defaultConfig: CyclingHudConfig = {
   minGradientPercent: 1,
   gradientOnlyWhenMoving: true,
   hideLingerMs: 10000,
+  maxHeartRateBpm: 190,
+  averagePowerWatts: 250,
 };
 
 export interface PauseInfo {

@@ -3,8 +3,9 @@ import { PauseGauge } from './PauseGauge';
 import { LocationChip } from './LocationChip';
 import { StatsCard } from './StatsCard';
 import { useLingering } from './hooks/useLingering';
-import { gradientLevel, speedLevel } from './format';
+import { gradientLevel, speedLevel, heartRateZone, heartbeatSeconds, powerZone } from './format';
 import { NumberValue } from './NumberValue';
+import { IconHeart, IconBolt } from './icons/Icons';
 import { type CyclingData, type CyclingHudConfig, type PauseInfo, defaultConfig, defaultPause } from './types';
 import styles from './CyclingHud.module.css';
 import gaugeStyles from './Gauge.module.css';
@@ -30,12 +31,16 @@ export default function CyclingHud({
   const speedLinger = useLingering(speedActive, config.hideLingerMs);
   const gradientLinger = useLingering(gradientActive, config.hideLingerMs);
   const showSpeed = speedLinger.visible && !pause.onBreak;
-  const showGradient = gradientLinger.visible;
+  const showGradient = gradientLinger.visible && !pause.onBreak;
   const showPause = pause.onBreak;
 
   const showElevation = visible.elevation;
   const showTopChips = visible.location || visible.distance || showElevation;
   const showBottomGauges = showSpeed || showGradient || showPause;
+
+  const showHeartRate = visible.heartRate && data.heartRateBpm > 0 && !pause.onBreak;
+  const showPower = visible.power && data.powerWatts > 0 && !pause.onBreak;
+  const showAnyGauge = showBottomGauges || showHeartRate || showPower;
 
   return (
     <div className={styles.root}>
@@ -58,8 +63,28 @@ export default function CyclingHud({
         </div>
       )}
 
-      {showBottomGauges && (
+      {showAnyGauge && (
         <div className={`${styles.gaugeRow} ${styles.bottomRight}`}>
+          {showHeartRate && (
+            <Gauge
+              accentClass={gaugeStyles.heartRate}
+              levelClass={gaugeStyles[`heartRateLevel${heartRateZone(data.heartRateBpm, config.maxHeartRateBpm)}`]}
+              backgroundIcon={<IconHeart />}
+              backgroundPulseSeconds={heartbeatSeconds(data.heartRateBpm)}
+              value={<NumberValue n={data.heartRateBpm} />}
+              unit="bpm"
+            />
+          )}
+          {showPower && (
+            <Gauge
+              accentClass={gaugeStyles.power}
+              levelClass={gaugeStyles[`powerLevel${powerZone(data.powerWatts, config.averagePowerWatts)}`]}
+              backgroundIcon={<IconBolt />}
+              backgroundPulseSeconds={powerZone(data.powerWatts, config.averagePowerWatts) >= 6 ? 0.6 : undefined}
+              value={<NumberValue n={data.powerWatts} />}
+              unit="W"
+            />
+          )}
           {showGradient && (
             <Gauge
               accentClass={gaugeStyles.gradient}

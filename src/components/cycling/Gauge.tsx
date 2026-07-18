@@ -6,6 +6,8 @@ export function Gauge({
   accentClass,
   levelClass,
   mountainClass,
+  backgroundIcon,
+  backgroundPulseSeconds,
   extreme,
   big,
   fading,
@@ -16,6 +18,9 @@ export function Gauge({
   accentClass: string;
   levelClass?: string;
   mountainClass?: string;
+  // fills the gauge behind the value, e.g. IconHeart/IconBolt - optionally blinking/pulsing
+  backgroundIcon?: ReactNode;
+  backgroundPulseSeconds?: number;
   extreme?: boolean;
   big?: boolean;
   fading?: boolean;
@@ -30,6 +35,14 @@ export function Gauge({
       } ${fading ? styles.fadingOut : ''}`}
     >
       {mountainClass && <div className={`${styles.mountain} ${mountainClass}`} />}
+      {backgroundIcon && (
+        <div
+          className={`${styles.bgIcon} ${backgroundPulseSeconds ? styles.bgIconPulse : ''}`}
+          style={backgroundPulseSeconds ? { animationDuration: `${backgroundPulseSeconds}s` } : undefined}
+        >
+          {backgroundIcon}
+        </div>
+      )}
       <div className={styles.gaugeMain}>
         <span className={styles.gaugeUnit}>{unit}</span>
         <span className={styles.gaugeValue}>{value}</span>

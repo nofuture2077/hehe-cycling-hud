@@ -11,6 +11,8 @@ interface Sections {
   speed: boolean;
   gradient: boolean;
   elevation: boolean;
+  heartRate: boolean;
+  power: boolean;
   split: boolean;
   showMax: boolean;
   debug: boolean;
@@ -23,6 +25,8 @@ const defaultSections: Sections = {
   speed: true,
   gradient: true,
   elevation: true,
+  heartRate: true,
+  power: true,
   split: false,
   showMax: false,
   debug: false,
@@ -36,6 +40,8 @@ const CONFIG_KEYS: Record<keyof Sections, string> = {
   speed: 'cyclingHudSpeed',
   gradient: 'cyclingHudGradient',
   elevation: 'cyclingHudElevation',
+  heartRate: 'cyclingHudHeartRate',
+  power: 'cyclingHudPower',
   split: 'cyclingHudSplit',
   showMax: 'cyclingHudShowMax',
   debug: 'cyclingHudDebug',
@@ -60,6 +66,8 @@ interface Thresholds {
   pauseStartAfterSeconds: number;
   pauseResumeSpeedKmh: number;
   pauseMinDistanceM: number;
+  maxHeartRateBpm: number;
+  averagePowerWatts: number;
 }
 
 const defaultThresholds: Thresholds = {
@@ -72,6 +80,8 @@ const defaultThresholds: Thresholds = {
   pauseStartAfterSeconds: 30,
   pauseResumeSpeedKmh: 5,
   pauseMinDistanceM: 100,
+  maxHeartRateBpm: 190,
+  averagePowerWatts: 250,
 };
 
 // profile.config keys carrying each threshold, set via Settings > Connect > Moblin
@@ -85,6 +95,8 @@ const THRESHOLD_CONFIG_KEYS: Record<keyof Thresholds, string> = {
   pauseStartAfterSeconds: 'cyclingHudPauseStartAfterSeconds',
   pauseResumeSpeedKmh: 'cyclingHudPauseResumeSpeedKmh',
   pauseMinDistanceM: 'cyclingHudPauseMinDistanceM',
+  maxHeartRateBpm: 'cyclingHudMaxHeartRateBpm',
+  averagePowerWatts: 'cyclingHudAveragePowerWatts',
 };
 
 const THRESHOLD_BOOLEAN_KEYS: (keyof Thresholds)[] = ['gradientOnlyWhenMoving', 'pauseEnabled'];
@@ -239,6 +251,15 @@ function num(value: number | null | undefined): number {
   return typeof value === 'number' && Number.isFinite(value) ? value : 0;
 }
 
+// heartRates carries one entry per paired sensor - take the first real reading, whichever sensor it's from
+function firstHeartRate(heartRates: Record<string, number | null> | undefined): number {
+  if (!heartRates) return 0;
+  for (const bpm of Object.values(heartRates)) {
+    if (typeof bpm === 'number' && Number.isFinite(bpm)) return bpm;
+  }
+  return 0;
+}
+
 function toCyclingData(t: MoblinTelemetryData, maxSpeedKmh: number, maxGradientPercent: number): CyclingData {
   return {
     speedKmh: num(t.data.speed) * 3.6,
@@ -252,6 +273,8 @@ function toCyclingData(t: MoblinTelemetryData, maxSpeedKmh: number, maxGradientP
     elevationLossM: num(t.data.altitudeDescent),
     splitElevationGainM: num(t.data.splitAltitudeAscent),
     splitElevationLossM: num(t.data.splitAltitudeDescent),
+    heartRateBpm: firstHeartRate(t.data.heartRates),
+    powerWatts: num(t.data.cyclingPower),
   };
 }
 
@@ -487,6 +510,8 @@ export function useMoblinCyclingHud(): {
       location: sections.enabled && sections.location,
       gradient: sections.enabled && sections.gradient,
       elevation: sections.enabled && sections.elevation,
+      heartRate: sections.enabled && sections.heartRate,
+      power: sections.enabled && sections.power,
       split: sections.split,
       showMax: sections.showMax,
     },
@@ -494,6 +519,8 @@ export function useMoblinCyclingHud(): {
     minGradientPercent: thresholds.minGradientPercent,
     gradientOnlyWhenMoving: thresholds.gradientOnlyWhenMoving,
     hideLingerMs: thresholds.hideLingerSeconds * 1000,
+    maxHeartRateBpm: thresholds.maxHeartRateBpm,
+    averagePowerWatts: thresholds.averagePowerWatts,
   };
 
   return { data, config, pause, status, error, debug, debugVisible: sections.debug };

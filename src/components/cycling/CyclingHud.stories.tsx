@@ -14,6 +14,8 @@ const sampleData: CyclingData = {
   elevationLossM: 210,
   splitElevationGainM: 140,
   splitElevationLossM: 60,
+  heartRateBpm: 145,
+  powerWatts: 255,
 };
 
 function HudFrame({ children }: { children: React.ReactNode }) {
@@ -79,5 +81,35 @@ export const PauseActive: Story = {
 export const Stationary: Story = {
   args: {
     data: { ...sampleData, speedKmh: 0, gradientPercent: 0.2 },
+  },
+};
+
+export const HeartRateAndPower: Story = {
+  args: {
+    data: { ...sampleData, heartRateBpm: 168, powerWatts: 340 },
+  },
+};
+
+const heartRateOnlyConfig: CyclingHudConfig = {
+  ...defaultConfig,
+  visible: { ...defaultConfig.visible, speed: false, gradient: false, distance: false, elevation: false, location: false, power: false },
+};
+
+export const HeartRateOnly: Story = {
+  args: { config: heartRateOnlyConfig, data: { ...sampleData, heartRateBpm: 178 } },
+};
+
+const powerOnlyConfig: CyclingHudConfig = {
+  ...defaultConfig,
+  visible: { ...defaultConfig.visible, speed: false, gradient: false, distance: false, elevation: false, location: false, heartRate: false },
+};
+
+export const PowerOnly: Story = {
+  args: { config: powerOnlyConfig, data: { ...sampleData, powerWatts: 400 } },
+};
+
+export const NoHeartRateOrPowerData: Story = {
+  args: {
+    data: { ...sampleData, heartRateBpm: 0, powerWatts: 0 },
   },
 };

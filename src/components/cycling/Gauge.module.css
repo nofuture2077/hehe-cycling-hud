@@ -232,3 +232,114 @@
 .gradient {
   --accent: #4dd0e1;
 }
+
+/* --- heart rate / power gauges: zone color background + pulsing icon silhouette --- */
+
+.bgIcon {
+  position: absolute;
+  top: 4%;
+  left: 4%;
+  width: 92%;
+  height: 92%;
+  color: var(--level-color, var(--accent, #4dd0e1));
+  opacity: 0.3;
+}
+
+@keyframes bg-icon-pulse {
+  0%,
+  100% {
+    opacity: 0.18;
+    transform: scale(0.94);
+  }
+
+  50% {
+    opacity: 0.4;
+    transform: scale(1.04);
+  }
+}
+
+.bgIconPulse {
+  animation-name: bg-icon-pulse;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.heartRate {
+  --accent: #ff5c8a;
+}
+
+.heartRateLevel1 {
+  background: rgba(38, 166, 154, 0.25);
+  border-color: rgba(38, 166, 154, 0.8);
+  --level-color: #26a69a;
+}
+
+.heartRateLevel2 {
+  background: rgba(67, 160, 71, 0.28);
+  border-color: rgba(67, 160, 71, 0.85);
+  --level-color: #43a047;
+}
+
+.heartRateLevel3 {
+  background: rgba(251, 192, 45, 0.25);
+  border-color: rgba(251, 192, 45, 0.85);
+  --level-color: #fbc02d;
+}
+
+.heartRateLevel4 {
+  background: rgba(251, 140, 0, 0.3);
+  border-color: rgba(251, 140, 0, 0.85);
+  --level-color: #fb8c00;
+}
+
+.heartRateLevel5 {
+  background: rgba(229, 57, 53, 0.4);
+  border-color: rgba(229, 57, 53, 0.9);
+  --level-color: #e53935;
+}
+
+.power {
+  --accent: #ffd54f;
+}
+
+.powerLevel1 {
+  background: rgba(84, 110, 122, 0.3);
+  border-color: rgba(84, 110, 122, 0.85);
+  --level-color: #78909c;
+}
+
+.powerLevel2 {
+  background: rgba(67, 160, 71, 0.28);
+  border-color: rgba(67, 160, 71, 0.85);
+  --level-color: #43a047;
+}
+
+.powerLevel3 {
+  background: rgba(38, 166, 154, 0.25);
+  border-color: rgba(38, 166, 154, 0.85);
+  --level-color: #26a69a;
+}
+
+.powerLevel4 {
+  background: rgba(251, 192, 45, 0.25);
+  border-color: rgba(251, 192, 45, 0.85);
+  --level-color: #fbc02d;
+}
+
+.powerLevel5 {
+  background: rgba(251, 140, 0, 0.3);
+  border-color: rgba(251, 140, 0, 0.85);
+  --level-color: #fb8c00;
+}
+
+.powerLevel6 {
+  background: rgba(229, 57, 53, 0.35);
+  border-color: rgba(229, 57, 53, 0.9);
+  --level-color: #e53935;
+}
+
+.powerLevel7 {
+  background: rgba(142, 36, 170, 0.4);
+  border-color: rgba(142, 36, 170, 0.9);
+  --level-color: #ce93d8;
+}
