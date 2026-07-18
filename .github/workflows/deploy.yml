@@ -7,17 +7,18 @@ on:
 
 jobs:
   build-and-deploy:
+    runs-on: ubuntu-latest
+
     env:
       VITE_BACKEND_URL: https://server.hehechat.io
       VITE_BUILDNUMBER: ${{ github.run_number }}
-    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '22'
 
@@ -30,15 +31,38 @@ jobs:
       - name: Build project
         run: yarn build
 
-      - name: Transfer files to AWS
+      - name: Configure SSH
+        env:
+          AWS_SSH_KEY: ${{ secrets.AWS_SSH_KEY }}
+          AWS_SSH_HOST: ${{ secrets.AWS_SSH_HOST }}
+        run: |
+          mkdir -p ~/.ssh
+
+          echo "${AWS_SSH_KEY}" > ~/.ssh/github_actions
+          chmod 600 ~/.ssh/github_actions
+
+          ssh-keyscan -H "${AWS_SSH_HOST}" >> ~/.ssh/known_hosts
+
+      - name: Test SSH connection
         env:
           AWS_SSH_HOST: ${{ secrets.AWS_SSH_HOST }}
           AWS_SSH_USER: ${{ secrets.AWS_SSH_USER }}
-          AWS_SSH_KEY: ${{ secrets.AWS_SSH_KEY }}
-          AWS_SSH_PATH: '/home/ec2-user/live/cycling-hud'
         run: |
-          mkdir -p ~/.ssh
-          echo "${AWS_SSH_KEY}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H "${AWS_SSH_HOST}" >> ~/.ssh/known_hosts
-          rsync -avz --delete ./dist "${AWS_SSH_USER}@${AWS_SSH_HOST}:${AWS_SSH_PATH}"
+          ssh \
+            -i ~/.ssh/github_actions \
+            -o IdentitiesOnly=yes \
+            "${AWS_SSH_USER}@${AWS_SSH_HOST}" \
+            "echo SSH connection successful"
+
+      - name: Deploy files
+        env:
+          AWS_SSH_HOST: ${{ secrets.AWS_SSH_HOST }}
+          AWS_SSH_USER: ${{ secrets.AWS_SSH_USER }}
+          AWS_SSH_PATH: /home/ec2-user/live/cycling-hud
+        run: |
+          rsync \
+            -avz \
+            --delete \
+            -e "ssh -i ~/.ssh/github_actions -o IdentitiesOnly=yes" \
+            ./dist/ \
+            "${AWS_SSH_USER}@${AWS_SSH_HOST}:${AWS_SSH_PATH}/"
