@@ -12,6 +12,7 @@ interface Sections {
   gradient: boolean;
   elevation: boolean;
   split: boolean;
+  showMax: boolean;
   debug: boolean;
 }
 
@@ -23,6 +24,7 @@ const defaultSections: Sections = {
   gradient: true,
   elevation: true,
   split: false,
+  showMax: false,
   debug: false,
 };
 
@@ -35,6 +37,7 @@ const CONFIG_KEYS: Record<keyof Sections, string> = {
   gradient: 'cyclingHudGradient',
   elevation: 'cyclingHudElevation',
   split: 'cyclingHudSplit',
+  showMax: 'cyclingHudShowMax',
   debug: 'cyclingHudDebug',
 };
 
@@ -236,13 +239,15 @@ function num(value: number | null | undefined): number {
   return typeof value === 'number' && Number.isFinite(value) ? value : 0;
 }
 
-function toCyclingData(t: MoblinTelemetryData): CyclingData {
+function toCyclingData(t: MoblinTelemetryData, maxSpeedKmh: number, maxGradientPercent: number): CyclingData {
   return {
     speedKmh: num(t.data.speed) * 3.6,
+    maxSpeedKmh,
     distanceKm: num(t.data.distance) / 1000,
     splitDistanceKm: num(t.data.splitDistance) / 1000,
     location: toLocation(t),
     gradientPercent: num(t.data.slopePercent),
+    maxGradientPercent,
     elevationGainM: num(t.data.altitudeAscent),
     elevationLossM: num(t.data.altitudeDescent),
     splitElevationGainM: num(t.data.splitAltitudeAscent),
@@ -310,6 +315,14 @@ export function useMoblinCyclingHud(): {
   // telemetry is buffered here and released after delaySeconds, to line the HUD up with the
   // stream's video delay - see the flush effect below
   const bufferRef = useRef<{ t: number; data: CyclingData }[]>([]);
+  // running session maxima, tracked off the raw (undelayed) telemetry so they aren't capped by
+  // whatever's still sitting in the buffer; reset on streamStartSignal like pause tracking
+  const maxSpeedRef = useRef(0);
+  const maxGradientRef = useRef(0);
+  useEffect(() => {
+    maxSpeedRef.current = 0;
+    maxGradientRef.current = 0;
+  }, [streamStartSignal]);
 
   // telemetry comes from HeheServer over a plain WebSocket, using the same
   // browser-source sink token as chat/alert sources - independent of any Moblin browser-source
@@ -410,7 +423,14 @@ export function useMoblinCyclingHud(): {
             telemetryCount: d.telemetryCount + 1,
             lastTelemetryRaw: safeStringify(msg.data),
           }));
-          bufferRef.current.push({ t: Date.now(), data: toCyclingData({ data: msg.data }) });
+          const speedKmh = num(msg.data.speed) * 3.6;
+          const gradientPercent = num(msg.data.slopePercent);
+          maxSpeedRef.current = Math.max(maxSpeedRef.current, speedKmh);
+          maxGradientRef.current = Math.max(maxGradientRef.current, Math.abs(gradientPercent));
+          bufferRef.current.push({
+            t: Date.now(),
+            data: toCyclingData({ data: msg.data }, maxSpeedRef.current, maxGradientRef.current),
+          });
         }
       });
 
@@ -468,6 +488,7 @@ export function useMoblinCyclingHud(): {
       gradient: sections.enabled && sections.gradient,
       elevation: sections.enabled && sections.elevation,
       split: sections.split,
+      showMax: sections.showMax,
     },
     minSpeedKmh: thresholds.minSpeedKmh,
     minGradientPercent: thresholds.minGradientPercent,

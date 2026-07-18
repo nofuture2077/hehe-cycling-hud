@@ -6,10 +6,12 @@ import { useMoblinCyclingHud } from './hooks/useMoblinCyclingHud';
 // ponytail: fallback so the design still renders when opened outside a Moblin browser source
 const previewData: CyclingData = {
   speedKmh: 0,
+  maxSpeedKmh: 0,
   distanceKm: 0,
   splitDistanceKm: 0,
   location: 'Tokyo, Japan',
   gradientPercent: 0,
+  maxGradientPercent: 0,
   elevationGainM: 0,
   elevationLossM: 0,
   splitElevationGainM: 0,

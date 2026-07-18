@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(npx -y storybook@latest init --yes --skip-install)",
+      "Bash(npm install *)",
+      "Bash(yarn install *)",
+      "Bash(grep -rln \"CyclingData\" /Users/martin/Development/HeheChat/src 2>/dev/null)",
+      "Read(//Users/martin/Development/HeheChat/src/**)",
+      "Bash(npx tsc *)",
+      "Bash(grep -rln \"cyclingHudSplit\\\\|cyclingHud\" /Users/martin/Development/HeheChat/src 2>/dev/null)",
+      "Bash(grep -rn \"setCyclingHudSplit\\\\|useConfig\\\\b\" /Users/martin/Development/HeheChat/src --include=*.tsx --include=*.ts | grep -v node_modules)"
+    ]
+  }
+}
