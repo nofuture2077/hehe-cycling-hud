@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { IconMax } from './icons/Icons';
 import styles from './Gauge.module.css';
 
@@ -18,9 +19,9 @@ export function Gauge({
   extreme?: boolean;
   big?: boolean;
   fading?: boolean;
-  value: string;
+  value: ReactNode;
   unit: string;
-  secondaryValue?: string;
+  secondaryValue?: ReactNode;
 }) {
   return (
     <div

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Gauge } from './Gauge';
+import { NumberValue } from './NumberValue';
 import styles from './Gauge.module.css';
 
 const meta: Meta<typeof Gauge> = {
@@ -95,7 +96,7 @@ export const GradientLevel1: Story = {
     accentClass: styles.gradient,
     levelClass: styles.gradientLevel1,
     mountainClass: styles.mountain1,
-    value: '3.0',
+    value: <NumberValue n={3.0} digits={1} />,
     unit: '%',
   },
 };
@@ -105,7 +106,7 @@ export const GradientLevel2: Story = {
     accentClass: styles.gradient,
     levelClass: styles.gradientLevel2,
     mountainClass: styles.mountain2,
-    value: '6.5',
+    value: <NumberValue n={6.5} digits={1} />,
     unit: '%',
   },
 };
@@ -115,7 +116,7 @@ export const GradientLevel3: Story = {
     accentClass: styles.gradient,
     levelClass: styles.gradientLevel3,
     mountainClass: styles.mountain3,
-    value: '10.0',
+    value: <NumberValue n={10.0} digits={1} />,
     unit: '%',
   },
 };
@@ -126,7 +127,7 @@ export const GradientLevel4Extreme: Story = {
     levelClass: styles.gradientLevel4,
     mountainClass: styles.mountain4,
     extreme: true,
-    value: '15.0',
+    value: <NumberValue n={15.0} digits={1} />,
     unit: '%',
   },
 };
@@ -136,8 +137,8 @@ export const GradientWithMax: Story = {
     accentClass: styles.gradient,
     levelClass: styles.gradientLevel2,
     mountainClass: styles.mountain2,
-    value: '6.5',
+    value: <NumberValue n={6.5} digits={1} />,
     unit: '%',
-    secondaryValue: '9.2',
+    secondaryValue: <NumberValue n={9.2} digits={1} />,
   },
 };

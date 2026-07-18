@@ -155,7 +155,7 @@
 }
 
 .gaugeValue {
-  font-size: 48px;
+  font-size: 58px;
   font-weight: 700;
   color: inherit;
   line-height: 0.8;
@@ -200,8 +200,8 @@
   overflow: visible;
 }
 
-.pauseValue {
-  font-size: 30px;
+.gaugeBig .pauseValue {
+  font-size:48px;
 }
 
 .pauseIcon {
@@ -221,13 +221,12 @@
   height: 48px;
   padding: 6 6px;
   border-radius: 50%;
-  background: var(--accent, #ba68c8);
-  border: 3px solid #14161a;
+  background: rgba(255, 51, 153, 0.6);
+  border: 3px solid rgba(255, 51, 153, 0.9);
   color: #fff;
   font-size: 28px;
   font-weight: 800;
   line-height: 1;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
 }
 
 .gradient {

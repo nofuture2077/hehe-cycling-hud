@@ -1,5 +1,6 @@
 import { IconRoute, IconElevationUp, IconElevationDown } from './icons/Icons';
 import { fmt } from './format';
+import { NumberValue } from './NumberValue';
 import styles from './Chips.module.css';
 
 export function StatsCard({
@@ -32,12 +33,12 @@ export function StatsCard({
           </span>
           <span className={styles.chipValues}>
             <span className={styles.value}>
-              {fmt(split ? splitDistanceKm : distanceKm, 1)}
+              <NumberValue n={split ? splitDistanceKm : distanceKm} digits={1} />
               <span className={styles.unit}>km</span>
             </span>
             {split && (
               <span className={styles.chipSecondary}>
-                {fmt(distanceKm, 1)}
+                <NumberValue n={distanceKm} />
                 <span className={styles.unit}>km</span>
               </span>
             )}

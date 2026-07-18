@@ -3,7 +3,8 @@ import { PauseGauge } from './PauseGauge';
 import { LocationChip } from './LocationChip';
 import { StatsCard } from './StatsCard';
 import { useLingering } from './hooks/useLingering';
-import { fmt, gradientLevel, speedLevel } from './format';
+import { gradientLevel, speedLevel } from './format';
+import { NumberValue } from './NumberValue';
 import { type CyclingData, type CyclingHudConfig, type PauseInfo, defaultConfig, defaultPause } from './types';
 import styles from './CyclingHud.module.css';
 import gaugeStyles from './Gauge.module.css';
@@ -66,9 +67,9 @@ export default function CyclingHud({
               mountainClass={gaugeStyles[`mountain${gradientLevel(data.gradientPercent)}`]}
               extreme={Math.abs(data.gradientPercent) >= 13}
               fading={gradientLinger.fading}
-              value={fmt(data.gradientPercent, 1)}
+              value={<NumberValue n={data.gradientPercent} digits={1} />}
               unit="%"
-              secondaryValue={visible.showMax ? fmt(data.maxGradientPercent, 1) : undefined}
+              secondaryValue={visible.showMax ? <NumberValue n={data.maxGradientPercent} digits={1} /> : undefined}
             />
           )}
           {showPause ? (
@@ -84,9 +85,9 @@ export default function CyclingHud({
                 levelClass={gaugeStyles[`speedLevel${speedLevel(data.speedKmh)}`]}
                 big
                 fading={speedLinger.fading}
-                value={fmt(data.speedKmh, 0)}
+                value={<NumberValue n={data.speedKmh} />}
                 unit="km/h"
-                secondaryValue={visible.showMax ? fmt(data.maxSpeedKmh, 0) : undefined}
+                secondaryValue={visible.showMax ? <NumberValue n={data.maxSpeedKmh} /> : undefined}
               />
             )
           )}

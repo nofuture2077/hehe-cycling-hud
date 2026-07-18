@@ -1,5 +1,6 @@
-import { IconPause } from './icons/Icons';
-import { formatDuration } from './format';
+import { IconClock, IconPause } from './icons/Icons';
+import { currentPauseParts, durationParts } from './format';
+import { NumberValue } from './NumberValue';
 import styles from './Gauge.module.css';
 
 export function PauseGauge({
@@ -11,6 +12,9 @@ export function PauseGauge({
   totalSeconds: number;
   breakCount: number;
 }) {
+  const current = currentPauseParts(currentSeconds);
+  const total = durationParts(totalSeconds);
+
   return (
     <div className={`${styles.gauge} ${styles.gaugeBig} ${styles.pause}`}>
       <span className={styles.pauseBadge}>{breakCount}</span>
@@ -18,8 +22,14 @@ export function PauseGauge({
         <span className={styles.pauseIcon}>
           <IconPause />
         </span>
-        <span className={`${styles.gaugeValue} ${styles.pauseValue}`}>{formatDuration(currentSeconds)}</span>
-        <span className={styles.gaugeSecondary}>{`Σ ${formatDuration(totalSeconds)}`}</span>
+        <span className={`${styles.gaugeValue} ${styles.pauseValue}`}>
+          <NumberValue n={current.value} decimal={current.decimal} separator=":" />
+        </span>
+        <span className={styles.gaugeSecondary}>
+          <IconClock />
+          <NumberValue n={total.value} decimal={total.decimal} />
+          {total.unit}
+        </span>
       </div>
     </div>
   );

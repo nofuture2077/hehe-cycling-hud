@@ -2,6 +2,7 @@ import { Component, type ReactNode } from 'react';
 import ReactDOM from 'react-dom/client';
 import CyclingHud, { type CyclingData } from './components/cycling/CyclingHud';
 import { useMoblinCyclingHud } from './hooks/useMoblinCyclingHud';
+import { useVersionCheck } from './hooks/useVersionCheck';
 
 // ponytail: fallback so the design still renders when opened outside a Moblin browser source
 const previewData: CyclingData = {
@@ -92,6 +93,17 @@ last telemetry raw: ${debug.lastTelemetryRaw ?? '-'}`}
 
 function CyclingRoot() {
   const { data, config, pause, status, error, debug, debugVisible } = useMoblinCyclingHud();
+
+  // Long-lived browser-source sessions must pick up a new build without a manual OBS reload.
+  useVersionCheck({
+    checkInterval: 30 * 60 * 1000,
+    remoteManifestUrl: window.location.origin + '/manifest.json',
+    onNewVersionDetected: (_current, latest) => {
+      if (latest) localStorage.setItem('hehe-cycling-hud-current-version', latest);
+      window.location.reload();
+    },
+  });
+
   return (
     <>
       {status === 'error' && (
