@@ -1,0 +1,44 @@
+name: Deploy to AWS
+
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  build-and-deploy:
+    env:
+      VITE_BACKEND_URL: https://server.hehechat.io
+      VITE_BUILDNUMBER: ${{ github.run_number }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build project
+        run: yarn build
+
+      - name: Transfer files to AWS
+        env:
+          AWS_SSH_HOST: ${{ secrets.AWS_SSH_HOST }}
+          AWS_SSH_USER: ${{ secrets.AWS_SSH_USER }}
+          AWS_SSH_KEY: ${{ secrets.AWS_SSH_KEY }}
+          AWS_SSH_PATH: '/home/ec2-user/live/cycling-hud'
+        run: |
+          mkdir -p ~/.ssh
+          echo "${AWS_SSH_KEY}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H "${AWS_SSH_HOST}" >> ~/.ssh/known_hosts
+          rsync -avz --delete ./dist "${AWS_SSH_USER}@${AWS_SSH_HOST}:${AWS_SSH_PATH}"
