@@ -125,3 +125,44 @@
 .loss {
   --accent: #e57373;
 }
+
+/* --- mono theme: flat grayscale panels, single neutral accent --- */
+
+[data-theme='mono'] .chip,
+[data-theme='mono'] .statsCard {
+  background: var(--mono-bg);
+  backdrop-filter: none;
+  border-color: var(--mono-border);
+}
+
+[data-theme='mono'] .location,
+[data-theme='mono'] .distance,
+[data-theme='mono'] .gain,
+[data-theme='mono'] .loss {
+  --accent: var(--mono-accent);
+}
+
+[data-theme='mono'] .chipIcon {
+  filter: none;
+}
+
+/* --- cockpit theme: telemetry-strip amber/green, statsCard blends into the dashboard bar --- */
+
+[data-theme='cockpit'] .chip,
+[data-theme='cockpit'] .statsCard {
+  background: var(--cockpit-bg);
+  border-color: var(--cockpit-border);
+}
+
+[data-theme='cockpit'] .statsDistance {
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+[data-theme='cockpit'] .location,
+[data-theme='cockpit'] .distance,
+[data-theme='cockpit'] .gain,
+[data-theme='cockpit'] .loss {
+  --accent: var(--cockpit-accent);
+}

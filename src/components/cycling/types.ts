@@ -28,7 +28,11 @@ export interface CyclingHudVisibility {
   showMax: boolean;
 }
 
+export type CyclingHudTheme = 'classic' | 'mono' | 'cockpit';
+
 export interface CyclingHudConfig {
+  // overall visual style of the HUD
+  theme: CyclingHudTheme;
   visible: CyclingHudVisibility;
   // dynamic elements hide themselves below these thresholds
   minSpeedKmh: number;
@@ -43,6 +47,7 @@ export interface CyclingHudConfig {
 }
 
 export const defaultConfig: CyclingHudConfig = {
+  theme: 'classic',
   visible: {
     speed: true,
     distance: true,

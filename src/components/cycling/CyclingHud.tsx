@@ -10,7 +10,7 @@ import { type CyclingData, type CyclingHudConfig, type PauseInfo, defaultConfig,
 import styles from './CyclingHud.module.css';
 import gaugeStyles from './Gauge.module.css';
 
-export type { CyclingData, CyclingHudVisibility, CyclingHudConfig, PauseInfo } from './types';
+export type { CyclingData, CyclingHudVisibility, CyclingHudConfig, CyclingHudTheme, PauseInfo } from './types';
 
 export default function CyclingHud({
   data,
@@ -43,7 +43,7 @@ export default function CyclingHud({
   const showAnyGauge = showBottomGauges || showHeartRate || showPower;
 
   return (
-    <div className={styles.root}>
+    <div className={styles.root} data-theme={config.theme}>
       {showTopChips && (
         <div className={`${styles.chipCluster} ${styles.topLeft}`}>
           {visible.location && <LocationChip location={data.location} />}

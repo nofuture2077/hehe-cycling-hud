@@ -343,3 +343,100 @@
   border-color: rgba(142, 36, 170, 0.9);
   --level-color: #ce93d8;
 }
+
+/* --- mono theme: flat grayscale, single neutral accent, brightness instead of hue for zones --- */
+
+[data-theme='mono'] .gauge {
+  backdrop-filter: none;
+}
+
+[data-theme='mono'] .speed,
+[data-theme='mono'] .gradient,
+[data-theme='mono'] .pause,
+[data-theme='mono'] .heartRate,
+[data-theme='mono'] .power {
+  --accent: var(--mono-accent);
+}
+
+[data-theme='mono'] .speedLevel1,
+[data-theme='mono'] .gradientLevel1 {
+  background: var(--mono-bg);
+  border-color: var(--mono-border);
+  --level-color: var(--mono-accent);
+}
+
+[data-theme='mono'] .speedLevel2,
+[data-theme='mono'] .gradientLevel2,
+[data-theme='mono'] .heartRateLevel1,
+[data-theme='mono'] .powerLevel1 {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(230, 230, 232, 0.65);
+  --level-color: #e6e6e8;
+}
+
+[data-theme='mono'] .speedLevel3,
+[data-theme='mono'] .gradientLevel3,
+[data-theme='mono'] .heartRateLevel2,
+[data-theme='mono'] .heartRateLevel3,
+[data-theme='mono'] .powerLevel2,
+[data-theme='mono'] .powerLevel3 {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(200, 200, 204, 0.75);
+  --level-color: #cfcfd2;
+}
+
+[data-theme='mono'] .speedLevel4,
+[data-theme='mono'] .gradientLevel4,
+[data-theme='mono'] .heartRateLevel4,
+[data-theme='mono'] .powerLevel4,
+[data-theme='mono'] .powerLevel5 {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(170, 170, 175, 0.85);
+  --level-color: #aeaeb2;
+}
+
+[data-theme='mono'] .speedLevel5,
+[data-theme='mono'] .heartRateLevel5,
+[data-theme='mono'] .powerLevel6,
+[data-theme='mono'] .powerLevel7 {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.95);
+  --level-color: #ffffff;
+}
+
+[data-theme='mono'] .mountain1,
+[data-theme='mono'] .mountain2,
+[data-theme='mono'] .mountain3,
+[data-theme='mono'] .mountain4 {
+  background: linear-gradient(to top, #6e6e72, #d0d0d4);
+}
+
+[data-theme='mono'] .bgIcon {
+  opacity: 0.16;
+}
+
+[data-theme='mono'] .pauseBadge {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.85);
+}
+
+/* --- cockpit theme: telemetry-strip amber/green accent, gauges sit flush in the dashboard bar --- */
+
+[data-theme='cockpit'] .gauge {
+  background: rgba(12, 16, 14, 0.4);
+}
+
+[data-theme='cockpit'] .speed,
+[data-theme='cockpit'] .gradient,
+[data-theme='cockpit'] .pause,
+[data-theme='cockpit'] .heartRate,
+[data-theme='cockpit'] .power {
+  --accent: var(--cockpit-accent);
+}
+
+[data-theme='cockpit'] .speedLevel1,
+[data-theme='cockpit'] .gradientLevel1 {
+  background: rgba(12, 16, 14, 0.4);
+  border-color: var(--cockpit-border);
+  --level-color: var(--cockpit-accent);
+}

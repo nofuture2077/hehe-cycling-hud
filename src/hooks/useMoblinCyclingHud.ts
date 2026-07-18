@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from 'react';
 import type { MoblinTelemetryData } from '../types/moblin';
-import type { CyclingData, CyclingHudConfig, PauseInfo } from '../components/cycling/CyclingHud';
+import type { CyclingData, CyclingHudConfig, CyclingHudTheme, PauseInfo } from '../components/cycling/CyclingHud';
 import { parseMessage, isSystemMessageType, HeheChatMessage, SystemMessage } from '../commons/message';
 import { version } from '../../package.json';
 
@@ -109,6 +109,16 @@ function thresholdsFromConfig(profileConfig: Record<string, unknown> | undefined
     if (typeof value === (expectBoolean ? 'boolean' : 'number')) result[key] = value;
   }
   return result as unknown as Thresholds;
+}
+
+const VALID_THEMES: CyclingHudTheme[] = ['classic', 'mono', 'cockpit'];
+
+// profile.config key carrying the HUD's visual theme, set via Settings > Connect > Moblin
+const THEME_CONFIG_KEY = 'cyclingHudTheme';
+
+function themeFromConfig(profileConfig: Record<string, unknown> | undefined): CyclingHudTheme {
+  const value = profileConfig?.[THEME_CONFIG_KEY];
+  return VALID_THEMES.includes(value as CyclingHudTheme) ? (value as CyclingHudTheme) : 'classic';
 }
 
 const emptyPause: PauseInfo = {
@@ -331,6 +341,7 @@ export function useMoblinCyclingHud(): {
   const [data, setData] = useState<CyclingData | null>(null);
   const [sections, setSections] = useState<Sections>(defaultSections);
   const [thresholds, setThresholds] = useState<Thresholds>(defaultThresholds);
+  const [theme, setTheme] = useState<CyclingHudTheme>('classic');
   const [status, setStatus] = useState<MoblinConnectionStatus>('waiting');
   const [error, setError] = useState<string | null>(null);
   const [streamStartSignal, setStreamStartSignal] = useState(0);
@@ -410,6 +421,7 @@ export function useMoblinCyclingHud(): {
           }
           setSections(sectionsFromConfig(msg.profile?.config));
           setThresholds(thresholdsFromConfig(msg.profile?.config));
+          setTheme(themeFromConfig(msg.profile?.config));
           return;
         }
 
@@ -417,6 +429,7 @@ export function useMoblinCyclingHud(): {
         if (msg.type === 'profile') {
           setSections(sectionsFromConfig(msg.profile?.config));
           setThresholds(thresholdsFromConfig(msg.profile?.config));
+          setTheme(themeFromConfig(msg.profile?.config));
           return;
         }
 
@@ -504,6 +517,7 @@ export function useMoblinCyclingHud(): {
   );
 
   const config: CyclingHudConfig = {
+    theme,
     visible: {
       speed: sections.enabled && sections.speed,
       distance: sections.enabled && sections.distance,

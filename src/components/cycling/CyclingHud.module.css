@@ -1,3 +1,15 @@
+:root {
+  /* mono theme palette: flat, low-saturation, single neutral accent */
+  --mono-bg: rgba(24, 24, 26, 0.78);
+  --mono-border: rgba(210, 210, 215, 0.55);
+  --mono-accent: #d7d9dc;
+
+  /* cockpit theme palette: telemetry-strip amber/green */
+  --cockpit-bg: rgba(12, 16, 14, 0.82);
+  --cockpit-border: rgba(120, 255, 170, 0.4);
+  --cockpit-accent: #7dffa8;
+}
+
 .root {
   position: fixed;
   inset: 0;
@@ -39,4 +51,42 @@
 .bottomRight {
   bottom: 40px;
   right: 40px;
+}
+
+/* --- cockpit: regroup + rearrange via CSS only, same DOM as classic/mono ---
+   both clusters sit side by side on one bottom-center line (no stacking, no panel);
+   the gauge row is reordered (speed/pause first, then heart rate, power, gradient)
+   instead of the classic left-to-right DOM order. */
+
+[data-theme='cockpit'] .topLeft {
+  top: auto;
+  bottom: 40px;
+  left: auto;
+  right: 50%;
+  margin-right: 10px;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+[data-theme='cockpit'] .bottomRight {
+  right: auto;
+  left: 50%;
+  margin-left: 10px;
+}
+
+[data-theme='cockpit'] .bottomRight > :nth-child(1) {
+  order: 2;
+}
+
+[data-theme='cockpit'] .bottomRight > :nth-child(2) {
+  order: 3;
+}
+
+[data-theme='cockpit'] .bottomRight > :nth-child(3) {
+  order: 4;
+}
+
+[data-theme='cockpit'] .bottomRight > :nth-child(4) {
+  order: 1;
 }
