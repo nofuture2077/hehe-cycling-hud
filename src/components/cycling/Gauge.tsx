@@ -44,16 +44,16 @@ export function Gauge({
         </div>
       )}
       <div className={styles.gaugeMain}>
-        <span className={styles.gaugeUnit}>{unit}</span>
-        <span className={styles.gaugeValue}>{value}</span>
-        
-          <span className={styles.gaugeSecondary}>
+        <span className={styles.gaugeSecondary}>
             {secondaryValue ? (
               <>
                 <IconMax />
                 {secondaryValue}
               </>) : <span>&nbsp;</span>}
           </span>
+        <span className={styles.gaugeValue}>{value}</span>
+        <span className={styles.gaugeUnit}>{unit}</span>
+          
       </div>
     </div>
   );

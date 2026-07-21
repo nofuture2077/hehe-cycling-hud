@@ -145,13 +145,13 @@
   font-size: 18px;
   font-weight: 700;
   color: inherit;
-  line-height: 1.4em;
-  text-transform: uppercase;
+  line-height: 1em;
+  /* text-transform: uppercase;*/
 }
 
 .gaugeBig .gaugeUnit {
   font-size: 20px;
-  line-height: 1.5em;
+  line-height: 1em;
 }
 
 .gaugeValue {
@@ -171,9 +171,9 @@
   align-items: center;
   gap: 2px;
   font-size: 22px;
-  font-weight: 700;
+  font-weight: 500;
   color: inherit;
-  line-height: 1;
+  line-height: 1.2;
   white-space: nowrap;
 }
 
@@ -182,13 +182,13 @@
 }
 
 .gaugeSecondary svg {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
 }
 
 .gaugeBig .gaugeSecondary svg {
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
 }
 
 .speed {

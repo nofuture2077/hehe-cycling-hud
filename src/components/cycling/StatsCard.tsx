@@ -32,16 +32,18 @@ export function StatsCard({
             <IconRoute />
           </span>
           <span className={styles.chipValues}>
+            
+              <span className={styles.chipSecondary}>
+                {split ? (<>
+                <NumberValue n={distanceKm} />
+                <span className={styles.unit}>km</span>
+                </>
+                ) : <span>&nbsp;</span>}
+              </span>
             <span className={styles.value}>
               <NumberValue n={split ? splitDistanceKm : distanceKm} digits={1} />
               <span className={styles.unit}>km</span>
             </span>
-            {split && (
-              <span className={styles.chipSecondary}>
-                <NumberValue n={distanceKm} />
-                <span className={styles.unit}>km</span>
-              </span>
-            )}
           </span>
         </div>
       )}
