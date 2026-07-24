@@ -1,0 +1,75 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.wrapper {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+}
+
+.profile {
+  width: 200px;
+  height: 108px;
+  display: block;
+}
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 108px;
+  padding: 2px 0;
+}
+
+.legendValue {
+  font-size: 11px;
+  font-weight: 600;
+  color: #f9a825;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+[data-theme='mono'] .legendValue {
+  color: var(--mono-accent, #e6e6e8);
+}
+
+[data-theme='cockpit'] .legendValue {
+  color: var(--cockpit-accent, #a8e063);
+}
+
+.line {
+  fill: none;
+  stroke: #f9a825;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.marker {
+  fill: #ff5c8a;
+  stroke: #fff;
+  stroke-width: 1.5;
+}
+
+.markerBlink {
+  animation: markerBlink 1s ease-in-out infinite;
+}
+
+@keyframes markerBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+[data-theme='mono'] .line {
+  stroke: var(--mono-accent, #e6e6e8);
+}
+
+[data-theme='cockpit'] .line {
+  stroke: var(--cockpit-accent, #a8e063);
+}

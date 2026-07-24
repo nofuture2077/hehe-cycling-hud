@@ -1,0 +1,44 @@
+.wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.map {
+  width: 240px;
+  height: 240px;
+  display: block;
+}
+
+.track {
+  fill: none;
+  stroke: #4dd0e1;
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.marker {
+  fill: #ff5c8a;
+  stroke: #fff;
+  stroke-width: 1.5;
+}
+
+.markerBlink {
+  animation: markerBlink 1s ease-in-out infinite;
+}
+
+@keyframes markerBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+[data-theme='mono'] .track {
+  stroke: var(--mono-accent, #e6e6e8);
+}
+
+[data-theme='cockpit'] .track {
+  stroke: var(--cockpit-accent, #a8e063);
+}

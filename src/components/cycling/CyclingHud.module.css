@@ -26,7 +26,12 @@
   position: absolute;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 3px;
+}
+
+.chipCluster.matchWidth {
+  align-items: stretch;
 }
 
 .topLeft {
@@ -39,10 +44,14 @@
   gap: 3px;
 }
 
-/* --- bottom-right: circular gauges --- */
+.trackMapSpacing {
+  margin-top: 14px;
+  margin-left: 6px;
+}
+
+/* --- bottom-right: elevation profile stacked above the circular gauges --- */
 
 .gaugeRow {
-  position: absolute;
   display: flex;
   align-items: flex-end;
   gap: 14px;
@@ -51,6 +60,9 @@
 .bottomRight {
   bottom: 40px;
   right: 40px;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 10px;
 }
 
 /* --- cockpit: regroup + rearrange via CSS only, same DOM as classic/mono ---
@@ -75,18 +87,23 @@
   margin-left: 10px;
 }
 
-[data-theme='cockpit'] .bottomRight > :nth-child(1) {
+[data-theme='cockpit'] .trackMapSpacing {
+  margin-top: 0;
+  margin-left: 14px;
+}
+
+[data-theme='cockpit'] .gaugeRow > :nth-child(1) {
   order: 2;
 }
 
-[data-theme='cockpit'] .bottomRight > :nth-child(2) {
+[data-theme='cockpit'] .gaugeRow > :nth-child(2) {
   order: 3;
 }
 
-[data-theme='cockpit'] .bottomRight > :nth-child(3) {
+[data-theme='cockpit'] .gaugeRow > :nth-child(3) {
   order: 4;
 }
 
-[data-theme='cockpit'] .bottomRight > :nth-child(4) {
+[data-theme='cockpit'] .gaugeRow > :nth-child(4) {
   order: 1;
 }

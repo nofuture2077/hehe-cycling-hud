@@ -93,6 +93,15 @@ export function IconBolt() {
   );
 }
 
+// tabler-icons "flag-filled" - checkered finish flag, used for remaining distance/ascent
+export function IconFlag() {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" stroke="none">
+      <path d="M6 2a1 1 0 0 1 1 1v1.2l1.5-.4a5 5 0 0 1 3.4.3l.3.15a3 3 0 0 0 2.4.1l2.1-.8A1 1 0 0 1 18 4.5v8a1 1 0 0 1-.65.94l-1.8.65a5 5 0 0 1-3.7-.1l-.3-.13a3 3 0 0 0-2.35-.02L7 14.7V21a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1z" />
+    </svg>
+  );
+}
+
 export function IconElevationDown() {
   return (
     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">

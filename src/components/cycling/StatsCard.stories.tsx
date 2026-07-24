@@ -33,3 +33,7 @@ export const ElevationOnly: Story = {
 export const SplitMode: Story = {
   args: { split: true },
 };
+
+export const WithRemaining: Story = {
+  args: { remainingDistanceKm: 42.3, remainingElevationGainM: 680 },
+};

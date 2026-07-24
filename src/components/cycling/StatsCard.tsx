@@ -1,4 +1,4 @@
-import { IconRoute, IconElevationUp, IconElevationDown } from './icons/Icons';
+import { IconRoute, IconPin, IconElevationUp, IconElevationDown, IconFlag } from './icons/Icons';
 import { fmt } from './format';
 import { NumberValue } from './NumberValue';
 import styles from './Chips.module.css';
@@ -13,6 +13,8 @@ export function StatsCard({
   elevationLossM,
   splitElevationGainM,
   splitElevationLossM,
+  remainingDistanceKm = null,
+  remainingElevationGainM = null,
 }: {
   showDistance: boolean;
   showElevation: boolean;
@@ -23,39 +25,54 @@ export function StatsCard({
   elevationLossM: number;
   splitElevationGainM: number;
   splitElevationLossM: number;
+  remainingDistanceKm?: number | null;
+  remainingElevationGainM?: number | null;
 }) {
   return (
     <div className={styles.statsCard}>
       {showDistance && (
         <div className={`${styles.chip} ${styles.distance} ${styles.statsDistance}`}>
-          <span className={styles.chipIcon}>
-            <IconRoute />
-          </span>
-          <span className={styles.chipValues}>
-            
-              <span className={styles.chipSecondary}>
-                {split ? (<>
-                <NumberValue n={distanceKm} />
-                <span className={styles.unit}>km</span>
-                </>
-                ) : <span>&nbsp;</span>}
-              </span>
+          <div className={styles.statsDistanceItem}>
+            <span className={styles.chipIcon}>
+              <IconRoute />
+            </span>
             <span className={styles.value}>
               <NumberValue n={split ? splitDistanceKm : distanceKm} digits={1} />
               <span className={styles.unit}>km</span>
             </span>
-          </span>
+          </div>
+          {split && (
+            <div className={styles.statsDistanceItem}>
+              <span className={styles.chipIcon}>
+                <IconPin />
+              </span>
+              <span className={styles.value}>
+                <NumberValue n={distanceKm} digits={1} />
+                <span className={styles.unit}>km</span>
+              </span>
+            </div>
+          )}
+          {remainingDistanceKm != null && (
+            <div className={styles.statsDistanceItem}>
+              <span className={styles.chipIcon}>
+                <IconFlag />
+              </span>
+              <span className={styles.value}>
+                <NumberValue n={remainingDistanceKm} digits={1} />
+                <span className={styles.unit}>km</span>
+              </span>
+            </div>
+          )}
         </div>
       )}
-      {showDistance && showElevation && <div className={styles.statsDivider} />}
       {showElevation && (
-        <div className={styles.statsElevation}>
+        <div className={`${styles.chip} ${styles.statsElevation}`}>
           <div className={`${styles.statsElevationRow} ${styles.gain}`}>
             <span className={styles.chipIcon}>
               <IconElevationUp />
             </span>
             <span className={styles.value}>
-              {fmt(split ? splitElevationGainM : elevationGainM)}
+              {fmt(Math.max(0, split ? splitElevationGainM : elevationGainM))}
               <span className={styles.unit}>m</span>
             </span>
           </div>
@@ -64,10 +81,21 @@ export function StatsCard({
               <IconElevationDown />
             </span>
             <span className={styles.value}>
-              {fmt(split ? splitElevationLossM : elevationLossM)}
+              {fmt(Math.max(0, split ? splitElevationLossM : elevationLossM))}
               <span className={styles.unit}>m</span>
             </span>
           </div>
+          {remainingElevationGainM != null && (
+            <div className={`${styles.statsElevationRow} ${styles.remaining}`}>
+              <span className={styles.chipIcon}>
+                <IconFlag />
+              </span>
+              <span className={styles.value}>
+                {fmt(Math.max(0, remainingElevationGainM))}
+                <span className={styles.unit}>m</span>
+              </span>
+            </div>
+          )}
         </div>
       )}
     </div>

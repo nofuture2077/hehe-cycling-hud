@@ -22,6 +22,12 @@ interface Sections {
   split: boolean;
   showMax: boolean;
   debug: boolean;
+  showGpxMap: boolean;
+  showGpxElevationMap: boolean;
+  showGpxPosition: boolean;
+  showGpxElevationPosition: boolean;
+  showGpxRemainingDistance: boolean;
+  showGpxRemainingElevation: boolean;
 }
 
 const defaultSections: Sections = {
@@ -42,6 +48,12 @@ const defaultSections: Sections = {
   split: false,
   showMax: false,
   debug: false,
+  showGpxMap: false,
+  showGpxElevationMap: false,
+  showGpxPosition: false,
+  showGpxElevationPosition: false,
+  showGpxRemainingDistance: false,
+  showGpxRemainingElevation: false,
 };
 
 // profile.config keys carrying each section's toggle, set via Settings > Connect > Moblin
@@ -63,7 +75,20 @@ const CONFIG_KEYS: Record<keyof Sections, string> = {
   split: 'cyclingHudSplit',
   showMax: 'cyclingHudShowMax',
   debug: 'cyclingHudDebug',
+  showGpxMap: 'showGpxMap',
+  showGpxElevationMap: 'showGpxElevationMap',
+  showGpxPosition: 'showGpxPosition',
+  showGpxElevationPosition: 'showGpxElevationPosition',
+  showGpxRemainingDistance: 'showGpxRemainingDistance',
+  showGpxRemainingElevation: 'showGpxRemainingElevation',
 };
+
+// gpxMapRadius is a number|null (null = full track), so it can't go through
+// THRESHOLD_CONFIG_KEYS which only accepts plain numbers
+function gpxMapRadiusFromConfig(profileConfig: Record<string, unknown> | undefined): number | null {
+  const value = profileConfig?.gpxMapRadius;
+  return typeof value === 'number' ? value : null;
+}
 
 function sectionsFromConfig(profileConfig: Record<string, unknown> | undefined): Sections {
   const result = { ...defaultSections };
@@ -332,6 +357,8 @@ function toCyclingData(
     powerWatts: num(t.data.cyclingPower),
     sessionMaxHeartRateBpm,
     sessionMaxPowerWatts,
+    latitude: t.data.latitude,
+    longitude: t.data.longitude,
   };
 }
 
@@ -376,6 +403,12 @@ function safeStringify(value: unknown): string {
   }
 }
 
+export interface GpxTrack {
+  id: string;
+  filename: string;
+  content: string;
+}
+
 export function useMoblinCyclingHud(): {
   data: CyclingData | null;
   config: CyclingHudConfig;
@@ -384,10 +417,13 @@ export function useMoblinCyclingHud(): {
   error: string | null;
   debug: MoblinDebugInfo;
   debugVisible: boolean;
+  gpxTrack: GpxTrack | null;
 } {
   const [data, setData] = useState<CyclingData | null>(null);
   const [sections, setSections] = useState<Sections>(defaultSections);
   const [thresholds, setThresholds] = useState<Thresholds>(defaultThresholds);
+  const [gpxMapRadius, setGpxMapRadius] = useState<number | null>(null);
+  const [gpxTrack, setGpxTrack] = useState<GpxTrack | null>(null);
   const [theme, setTheme] = useState<CyclingHudTheme>('classic');
   const [status, setStatus] = useState<MoblinConnectionStatus>('waiting');
   const [error, setError] = useState<string | null>(null);
@@ -414,6 +450,9 @@ export function useMoblinCyclingHud(): {
   // lifecycle, so both keep updating while backgrounded/not rendered by Moblin
   useEffect(() => {
     const token = getQueryVariable(window.location.hash.substring(1), 'token');
+    // separate per-user token authenticating the GPX track push (see GET /api/gpx/client) -
+    // optional, since GPX is a premium-only feature the URL may not carry one
+    const gpxToken = getQueryVariable(window.location.hash.substring(1), 'gpxToken');
 
     if (!token) {
       setStatus('error');
@@ -435,6 +474,11 @@ export function useMoblinCyclingHud(): {
       ws.addEventListener('open', () => {
         attempts = 0;
         ws!.send(JSON.stringify({ type: 'sink', source: 'Telemetry HUD', token }));
+        // separate handshake on the same connection - HeheServer registers this socket
+        // under the user's channel and pushes gpx-track messages to it (see websocket.js)
+        if (gpxToken) {
+          ws!.send(JSON.stringify({ type: 'cycling-hud-client', token: gpxToken }));
+        }
         setStatus('subscribed');
         setError(null);
       });
@@ -456,6 +500,14 @@ export function useMoblinCyclingHud(): {
           return;
         }
 
+        // the active GPX track, pushed by HeheServer whenever the user selects one in
+        // HeheChat > Settings > Connect > GPX (or immediately on connect if one is already active)
+        if (msg.type === 'gpx-track') {
+          const track = (msg as unknown as { data?: GpxTrack }).data;
+          if (track) setGpxTrack(track);
+          return;
+        }
+
         // sharedata arrives right after the sink handshake - use it to subscribe to the
         // channel(s) we belong to (starts the telemetry feed) and to read the HUD section
         // toggles from Settings > Connect > Moblin
@@ -472,6 +524,7 @@ export function useMoblinCyclingHud(): {
           }
           setSections(sectionsFromConfig(msg.profile?.config));
           setThresholds(thresholdsFromConfig(msg.profile?.config));
+          setGpxMapRadius(gpxMapRadiusFromConfig(msg.profile?.config));
           setTheme(themeFromConfig(msg.profile?.config));
           return;
         }
@@ -480,6 +533,7 @@ export function useMoblinCyclingHud(): {
         if (msg.type === 'profile') {
           setSections(sectionsFromConfig(msg.profile?.config));
           setThresholds(thresholdsFromConfig(msg.profile?.config));
+          setGpxMapRadius(gpxMapRadiusFromConfig(msg.profile?.config));
           setTheme(themeFromConfig(msg.profile?.config));
           return;
         }
@@ -595,6 +649,12 @@ export function useMoblinCyclingHud(): {
       power: sections.enabled && sections.power,
       split: sections.split,
       showMax: sections.showMax,
+      showGpxMap: sections.showGpxMap,
+      showGpxElevationMap: sections.showGpxElevationMap,
+      showGpxPosition: sections.showGpxPosition,
+      showGpxElevationPosition: sections.showGpxElevationPosition,
+      showGpxRemainingDistance: sections.showGpxRemainingDistance,
+      showGpxRemainingElevation: sections.showGpxRemainingElevation,
     },
     minSpeedKmh: thresholds.minSpeedKmh,
     minGradientPercent: thresholds.minGradientPercent,
@@ -602,9 +662,10 @@ export function useMoblinCyclingHud(): {
     hideLingerMs: thresholds.hideLingerSeconds * 1000,
     maxHeartRateBpm: thresholds.maxHeartRateBpm,
     averagePowerWatts: thresholds.averagePowerWatts,
+    gpxMapRadius,
   };
 
-  return { data, config, pause, status, error, debug, debugVisible: sections.debug };
+  return { data, config, pause, status, error, debug, debugVisible: sections.debug, gpxTrack };
 }
 
 // a bad chat payload here must never break the WS message pipe or crash the page

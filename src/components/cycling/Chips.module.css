@@ -12,53 +12,43 @@
 
 .statsCard {
   display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 6px 18px;
-  border-radius: 12px;
-  background: rgba(20, 22, 26, 0.72);
-  backdrop-filter: blur(8px);
-  border: 2px solid var(--accent, #4dd0e1);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
 }
 
 .statsDistance {
-  padding: 0;
-  border: none;
-  background: none;
-  backdrop-filter: none;
+  gap: 18px;
 }
 
-.statsDistance .value {
-  font-size: 40px;
+.statsDistanceItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.statsDistance .chipIcon {
-  width: 32px;
-  height: 32px;
+.statsDistanceItem:nth-child(2) .chipIcon {
+  color: #b0bec5;
 }
 
-.statsDistance .chipSecondary {
-  font-size: 20px;
-  margin-top: -1px;
-}
-
-.statsDivider {
-  width: 2px;
-  align-self: stretch;
-  background: rgba(255, 255, 255, 0.18);
+.statsDistanceItem:nth-child(3) .chipIcon {
+  color: #f2c94c;
 }
 
 .statsElevation {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 4px;
+  align-items: center;
+  gap: 16px;
 }
 
 .statsElevationRow {
   display: flex;
   align-items: center;
   gap: 6px;
+}
+
+.remaining {
+  --accent: #f2c94c;
 }
 
 .chipIcon {
@@ -88,23 +78,6 @@
   white-space: nowrap;
 }
 
-.chipValues {
-  display: flex;
-  flex-direction: column;
-  line-height: 1;
-  text-align: end;
-}
-
-.chipSecondary {
-  font-size: 16px;
-  font-weight: 700;
-  color: #fff;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
-  white-space: nowrap;
-  line-height: 1;
-  text-align: end;
-}
-
 .unit {
   font-size: 14px;
   font-weight: 700;
@@ -114,7 +87,7 @@
 }
 
 .location {
-  --accent: #b0bec5;
+  --accent: #f39;
 }
 
 .distance {
@@ -131,8 +104,7 @@
 
 /* --- mono theme: flat grayscale panels, single neutral accent --- */
 
-[data-theme='mono'] .chip,
-[data-theme='mono'] .statsCard {
+[data-theme='mono'] .chip {
   background: var(--mono-bg);
   backdrop-filter: none;
   border-color: var(--mono-border);
@@ -141,7 +113,8 @@
 [data-theme='mono'] .location,
 [data-theme='mono'] .distance,
 [data-theme='mono'] .gain,
-[data-theme='mono'] .loss {
+[data-theme='mono'] .loss,
+[data-theme='mono'] .remaining {
   --accent: var(--mono-accent);
 }
 
@@ -149,23 +122,27 @@
   filter: none;
 }
 
-/* --- cockpit theme: telemetry-strip amber/green, statsCard blends into the dashboard bar --- */
-
-[data-theme='cockpit'] .chip,
-[data-theme='cockpit'] .statsCard {
-  background: var(--cockpit-bg);
-  border-color: var(--cockpit-border);
+[data-theme='mono'] .statsDistanceItem:nth-child(2) .chipIcon,
+[data-theme='mono'] .statsDistanceItem:nth-child(3) .chipIcon {
+  color: var(--mono-accent);
 }
 
-[data-theme='cockpit'] .statsDistance {
-  background: none;
-  border: none;
-  padding: 0;
+/* --- cockpit theme: telemetry-strip amber/green --- */
+
+[data-theme='cockpit'] .chip {
+  background: var(--cockpit-bg);
+  border-color: var(--cockpit-border);
 }
 
 [data-theme='cockpit'] .location,
 [data-theme='cockpit'] .distance,
 [data-theme='cockpit'] .gain,
-[data-theme='cockpit'] .loss {
+[data-theme='cockpit'] .loss,
+[data-theme='cockpit'] .remaining {
   --accent: var(--cockpit-accent);
+}
+
+[data-theme='cockpit'] .statsDistanceItem:nth-child(2) .chipIcon,
+[data-theme='cockpit'] .statsDistanceItem:nth-child(3) .chipIcon {
+  color: var(--cockpit-accent);
 }

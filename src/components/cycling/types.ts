@@ -19,6 +19,8 @@ export interface CyclingData {
   powerWatts: number;
   sessionMaxHeartRateBpm: number;
   sessionMaxPowerWatts: number;
+  latitude: number | null;
+  longitude: number | null;
 }
 
 export interface CyclingHudVisibility {
@@ -39,6 +41,13 @@ export interface CyclingHudVisibility {
   split: boolean;
   // when on, the speed/gradient gauges also show the ride's max as a secondary value
   showMax: boolean;
+  // GPX track overlay sections - only render once a gpx-track message has arrived
+  showGpxMap: boolean;
+  showGpxElevationMap: boolean;
+  showGpxPosition: boolean;
+  showGpxElevationPosition: boolean;
+  showGpxRemainingDistance: boolean;
+  showGpxRemainingElevation: boolean;
 }
 
 export type CyclingHudTheme = 'classic' | 'mono' | 'cockpit';
@@ -57,6 +66,8 @@ export interface CyclingHudConfig {
   // personal baselines the heart rate/power gauges use to compute zones
   maxHeartRateBpm: number;
   averagePowerWatts: number;
+  // radius (meters) around the live position the map crops to; null shows the whole track
+  gpxMapRadius: number | null;
 }
 
 export const defaultConfig: CyclingHudConfig = {
@@ -77,6 +88,12 @@ export const defaultConfig: CyclingHudConfig = {
     power: true,
     split: false,
     showMax: false,
+    showGpxMap: false,
+    showGpxElevationMap: false,
+    showGpxPosition: true,
+    showGpxElevationPosition: true,
+    showGpxRemainingDistance: false,
+    showGpxRemainingElevation: false,
   },
   minSpeedKmh: 1,
   minGradientPercent: 1,
@@ -84,6 +101,7 @@ export const defaultConfig: CyclingHudConfig = {
   hideLingerMs: 10000,
   maxHeartRateBpm: 190,
   averagePowerWatts: 250,
+  gpxMapRadius: 50000,
 };
 
 export interface PauseInfo {

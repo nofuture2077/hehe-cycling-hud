@@ -1,6 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import CyclingHud, { type CyclingData, type CyclingHudConfig } from './CyclingHud';
 import { defaultConfig, defaultPause } from './types';
+import { parseGpx } from '../../gpx/parseGpx';
+import gpxContent from '../../gpx/fixtures/road-to-japantag.gpx?raw';
+import type { GpxTrack } from '../../hooks/useMoblinCyclingHud';
+
+const gpxTrack: GpxTrack = { id: 'road-to-japantag', filename: 'road-to-japantag.gpx', content: gpxContent };
+const gpxPoints = parseGpx(gpxContent);
+const gpxMidPoint = gpxPoints[Math.floor(gpxPoints.length / 2)];
 
 const sampleData: CyclingData = {
   speedKmh: 28,
@@ -23,6 +30,8 @@ const sampleData: CyclingData = {
   powerWatts: 255,
   sessionMaxHeartRateBpm: 168,
   sessionMaxPowerWatts: 410,
+  latitude: null,
+  longitude: null,
 };
 
 function HudFrame({ children }: { children: React.ReactNode }) {
@@ -41,13 +50,29 @@ const meta: Meta<typeof CyclingHud> = {
     data: sampleData,
     config: defaultConfig,
     pause: defaultPause,
+    gpxTrack,
   },
 };
 export default meta;
 
 type Story = StoryObj<typeof CyclingHud>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  args: {
+    config: {
+      ...defaultConfig,
+      visible: {
+        ...defaultConfig.visible,
+        split: true,
+        power: false,
+        showGpxMap: true,
+        showGpxElevationMap: false,
+        showGpxRemainingDistance: true,
+      },
+    },
+    data: { ...sampleData, distanceKm: 950, latitude: gpxMidPoint.lat, longitude: gpxMidPoint.lon },
+  },
+};
 
 export const SplitMode: Story = {
   args: {
@@ -118,5 +143,32 @@ export const PowerOnly: Story = {
 export const NoHeartRateOrPowerData: Story = {
   args: {
     data: { ...sampleData, heartRateBpm: 0, powerWatts: 0 },
+  },
+};
+
+const gpxVisibleConfig: CyclingHudConfig = {
+  ...defaultConfig,
+  visible: {
+    ...defaultConfig.visible,
+    showGpxMap: true,
+    showGpxElevationMap: true,
+    showGpxPosition: true,
+    showGpxElevationPosition: true,
+    showGpxRemainingDistance: true,
+    showGpxRemainingElevation: true,
+  },
+};
+
+export const WithGpxTrack: Story = {
+  args: {
+    config: gpxVisibleConfig,
+    data: { ...sampleData, latitude: gpxMidPoint.lat, longitude: gpxMidPoint.lon },
+  },
+};
+
+export const GpxTrackZoomedMap: Story = {
+  args: {
+    config: { ...gpxVisibleConfig, gpxMapRadius: 500 },
+    data: { ...sampleData, latitude: gpxMidPoint.lat, longitude: gpxMidPoint.lon },
   },
 };

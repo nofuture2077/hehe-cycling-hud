@@ -1,12 +1,18 @@
+import { useMemo } from 'react';
 import { Gauge } from './Gauge';
 import { PauseGauge } from './PauseGauge';
 import { LocationChip } from './LocationChip';
 import { StatsCard } from './StatsCard';
+import { TrackMap } from './TrackMap';
+import { ElevationProfile } from './ElevationProfile';
 import { useLingering } from './hooks/useLingering';
 import { gradientLevel, speedLevel, heartRateZone, heartbeatSeconds, powerZone } from './format';
 import { NumberValue } from './NumberValue';
 import { IconHeart, IconBolt } from './icons/Icons';
 import { type CyclingData, type CyclingHudConfig, type PauseInfo, defaultConfig, defaultPause } from './types';
+import { parseGpx } from '../../gpx/parseGpx';
+import { findNearestPointIndex, remainingDistanceMeters, remainingElevationGainMeters } from '../../gpx/trackStats';
+import type { GpxTrack } from '../../hooks/useMoblinCyclingHud';
 import styles from './CyclingHud.module.css';
 import gaugeStyles from './Gauge.module.css';
 
@@ -16,12 +22,29 @@ export default function CyclingHud({
   data,
   config = defaultConfig,
   pause = defaultPause,
+  gpxTrack = null,
 }: {
   data: CyclingData;
   config?: CyclingHudConfig;
   pause?: PauseInfo;
+  gpxTrack?: GpxTrack | null;
 }) {
   const { visible } = config;
+
+  const gpxPoints = useMemo(() => (gpxTrack ? parseGpx(gpxTrack.content) : []), [gpxTrack]);
+  const position = data.latitude != null && data.longitude != null
+    ? { lat: data.latitude, lon: data.longitude }
+    : null;
+  const nearestIndex = position && gpxPoints.length ? findNearestPointIndex(gpxPoints, position.lat, position.lon) : -1;
+  const remainingDistanceKm = nearestIndex >= 0 ? remainingDistanceMeters(gpxPoints, nearestIndex) / 1000 : 0;
+  const remainingElevationGainM = nearestIndex >= 0 ? remainingElevationGainMeters(gpxPoints, nearestIndex) : 0;
+
+  const showGpxMap = visible.showGpxMap && gpxPoints.length > 0;
+  const showGpxElevationMap = visible.showGpxElevationMap && gpxPoints.length > 0;
+  const showGpxRemainingDistance = visible.showGpxRemainingDistance && gpxPoints.length > 0;
+  const showGpxRemainingElevation = visible.showGpxRemainingElevation && gpxPoints.length > 0;
+  const mapPosition = visible.showGpxPosition ? position : null;
+  const elevationPosition = visible.showGpxElevationPosition ? position : null;
   const isMoving = data.speedKmh >= config.minSpeedKmh;
   const speedActive = visible.speed && isMoving && !pause.onBreak;
   const gradientAboveThreshold = Math.abs(data.gradientPercent) >= config.minGradientPercent;
@@ -35,17 +58,17 @@ export default function CyclingHud({
   const showPause = pause.onBreak;
 
   const showElevation = visible.elevation;
-  const showTopChips = visible.location || visible.distance || showElevation;
+  const showTopChips = visible.location || visible.distance || showElevation || showGpxMap;
   const showBottomGauges = showSpeed || showGradient || showPause;
 
   const showHeartRate = visible.heartRate && data.heartRateBpm > 0 && !pause.onBreak;
   const showPower = visible.power && data.powerWatts > 0 && !pause.onBreak;
-  const showAnyGauge = showBottomGauges || showHeartRate || showPower;
+  const showAnyGauge = showBottomGauges || showHeartRate || showPower || showGpxElevationMap;
 
   return (
     <div className={styles.root} data-theme={config.theme}>
       {showTopChips && (
-        <div className={`${styles.chipCluster} ${styles.topLeft}`}>
+        <div className={`${styles.chipCluster} ${styles.topLeft} ${showElevation ? styles.matchWidth : ''}`}>
           {visible.location && (
             <LocationChip
               city={data.city}
@@ -73,13 +96,32 @@ export default function CyclingHud({
               elevationLossM={data.elevationLossM}
               splitElevationGainM={data.splitElevationGainM}
               splitElevationLossM={data.splitElevationLossM}
+              remainingDistanceKm={showGpxRemainingDistance ? remainingDistanceKm : null}
+              remainingElevationGainM={showGpxRemainingElevation ? remainingElevationGainM : null}
             />
+          )}
+          {showGpxMap && (
+            <div className={styles.trackMapSpacing}>
+              <TrackMap
+                points={gpxPoints}
+                position={mapPosition}
+                radiusMeters={config.gpxMapRadius}
+              />
+            </div>
           )}
         </div>
       )}
 
       {showAnyGauge && (
-        <div className={`${styles.gaugeRow} ${styles.bottomRight}`}>
+        <div className={`${styles.chipCluster} ${styles.bottomRight}`}>
+          {showGpxElevationMap && (
+            <ElevationProfile
+              points={gpxPoints}
+              position={elevationPosition}
+              radiusMeters={config.gpxMapRadius}
+            />
+          )}
+          <div className={styles.gaugeRow}>
           {showHeartRate && (
             <Gauge
               accentClass={gaugeStyles.heartRate}
@@ -127,12 +169,13 @@ export default function CyclingHud({
                 levelClass={gaugeStyles[`speedLevel${speedLevel(data.speedKmh)}`]}
                 big
                 fading={speedLinger.fading}
-                value={<NumberValue n={data.speedKmh} />}
+                value={<NumberValue n={Math.max(0, data.speedKmh)} />}
                 unit="km/h"
-                secondaryValue={visible.showMax ? <NumberValue n={data.maxSpeedKmh} /> : undefined}
+                secondaryValue={visible.showMax ? <NumberValue n={Math.max(0, data.maxSpeedKmh)} /> : undefined}
               />
             )
           )}
+          </div>
         </div>
       )}
     </div>
