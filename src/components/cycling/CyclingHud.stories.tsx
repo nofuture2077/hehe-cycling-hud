@@ -60,15 +60,39 @@ type Story = StoryObj<typeof CyclingHud>;
 export const Default: Story = {
   args: {
     config: {
-      ...defaultConfig,
-      visible: {
-        ...defaultConfig.visible,
-        split: true,
-        power: false,
-        showGpxMap: true,
-        showGpxElevationMap: false,
-        showGpxRemainingDistance: true,
+      "theme": "classic",
+
+      "visible": {
+        "speed": true,
+        "distance": true,
+        "location": true,
+        "locationCity": true,
+        "locationRegion": false,
+        "locationCountry": true,
+        "locationFlag": true,
+        "locationTemperature": true,
+        "locationLocalTime": false,
+        "gradient": true,
+        "elevation": false,
+        "heartRate": true,
+        "power": false,
+        "split": true,
+        "showMax": false,
+        "showGpxMap": true,
+        "showGpxElevationMap": false,
+        "showGpxPosition": true,
+        "showGpxElevationPosition": true,
+        "showGpxRemainingDistance": true,
+        "showGpxRemainingElevation": false
       },
+
+      "minSpeedKmh": 1,
+      "minGradientPercent": 1,
+      "gradientOnlyWhenMoving": true,
+      "hideLingerMs": 10000,
+      "maxHeartRateBpm": 190,
+      "averagePowerWatts": 250,
+      "gpxMapRadius": 50000
     },
     data: { ...sampleData, distanceKm: 950, latitude: gpxMidPoint.lat, longitude: gpxMidPoint.lon },
   },
