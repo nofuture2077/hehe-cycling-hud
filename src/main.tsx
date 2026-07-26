@@ -103,7 +103,7 @@ last telemetry raw: ${debug.lastTelemetryRaw ?? '-'}`}
 }
 
 function CyclingRoot() {
-  const { data, config, pause, status, error, debug, debugVisible, gpxTrack } = useMoblinCyclingHud();
+  const { data, config, pause, status, error, debug, debugVisible, gpxTrack, logo } = useMoblinCyclingHud();
 
   // Long-lived browser-source sessions must pick up a new build without a manual OBS reload.
   useVersionCheck({
@@ -120,7 +120,7 @@ function CyclingRoot() {
       {status === 'error' && (
         <Banner background="#c62828" color="#fff">Moblin-Verbindung fehlgeschlagen: {error}</Banner>
       )}
-      <CyclingHud data={data ?? previewData} config={config} pause={pause} gpxTrack={gpxTrack} />
+      <CyclingHud data={data ?? previewData} config={config} pause={pause} gpxTrack={gpxTrack} logo={logo} />
       {debugVisible && <DebugPanel status={status} debug={debug} />}
     </>
   );

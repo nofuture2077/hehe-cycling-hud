@@ -48,6 +48,8 @@ export interface CyclingHudVisibility {
   showGpxElevationPosition: boolean;
   showGpxRemainingDistance: boolean;
   showGpxRemainingElevation: boolean;
+  // custom logo - only renders once both this is on and a logo has been uploaded
+  showLogo: boolean;
 }
 
 export type CyclingHudTheme = 'classic' | 'mono' | 'cockpit';
@@ -94,6 +96,7 @@ export const defaultConfig: CyclingHudConfig = {
     showGpxElevationPosition: true,
     showGpxRemainingDistance: false,
     showGpxRemainingElevation: false,
+    showLogo: false,
   },
   minSpeedKmh: 1,
   minGradientPercent: 1,
@@ -103,6 +106,12 @@ export const defaultConfig: CyclingHudConfig = {
   averagePowerWatts: 250,
   gpxMapRadius: 50000,
 };
+
+export interface LogoData {
+  filename: string;
+  mimeType: string;
+  content: string; // base64-encoded
+}
 
 export interface PauseInfo {
   onBreak: boolean;

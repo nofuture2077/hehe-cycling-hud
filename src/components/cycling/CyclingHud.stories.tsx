@@ -3,9 +3,11 @@ import CyclingHud, { type CyclingData, type CyclingHudConfig } from './CyclingHu
 import { defaultConfig, defaultPause } from './types';
 import { parseGpx } from '../../gpx/parseGpx';
 import gpxContent from '../../gpx/fixtures/road-to-japantag.gpx?raw';
-import type { GpxTrack } from '../../hooks/useMoblinCyclingHud';
+import type { GpxTrack, LogoData } from '../../hooks/useMoblinCyclingHud';
 
 const gpxTrack: GpxTrack = { id: 'road-to-japantag', filename: 'road-to-japantag.gpx', content: gpxContent };
+const sampleLogoSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="50" cy="50" r="45" fill="#e63946"/></svg>';
+const sampleLogo: LogoData = { filename: 'logo.svg', mimeType: 'image/svg+xml', content: btoa(sampleLogoSvg) };
 const gpxPoints = parseGpx(gpxContent);
 const gpxMidPoint = gpxPoints[Math.floor(gpxPoints.length / 2)];
 
@@ -51,6 +53,7 @@ const meta: Meta<typeof CyclingHud> = {
     config: defaultConfig,
     pause: defaultPause,
     gpxTrack,
+    logo: sampleLogo,
   },
 };
 export default meta;
@@ -83,7 +86,8 @@ export const Default: Story = {
         "showGpxPosition": true,
         "showGpxElevationPosition": true,
         "showGpxRemainingDistance": true,
-        "showGpxRemainingElevation": false
+        "showGpxRemainingElevation": false,
+        "showLogo": true
       },
 
       "minSpeedKmh": 1,
@@ -194,5 +198,19 @@ export const GpxTrackZoomedMap: Story = {
   args: {
     config: { ...gpxVisibleConfig, gpxMapRadius: 500 },
     data: { ...sampleData, latitude: gpxMidPoint.lat, longitude: gpxMidPoint.lon },
+  },
+};
+
+export const LogoHiddenByToggle: Story = {
+  args: {
+    config: { ...defaultConfig, visible: { ...defaultConfig.visible, showLogo: false } },
+    logo: sampleLogo,
+  },
+};
+
+export const LogoMissing: Story = {
+  args: {
+    config: { ...defaultConfig, visible: { ...defaultConfig.visible, showLogo: true } },
+    logo: null,
   },
 };

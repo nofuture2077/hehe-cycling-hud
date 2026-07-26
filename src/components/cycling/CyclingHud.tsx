@@ -9,25 +9,27 @@ import { useLingering } from './hooks/useLingering';
 import { gradientLevel, speedLevel, heartRateZone, heartbeatSeconds, powerZone } from './format';
 import { NumberValue } from './NumberValue';
 import { IconHeart, IconBolt } from './icons/Icons';
-import { type CyclingData, type CyclingHudConfig, type PauseInfo, defaultConfig, defaultPause } from './types';
+import { type CyclingData, type CyclingHudConfig, type LogoData, type PauseInfo, defaultConfig, defaultPause } from './types';
 import { parseGpx } from '../../gpx/parseGpx';
 import { findNearestPointIndex, remainingDistanceMeters, remainingElevationGainMeters } from '../../gpx/trackStats';
 import type { GpxTrack } from '../../hooks/useMoblinCyclingHud';
 import styles from './CyclingHud.module.css';
 import gaugeStyles from './Gauge.module.css';
 
-export type { CyclingData, CyclingHudVisibility, CyclingHudConfig, CyclingHudTheme, PauseInfo } from './types';
+export type { CyclingData, CyclingHudVisibility, CyclingHudConfig, CyclingHudTheme, LogoData, PauseInfo } from './types';
 
 export default function CyclingHud({
   data,
   config = defaultConfig,
   pause = defaultPause,
   gpxTrack = null,
+  logo = null,
 }: {
   data: CyclingData;
   config?: CyclingHudConfig;
   pause?: PauseInfo;
   gpxTrack?: GpxTrack | null;
+  logo?: LogoData | null;
 }) {
   const { visible } = config;
 
@@ -61,6 +63,8 @@ export default function CyclingHud({
   const showTopChips = visible.location || visible.distance || showElevation || showGpxMap;
   const showBottomGauges = showSpeed || showGradient || showPause;
 
+  const showLogo = visible.showLogo && logo !== null;
+
   const showHeartRate = visible.heartRate && data.heartRateBpm > 0 && !pause.onBreak;
   const showPower = visible.power && data.powerWatts > 0 && !pause.onBreak;
   const showAnyGauge = showBottomGauges || showHeartRate || showPower || showGpxElevationMap;
@@ -69,37 +73,50 @@ export default function CyclingHud({
     <div className={styles.root} data-theme={config.theme}>
       {showTopChips && (
         <div className={`${styles.chipCluster} ${styles.topLeft} ${showElevation ? styles.matchWidth : ''}`}>
-          {visible.location && (
-            <LocationChip
-              city={data.city}
-              region={data.region}
-              country={data.country}
-              countryFlag={data.countryFlag}
-              temperatureC={data.temperatureC}
-              localTime={data.localTime}
-              showCity={visible.locationCity}
-              showRegion={visible.locationRegion}
-              showCountry={visible.locationCountry}
-              showFlag={visible.locationFlag}
-              showTemperature={visible.locationTemperature}
-              showLocalTime={visible.locationLocalTime}
-            />
-          )}
-          {(visible.distance || showElevation) && (
-            <StatsCard
-              showDistance={visible.distance}
-              showElevation={showElevation}
-              split={visible.split}
-              distanceKm={data.distanceKm}
-              splitDistanceKm={data.splitDistanceKm}
-              elevationGainM={data.elevationGainM}
-              elevationLossM={data.elevationLossM}
-              splitElevationGainM={data.splitElevationGainM}
-              splitElevationLossM={data.splitElevationLossM}
-              remainingDistanceKm={showGpxRemainingDistance ? remainingDistanceKm : null}
-              remainingElevationGainM={showGpxRemainingElevation ? remainingElevationGainM : null}
-            />
-          )}
+          <div className={`${styles.hor}`}>
+            {showLogo && (
+              <div>
+                <img
+                  src={`data:${logo!.mimeType};base64,${logo!.content}`}
+                  height={100}
+                  style={{marginRight: 20}}
+                />
+              </div>
+            )}
+            <div style={{display:'flex', gap: 10, flexDirection: 'column'}}>
+              {visible.location && (
+                <LocationChip
+                  city={data.city}
+                  region={data.region}
+                  country={data.country}
+                  countryFlag={data.countryFlag}
+                  temperatureC={data.temperatureC}
+                  localTime={data.localTime}
+                  showCity={visible.locationCity}
+                  showRegion={visible.locationRegion}
+                  showCountry={visible.locationCountry}
+                  showFlag={visible.locationFlag}
+                  showTemperature={visible.locationTemperature}
+                  showLocalTime={visible.locationLocalTime}
+                />
+              )}
+              {(visible.distance || showElevation) && (
+                <StatsCard
+                  showDistance={visible.distance}
+                  showElevation={showElevation}
+                  split={visible.split}
+                  distanceKm={data.distanceKm}
+                  splitDistanceKm={data.splitDistanceKm}
+                  elevationGainM={data.elevationGainM}
+                  elevationLossM={data.elevationLossM}
+                  splitElevationGainM={data.splitElevationGainM}
+                  splitElevationLossM={data.splitElevationLossM}
+                  remainingDistanceKm={showGpxRemainingDistance ? remainingDistanceKm : null}
+                  remainingElevationGainM={showGpxRemainingElevation ? remainingElevationGainM : null}
+                />
+              )}
+            </div>
+          </div>
           {showGpxMap && (
             <div className={styles.trackMapSpacing}>
               <TrackMap

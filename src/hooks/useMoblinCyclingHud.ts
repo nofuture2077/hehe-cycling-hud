@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from 'react';
 import type { MoblinTelemetryData } from '../types/moblin';
-import type { CyclingData, CyclingHudConfig, CyclingHudTheme, PauseInfo } from '../components/cycling/CyclingHud';
+import type { CyclingData, CyclingHudConfig, CyclingHudTheme, LogoData, PauseInfo } from '../components/cycling/CyclingHud';
 import { parseMessage, isSystemMessageType, HeheChatMessage, SystemMessage } from '../commons/message';
 import { version } from '../../package.json';
 
@@ -28,6 +28,7 @@ interface Sections {
   showGpxElevationPosition: boolean;
   showGpxRemainingDistance: boolean;
   showGpxRemainingElevation: boolean;
+  showLogo: boolean;
 }
 
 const defaultSections: Sections = {
@@ -54,6 +55,7 @@ const defaultSections: Sections = {
   showGpxElevationPosition: false,
   showGpxRemainingDistance: false,
   showGpxRemainingElevation: false,
+  showLogo: false,
 };
 
 // profile.config keys carrying each section's toggle, set via Settings > Connect > Moblin
@@ -81,6 +83,7 @@ const CONFIG_KEYS: Record<keyof Sections, string> = {
   showGpxElevationPosition: 'showGpxElevationPosition',
   showGpxRemainingDistance: 'showGpxRemainingDistance',
   showGpxRemainingElevation: 'showGpxRemainingElevation',
+  showLogo: 'cyclingHudShowLogo',
 };
 
 // gpxMapRadius is a number|null (null = full track), so it can't go through
@@ -409,6 +412,8 @@ export interface GpxTrack {
   content: string;
 }
 
+export type { LogoData };
+
 export function useMoblinCyclingHud(): {
   data: CyclingData | null;
   config: CyclingHudConfig;
@@ -418,12 +423,14 @@ export function useMoblinCyclingHud(): {
   debug: MoblinDebugInfo;
   debugVisible: boolean;
   gpxTrack: GpxTrack | null;
+  logo: LogoData | null;
 } {
   const [data, setData] = useState<CyclingData | null>(null);
   const [sections, setSections] = useState<Sections>(defaultSections);
   const [thresholds, setThresholds] = useState<Thresholds>(defaultThresholds);
   const [gpxMapRadius, setGpxMapRadius] = useState<number | null>(null);
   const [gpxTrack, setGpxTrack] = useState<GpxTrack | null>(null);
+  const [logo, setLogo] = useState<LogoData | null>(null);
   const [theme, setTheme] = useState<CyclingHudTheme>('classic');
   const [status, setStatus] = useState<MoblinConnectionStatus>('waiting');
   const [error, setError] = useState<string | null>(null);
@@ -450,9 +457,6 @@ export function useMoblinCyclingHud(): {
   // lifecycle, so both keep updating while backgrounded/not rendered by Moblin
   useEffect(() => {
     const token = getQueryVariable(window.location.hash.substring(1), 'token');
-    // separate per-user token authenticating the GPX track push (see GET /api/gpx/client) -
-    // optional, since GPX is a premium-only feature the URL may not carry one
-    const gpxToken = getQueryVariable(window.location.hash.substring(1), 'gpxToken');
 
     if (!token) {
       setStatus('error');
@@ -474,11 +478,9 @@ export function useMoblinCyclingHud(): {
       ws.addEventListener('open', () => {
         attempts = 0;
         ws!.send(JSON.stringify({ type: 'sink', source: 'Telemetry HUD', token }));
-        // separate handshake on the same connection - HeheServer registers this socket
-        // under the user's channel and pushes gpx-track messages to it (see websocket.js)
-        if (gpxToken) {
-          ws!.send(JSON.stringify({ type: 'cycling-hud-client', token: gpxToken }));
-        }
+        // second handshake on the same connection, same token - HeheServer registers this
+        // socket under the user's channel and pushes gpx-track messages to it (see websocket.js)
+        ws!.send(JSON.stringify({ type: 'cycling-hud-client', token }));
         setStatus('subscribed');
         setError(null);
       });
@@ -505,6 +507,14 @@ export function useMoblinCyclingHud(): {
         if (msg.type === 'gpx-track') {
           const track = (msg as unknown as { data?: GpxTrack }).data;
           if (track) setGpxTrack(track);
+          return;
+        }
+
+        // the active logo, pushed by HeheServer whenever the user uploads/removes one in
+        // HeheChat > Settings > Connect > Moblin (or immediately on connect if one is already set)
+        if (msg.type === 'logo') {
+          const logoData = (msg as unknown as { data?: LogoData | null }).data;
+          setLogo(logoData ?? null);
           return;
         }
 
@@ -655,6 +665,7 @@ export function useMoblinCyclingHud(): {
       showGpxElevationPosition: sections.showGpxElevationPosition,
       showGpxRemainingDistance: sections.showGpxRemainingDistance,
       showGpxRemainingElevation: sections.showGpxRemainingElevation,
+      showLogo: sections.showLogo,
     },
     minSpeedKmh: thresholds.minSpeedKmh,
     minGradientPercent: thresholds.minGradientPercent,
@@ -665,7 +676,7 @@ export function useMoblinCyclingHud(): {
     gpxMapRadius,
   };
 
-  return { data, config, pause, status, error, debug, debugVisible: sections.debug, gpxTrack };
+  return { data, config, pause, status, error, debug, debugVisible: sections.debug, gpxTrack, logo };
 }
 
 // a bad chat payload here must never break the WS message pipe or crash the page

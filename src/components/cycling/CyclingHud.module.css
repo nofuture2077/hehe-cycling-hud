@@ -30,6 +30,11 @@
   gap: 3px;
 }
 
+.chipCluster > .hor {
+  display: flex;
+  flex-direction: row;
+}
+
 .chipCluster.matchWidth {
   align-items: stretch;
 }
