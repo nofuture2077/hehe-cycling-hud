@@ -568,7 +568,7 @@ export function useMoblinCyclingHud(): {
           return;
         }
 
-        if (msg.type === 'Telemetry' && msg.data) {
+        if (msg.type === 'Stats' && msg.data) {
           setDebug((d) => ({
             ...d,
             telemetryCount: d.telemetryCount + 1,
