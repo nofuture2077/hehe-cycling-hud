@@ -10,7 +10,7 @@ import { gradientLevel, speedLevel, heartRateZone, heartbeatSeconds, powerZone }
 import { NumberValue } from './NumberValue';
 import { IconHeart, IconBolt } from './icons/Icons';
 import { type CyclingData, type CyclingHudConfig, type LogoData, type PauseInfo, defaultConfig, defaultPause } from './types';
-import { parseGpx } from '../../gpx/parseGpx';
+import { parseGpx, parseGpxWaypoints } from '../../gpx/parseGpx';
 import { findNearestPointIndex, remainingDistanceMeters, remainingElevationGainMeters } from '../../gpx/trackStats';
 import type { GpxTrack } from '../../hooks/useMoblinCyclingHud';
 import styles from './CyclingHud.module.css';
@@ -34,6 +34,7 @@ export default function CyclingHud({
   const { visible } = config;
 
   const gpxPoints = useMemo(() => (gpxTrack ? parseGpx(gpxTrack.content) : []), [gpxTrack]);
+  const gpxWaypoints = useMemo(() => (gpxTrack ? parseGpxWaypoints(gpxTrack.content) : []), [gpxTrack]);
   const position = data.latitude != null && data.longitude != null
     ? { lat: data.latitude, lon: data.longitude }
     : null;
@@ -42,6 +43,7 @@ export default function CyclingHud({
   const remainingElevationGainM = nearestIndex >= 0 ? remainingElevationGainMeters(gpxPoints, nearestIndex) : 0;
 
   const showGpxMap = visible.showGpxMap && gpxPoints.length > 0;
+  const showGpxWaypoints = visible.showGpxWaypoints && gpxWaypoints.length > 0;
   const showGpxElevationMap = visible.showGpxElevationMap && gpxPoints.length > 0;
   const showGpxRemainingDistance = visible.showGpxRemainingDistance && gpxPoints.length > 0;
   const showGpxRemainingElevation = visible.showGpxRemainingElevation && gpxPoints.length > 0;
@@ -123,6 +125,7 @@ export default function CyclingHud({
                 points={gpxPoints}
                 position={mapPosition}
                 radiusMeters={config.gpxMapRadius}
+                waypoints={showGpxWaypoints ? gpxWaypoints : []}
               />
             </div>
           )}

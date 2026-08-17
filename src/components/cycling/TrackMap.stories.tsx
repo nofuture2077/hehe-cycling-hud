@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TrackMap } from './TrackMap';
-import { parseGpx } from '../../gpx/parseGpx';
+import { parseGpx, parseGpxWaypoints } from '../../gpx/parseGpx';
 import gpxContent from '../../gpx/fixtures/road-to-japantag.gpx?raw';
 
 const points = parseGpx(gpxContent);
+const waypoints = parseGpxWaypoints(gpxContent);
 const midPoint = points[Math.floor(points.length / 2)];
 
 function Frame({ children }: { children: React.ReactNode }) {
@@ -20,6 +21,7 @@ const meta: Meta<typeof TrackMap> = {
     points,
     position: null,
     radiusMeters: null,
+    waypoints: [],
   },
 };
 export default meta;
@@ -38,6 +40,20 @@ export const ZoomedToRadius: Story = {
   args: {
     position: { lat: midPoint.lat, lon: midPoint.lon },
     radiusMeters: 20000,
+  },
+};
+
+export const WithWaypoints: Story = {
+  args: {
+    waypoints,
+  },
+};
+
+export const WithWaypointsZoomedToRadius: Story = {
+  args: {
+    position: { lat: midPoint.lat, lon: midPoint.lon },
+    radiusMeters: 20000,
+    waypoints,
   },
 };
 

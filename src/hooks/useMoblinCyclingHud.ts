@@ -28,6 +28,7 @@ interface Sections {
   showGpxElevationPosition: boolean;
   showGpxRemainingDistance: boolean;
   showGpxRemainingElevation: boolean;
+  showGpxWaypoints: boolean;
   showLogo: boolean;
 }
 
@@ -55,6 +56,7 @@ const defaultSections: Sections = {
   showGpxElevationPosition: false,
   showGpxRemainingDistance: false,
   showGpxRemainingElevation: false,
+  showGpxWaypoints: false,
   showLogo: false,
 };
 
@@ -83,6 +85,7 @@ const CONFIG_KEYS: Record<keyof Sections, string> = {
   showGpxElevationPosition: 'showGpxElevationPosition',
   showGpxRemainingDistance: 'showGpxRemainingDistance',
   showGpxRemainingElevation: 'showGpxRemainingElevation',
+  showGpxWaypoints: 'showGpxWaypoints',
   showLogo: 'cyclingHudShowLogo',
 };
 
@@ -665,6 +668,7 @@ export function useMoblinCyclingHud(): {
       showGpxElevationPosition: sections.showGpxElevationPosition,
       showGpxRemainingDistance: sections.showGpxRemainingDistance,
       showGpxRemainingElevation: sections.showGpxRemainingElevation,
+      showGpxWaypoints: sections.showGpxWaypoints,
       showLogo: sections.showLogo,
     },
     minSpeedKmh: thresholds.minSpeedKmh,

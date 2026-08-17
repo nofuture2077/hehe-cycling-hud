@@ -48,6 +48,7 @@ export interface CyclingHudVisibility {
   showGpxElevationPosition: boolean;
   showGpxRemainingDistance: boolean;
   showGpxRemainingElevation: boolean;
+  showGpxWaypoints: boolean;
   // custom logo - only renders once both this is on and a logo has been uploaded
   showLogo: boolean;
 }
@@ -96,6 +97,7 @@ export const defaultConfig: CyclingHudConfig = {
     showGpxElevationPosition: true,
     showGpxRemainingDistance: false,
     showGpxRemainingElevation: false,
+    showGpxWaypoints: false,
     showLogo: false,
   },
   minSpeedKmh: 1,

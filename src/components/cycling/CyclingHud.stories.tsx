@@ -87,6 +87,7 @@ export const Default: Story = {
         "showGpxElevationPosition": true,
         "showGpxRemainingDistance": true,
         "showGpxRemainingElevation": false,
+        "showGpxWaypoints": true,
         "showLogo": true
       },
 

@@ -30,6 +30,21 @@
   animation: markerBlink 1s ease-in-out infinite;
 }
 
+.waypoint {
+  fill: #ffcc4d;
+  stroke: #3a3a3a;
+  stroke-width: 1;
+}
+
+.waypointLabel {
+  fill: #fff;
+  font-size: 7px;
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: #000;
+  stroke-width: 2px;
+}
+
 @keyframes markerBlink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.25; }

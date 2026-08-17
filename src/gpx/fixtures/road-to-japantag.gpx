@@ -10,23 +10,23 @@
     </author>
   </metadata>
   <wpt lat="53.213155" lon="6.570242">
-    <name>Groningen city centre</name>
+    <name>Groningen</name>
     <sym>Shopping Center</sym>
   </wpt>
   <wpt lat="52.851336" lon="4.698913">
-    <name>Duinen Den Helder–Callantsoog Dune Cycle Path</name>
+    <name>Den Helder</name>
     <sym>Flag, Blue</sym>
   </wpt>
   <wpt lat="52.682786" lon="4.680028">
-    <name>Forest Bike Path in the Schoorl Dunes</name>
+    <name>Dunes</name>
     <sym>Flag, Blue</sym>
   </wpt>
   <wpt lat="51.823383" lon="3.888867">
-    <name>Dune Cycle Path With Sea View</name>
+    <name>Sea View</name>
     <sym>Flag, Blue</sym>
   </wpt>
   <wpt lat="51.731386" lon="3.772151">
-    <name>Renesse town centre</name>
+    <name>Renesse</name>
     <sym>Shopping Center</sym>
   </wpt>
   <trk>
