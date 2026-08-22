@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from 'react';
 import type { MoblinTelemetryData } from '../types/moblin';
-import type { CyclingData, CyclingHudConfig, CyclingHudTheme, LogoData, PauseInfo } from '../components/cycling/CyclingHud';
 import { parseMessage, isSystemMessageType, HeheChatMessage, SystemMessage } from '../commons/message';
 import { version } from '../../package.json';
+import type {
+  CyclingData, CyclingHudConfig, CyclingHudTheme, CyclingHudLayout, LogoData, PauseInfo,
+  GpxTrack, MoblinConnectionStatus, MoblinDebugInfo,
+} from './types';
 
 interface Sections {
   enabled: boolean;
@@ -160,14 +163,25 @@ function thresholdsFromConfig(profileConfig: Record<string, unknown> | undefined
   return result as unknown as Thresholds;
 }
 
-const VALID_THEMES: CyclingHudTheme[] = ['classic', 'mono', 'cockpit', 'japan'];
-
-// profile.config key carrying the HUD's visual theme, set via Settings > Connect > Moblin
+// profile.config key carrying the HUD's visual theme, set via Settings > Connect > Moblin. Core
+// doesn't know or validate which theme names exist - it's a raw passthrough string, since which
+// names are valid is a decision for whichever HUD layer renders the theme
 const THEME_CONFIG_KEY = 'cyclingHudTheme';
+const DEFAULT_THEME: CyclingHudTheme = 'classic';
 
 function themeFromConfig(profileConfig: Record<string, unknown> | undefined): CyclingHudTheme {
   const value = profileConfig?.[THEME_CONFIG_KEY];
-  return VALID_THEMES.includes(value as CyclingHudTheme) ? (value as CyclingHudTheme) : 'classic';
+  return typeof value === 'string' && value.length > 0 ? value : DEFAULT_THEME;
+}
+
+// profile.config key carrying the HUD's widget arrangement - independent of theme, so a theme
+// and a layout can be picked separately. Same raw-passthrough treatment as theme above.
+const LAYOUT_CONFIG_KEY = 'cyclingHudLayout';
+const DEFAULT_LAYOUT: CyclingHudLayout = 'default';
+
+function layoutFromConfig(profileConfig: Record<string, unknown> | undefined): CyclingHudLayout {
+  const value = profileConfig?.[LAYOUT_CONFIG_KEY];
+  return typeof value === 'string' && value.length > 0 ? value : DEFAULT_LAYOUT;
 }
 
 const emptyPause: PauseInfo = {
@@ -368,7 +382,7 @@ function toCyclingData(
   };
 }
 
-export type MoblinConnectionStatus = 'waiting' | 'subscribed' | 'error';
+export type { MoblinConnectionStatus, MoblinDebugInfo, GpxTrack, LogoData };
 
 const INITIAL_RECONNECT_DELAY_MS = 1000;
 const MAX_RECONNECT_DELAY_MS = 30000;
@@ -377,17 +391,6 @@ const RECONNECT_BACKOFF = 1.5;
 function calcReconnectDelay(attempts: number): number {
   const delay = INITIAL_RECONNECT_DELAY_MS * RECONNECT_BACKOFF ** attempts;
   return Math.min(delay, MAX_RECONNECT_DELAY_MS);
-}
-
-// on-screen debug info since browser sources in OBS have no reachable devtools
-export interface MoblinDebugInfo {
-  telemetryCount: number;
-  chatCount: number;
-  lastChatUser: string | null;
-  lastChatText: string | null;
-  lastMessageError: string | null;
-  lastChatRaw: string | null;
-  lastTelemetryRaw: string | null;
 }
 
 const emptyDebug: MoblinDebugInfo = {
@@ -409,15 +412,11 @@ function safeStringify(value: unknown): string {
   }
 }
 
-export interface GpxTrack {
-  id: string;
-  filename: string;
-  content: string;
-}
-
-export type { LogoData };
-
-export function useMoblinCyclingHud(): {
+// public entry point of the "core" layer: owns the WebSocket connection, telemetry parsing,
+// session/pause tracking, and config resolution. Any HUD layout - the built-in one or a
+// third-party replacement - is meant to call only this hook and render from its output, without
+// reimplementing the connection or domain logic itself
+export function useCyclingCore(): {
   data: CyclingData | null;
   config: CyclingHudConfig;
   pause: PauseInfo;
@@ -434,7 +433,8 @@ export function useMoblinCyclingHud(): {
   const [gpxMapRadius, setGpxMapRadius] = useState<number | null>(null);
   const [gpxTrack, setGpxTrack] = useState<GpxTrack | null>(null);
   const [logo, setLogo] = useState<LogoData | null>(null);
-  const [theme, setTheme] = useState<CyclingHudTheme>('classic');
+  const [theme, setTheme] = useState<CyclingHudTheme>(DEFAULT_THEME);
+  const [layout, setLayout] = useState<CyclingHudLayout>(DEFAULT_LAYOUT);
   const [status, setStatus] = useState<MoblinConnectionStatus>('waiting');
   const [error, setError] = useState<string | null>(null);
   const [streamStartSignal, setStreamStartSignal] = useState(0);
@@ -539,6 +539,7 @@ export function useMoblinCyclingHud(): {
           setThresholds(thresholdsFromConfig(msg.profile?.config));
           setGpxMapRadius(gpxMapRadiusFromConfig(msg.profile?.config));
           setTheme(themeFromConfig(msg.profile?.config));
+          setLayout(layoutFromConfig(msg.profile?.config));
           return;
         }
 
@@ -548,6 +549,7 @@ export function useMoblinCyclingHud(): {
           setThresholds(thresholdsFromConfig(msg.profile?.config));
           setGpxMapRadius(gpxMapRadiusFromConfig(msg.profile?.config));
           setTheme(themeFromConfig(msg.profile?.config));
+          setLayout(layoutFromConfig(msg.profile?.config));
           return;
         }
 
@@ -646,6 +648,7 @@ export function useMoblinCyclingHud(): {
 
   const config: CyclingHudConfig = {
     theme,
+    layout,
     visible: {
       speed: sections.enabled && sections.speed,
       distance: sections.enabled && sections.distance,
@@ -682,6 +685,10 @@ export function useMoblinCyclingHud(): {
 
   return { data, config, pause, status, error, debug, debugVisible: sections.debug, gpxTrack, logo };
 }
+
+// deprecated: kept as an alias for one release so nothing importing the old Moblin-specific name
+// breaks mid-migration. New code should import `useCyclingCore`.
+export const useMoblinCyclingHud = useCyclingCore;
 
 // a bad chat payload here must never break the WS message pipe or crash the page
 function handleIncomingChat(

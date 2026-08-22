@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import type { GpxPoint, GpxWaypoint } from '../../gpx/parseGpx';
-import { distanceMeters, findNearestPointIndex, CLOSE_THRESHOLD_METERS } from '../../gpx/trackStats';
+import type { GpxPoint, GpxWaypoint } from '../core/gpx/parseGpx';
+import { distanceMeters, findNearestPointIndex, CLOSE_THRESHOLD_METERS } from '../core/gpx/trackStats';
 import styles from './TrackMap.module.css';
 
 const VIEWBOX_SIZE = 200;

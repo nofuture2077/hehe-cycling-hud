@@ -29,26 +29,14 @@
 .legendValue {
   font-size: 11px;
   font-weight: 600;
-  color: #f9a825;
+  color: var(--hud-accent, #f9a825);
   line-height: 1;
   white-space: nowrap;
 }
 
-[data-theme='mono'] .legendValue {
-  color: var(--mono-accent, #e6e6e8);
-}
-
-[data-theme='cockpit'] .legendValue {
-  color: var(--cockpit-accent, #a8e063);
-}
-
-[data-theme='japan'] .legendValue {
-  color: var(--japan-accent, #e30016);
-}
-
 .line {
   fill: none;
-  stroke: #f9a825;
+  stroke: var(--hud-accent, #f9a825);
   stroke-width: 2;
   stroke-linejoin: round;
   stroke-linecap: round;
@@ -68,16 +56,4 @@
 @keyframes markerBlink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.25; }
-}
-
-[data-theme='mono'] .line {
-  stroke: var(--mono-accent, #e6e6e8);
-}
-
-[data-theme='cockpit'] .line {
-  stroke: var(--cockpit-accent, #a8e063);
-}
-
-[data-theme='japan'] .line {
-  stroke: var(--japan-accent, #e30016);
 }

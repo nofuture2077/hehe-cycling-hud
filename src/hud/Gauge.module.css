@@ -1,0 +1,344 @@
+/* --- bottom-right: circular gauges --- */
+
+.gauge {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  background: var(--hud-gauge-bg, rgba(46, 125, 50, 0.35));
+  backdrop-filter: var(--hud-gauge-backdrop-filter, blur(8px));
+  border: 3px solid rgba(46, 125, 50, 0.8);
+  color: #2e7d32;
+  opacity: 1;
+  transition: background 0.3s ease, border-color 0.3s ease, opacity 0.6s ease;
+}
+
+.fadingOut {
+  opacity: 0;
+}
+
+/* --- ascent gauge: hill silhouette grows + heats up with slope intensity --- */
+
+.mountain {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  clip-path: polygon(0% 100%, 50% 0%, 100% 100%);
+  transition: height 0.3s ease, background 0.3s ease;
+}
+
+/* --- shared intensity buckets: mono/japan map their own palette onto these five steps, cutting
+   across the speed/gradient/heart-rate/power gauges (cockpit only maps bucket 1). Every rule
+   keeps its own classic-default fallback, distinct per gauge type, so an unthemed HUD renders
+   exactly as it did before buckets existed - only an active theme setting --hud-bN-* pulls
+   multiple gauge types onto the same shared color. --- */
+
+.gradientLevel1,
+.speedLevel1 {
+  background: var(--hud-b1-bg, rgba(20, 22, 26, 0.72));
+  border-color: var(--hud-b1-border, var(--accent, #4dd0e1));
+  --level-color: var(--hud-b1-color, var(--accent, #4dd0e1));
+}
+
+.mountain1 {
+  height: 22%;
+  background: var(--hud-mountain1-gradient, linear-gradient(to top, #2e7d32, #a5d6a7));
+}
+
+.gradientLevel2 {
+  background: var(--hud-b2-bg, rgba(249, 168, 37, 0.22));
+  border-color: var(--hud-b2-border, rgba(249, 168, 37, 0.8));
+  --level-color: var(--hud-b2-color, #f9a825);
+}
+
+.speedLevel2 {
+  background: var(--hud-b2-bg, rgba(251, 192, 45, 0.1));
+  border-color: var(--hud-b2-border, rgba(251, 192, 45, 0.85));
+  --level-color: var(--hud-b2-color, #fbc02d);
+}
+
+.heartRateLevel1 {
+  background: var(--hud-b2-bg, rgba(38, 166, 154, 0.25));
+  border-color: var(--hud-b2-border, rgba(38, 166, 154, 0.8));
+  --level-color: var(--hud-b2-color, #26a69a);
+}
+
+.powerLevel1 {
+  background: var(--hud-b2-bg, rgba(84, 110, 122, 0.3));
+  border-color: var(--hud-b2-border, rgba(84, 110, 122, 0.85));
+  --level-color: var(--hud-b2-color, #78909c);
+}
+
+.mountain2 {
+  height: 42%;
+  background: var(--hud-mountain2-gradient, linear-gradient(to top, #e6a80f, #f9c94d));
+}
+
+.gradientLevel3 {
+  background: var(--hud-b3-bg, rgba(230, 81, 0, 0.4));
+  border-color: var(--hud-b3-border, rgba(230, 81, 0, 0.85));
+  --level-color: var(--hud-b3-color, #e65100);
+}
+
+.speedLevel3 {
+  background: var(--hud-b3-bg, rgba(255, 152, 0, 0.1));
+  border-color: var(--hud-b3-border, rgba(255, 152, 0, 0.85));
+  --level-color: var(--hud-b3-color, #ff9800);
+}
+
+.heartRateLevel2 {
+  background: var(--hud-b3-bg, rgba(67, 160, 71, 0.28));
+  border-color: var(--hud-b3-border, rgba(67, 160, 71, 0.85));
+  --level-color: var(--hud-b3-color, #43a047);
+}
+
+.heartRateLevel3 {
+  background: var(--hud-b3-bg, rgba(251, 192, 45, 0.25));
+  border-color: var(--hud-b3-border, rgba(251, 192, 45, 0.85));
+  --level-color: var(--hud-b3-color, #fbc02d);
+}
+
+.powerLevel2 {
+  background: var(--hud-b3-bg, rgba(67, 160, 71, 0.28));
+  border-color: var(--hud-b3-border, rgba(67, 160, 71, 0.85));
+  --level-color: var(--hud-b3-color, #43a047);
+}
+
+.powerLevel3 {
+  background: var(--hud-b3-bg, rgba(38, 166, 154, 0.25));
+  border-color: var(--hud-b3-border, rgba(38, 166, 154, 0.85));
+  --level-color: var(--hud-b3-color, #26a69a);
+}
+
+.mountain3 {
+  height: 62%;
+  background: var(--hud-mountain3-gradient, linear-gradient(to top, #e65100, #ffb74d));
+}
+
+.gradientLevel4 {
+  background: var(--hud-b4-bg, rgba(183, 28, 28, 0.45));
+  border-color: var(--hud-b4-border, rgba(183, 28, 28, 0.9));
+  --level-color: var(--hud-b4-color, #b71c1c);
+}
+
+.speedLevel4 {
+  background: var(--hud-b4-bg, rgba(244, 67, 54, 0.2));
+  border-color: var(--hud-b4-border, rgba(244, 67, 54, 0.85));
+  --level-color: var(--hud-b4-color, #f44336);
+}
+
+.heartRateLevel4 {
+  background: var(--hud-b4-bg, rgba(251, 140, 0, 0.3));
+  border-color: var(--hud-b4-border, rgba(251, 140, 0, 0.85));
+  --level-color: var(--hud-b4-color, #fb8c00);
+}
+
+.powerLevel4 {
+  background: var(--hud-b4-bg, rgba(251, 192, 45, 0.25));
+  border-color: var(--hud-b4-border, rgba(251, 192, 45, 0.85));
+  --level-color: var(--hud-b4-color, #fbc02d);
+}
+
+.powerLevel5 {
+  background: var(--hud-b4-bg, rgba(251, 140, 0, 0.3));
+  border-color: var(--hud-b4-border, rgba(251, 140, 0, 0.85));
+  --level-color: var(--hud-b4-color, #fb8c00);
+}
+
+.mountain4 {
+  height: 88%;
+  background: var(--hud-mountain4-gradient, linear-gradient(to top, #b71c1c, #ef5350));
+}
+
+.speedLevel5 {
+  background: var(--hud-b5-bg, rgba(183, 28, 28, 0.3));
+  border-color: var(--hud-b5-border, rgba(183, 28, 28, 0.9));
+  --level-color: var(--hud-b5-color, #b71c1c);
+}
+
+.heartRateLevel5 {
+  background: var(--hud-b5-bg, rgba(229, 57, 53, 0.4));
+  border-color: var(--hud-b5-border, rgba(229, 57, 53, 0.9));
+  --level-color: var(--hud-b5-color, #e53935);
+}
+
+.powerLevel6 {
+  background: var(--hud-b5-bg, rgba(229, 57, 53, 0.35));
+  border-color: var(--hud-b5-border, rgba(229, 57, 53, 0.9));
+  --level-color: var(--hud-b5-color, #e53935);
+}
+
+.powerLevel7 {
+  background: var(--hud-b5-bg, rgba(142, 36, 170, 0.4));
+  border-color: var(--hud-b5-border, rgba(142, 36, 170, 0.9));
+  --level-color: var(--hud-b5-color, #ce93d8);
+}
+
+@keyframes pulse-extreme {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.pulse-extreme {
+  animation: pulse-extreme 0.8s ease-in-out infinite;
+}
+
+.gaugeBig {
+  width: 130px;
+  height: 130px;
+}
+
+/* unit/value/secondary share one column, all sizes scale off the same baseline rhythm and
+   are sized to fill the circle rather than float in the middle of it */
+.gaugeMain {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* darker shade of the level's own color, instead of white-on-shadow - shifts with
+     every gradient/speed stage's color, falls back to the gauge's base accent */
+  color: color-mix(in srgb, var(--level-color, var(--accent, #4dd0e1)) 17%, #fff 83%);
+}
+
+.gaugeUnit {
+  font-size: 18px;
+  font-weight: 700;
+  color: inherit;
+  line-height: 1em;
+  /* text-transform: uppercase;*/
+}
+
+.gaugeBig .gaugeUnit {
+  font-size: 20px;
+  line-height: 1em;
+}
+
+.gaugeValue {
+  font-size: 58px;
+  font-weight: 700;
+  color: inherit;
+  line-height: 0.8;
+  letter-spacing: 0.3px;
+}
+
+.gaugeBig .gaugeValue {
+  font-size: 82px;
+}
+
+.gaugeSecondary {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 22px;
+  font-weight: 500;
+  color: inherit;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.gaugeBig .gaugeSecondary {
+  font-size: 24px;
+}
+
+.gaugeSecondary svg {
+  width: 18px;
+  height: 18px;
+}
+
+.gaugeBig .gaugeSecondary svg {
+  width: 20px;
+  height: 20px;
+}
+
+.speed {
+  --accent: var(--hud-accent, #4dd0e1);
+}
+
+.pause {
+  --accent: var(--hud-accent, #ba68c8);
+  overflow: visible;
+}
+
+.gaugeBig .pauseValue {
+  font-size:48px;
+}
+
+.pauseIcon {
+  display: flex;
+  margin-bottom: 2px;
+}
+
+.pauseBadge {
+  position: absolute;
+  z-index: 2;
+  top: -14px;
+  right: -14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 6 6px;
+  border-radius: 50%;
+  background: var(--hud-pausebadge-bg, rgba(255, 51, 153, 0.6));
+  border: 3px solid var(--hud-pausebadge-border, rgba(255, 51, 153, 0.9));
+  color: #fff;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.gradient {
+  --accent: var(--hud-accent, #4dd0e1);
+}
+
+/* --- heart rate / power gauges: zone color background + pulsing icon silhouette --- */
+
+.bgIcon {
+  position: absolute;
+  top: 4%;
+  left: 4%;
+  width: 92%;
+  height: 92%;
+  color: var(--level-color, var(--accent, #4dd0e1));
+  opacity: var(--hud-bgicon-opacity, 0.3);
+}
+
+@keyframes bg-icon-pulse {
+  0%,
+  100% {
+    opacity: 0.18;
+    transform: scale(0.94);
+  }
+
+  50% {
+    opacity: 0.4;
+    transform: scale(1.04);
+  }
+}
+
+.bgIconPulse {
+  animation-name: bg-icon-pulse;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.heartRate {
+  --accent: var(--hud-accent, #ff5c8a);
+}
+
+.power {
+  --accent: var(--hud-accent, #ffd54f);
+}

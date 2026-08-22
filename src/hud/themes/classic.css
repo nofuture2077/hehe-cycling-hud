@@ -1,0 +1,43 @@
+/* classic theme: the original, no-theme-selected look. Unlike mono/cockpit/japan, classic never
+   had one unifying accent - each widget type keeps its own hand-picked color (speed/gradient
+   cyan, heart rate pink, power amber, pause purple, location pink, distance cyan, gain green,
+   loss red) and border, so --hud-accent/--hud-border are deliberately left unset here: setting
+   them would collapse that multi-color identity into one flat accent, which is a much bigger
+   change than "give classic a token file" should mean.
+
+   The one accepted change: making this file explicit means the intensity ramps (levels 2-5,
+   shared across speed/gradient/heart-rate/power) now use one canonical scale (speed's) instead
+   of each gauge type's own slightly different shade at the same step - e.g. gradient's level-2
+   amber becomes speed's level-2 amber. Bucket 1 needs no entry here since it's already identical
+   between speed/gradient by design (both fall back to var(--accent)) and heart-rate/power start
+   their ramp at bucket 2. Everything else below is an exact match for what was previously
+   hardcoded per-component - setting it here changes nothing, it just gives classic a home. */
+[data-theme='classic'] {
+  --hud-bg: rgba(20, 22, 26, 0.72);
+  --hud-gauge-bg: rgba(46, 125, 50, 0.35);
+  --hud-gauge-backdrop-filter: blur(8px);
+  --hud-chip-backdrop-filter: blur(8px);
+  --hud-chipicon-filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.7));
+  --hud-bgicon-opacity: 0.3;
+  --hud-pausebadge-bg: rgba(255, 51, 153, 0.6);
+  --hud-pausebadge-border: rgba(255, 51, 153, 0.9);
+
+  --hud-mountain1-gradient: linear-gradient(to top, #2e7d32, #a5d6a7);
+  --hud-mountain2-gradient: linear-gradient(to top, #e6a80f, #f9c94d);
+  --hud-mountain3-gradient: linear-gradient(to top, #e65100, #ffb74d);
+  --hud-mountain4-gradient: linear-gradient(to top, #b71c1c, #ef5350);
+
+  /* canonical scale (speed's), shared across gauge types - see the note above */
+  --hud-b2-bg: rgba(251, 192, 45, 0.1);
+  --hud-b2-border: rgba(251, 192, 45, 0.85);
+  --hud-b2-color: #fbc02d;
+  --hud-b3-bg: rgba(255, 152, 0, 0.1);
+  --hud-b3-border: rgba(255, 152, 0, 0.85);
+  --hud-b3-color: #ff9800;
+  --hud-b4-bg: rgba(244, 67, 54, 0.2);
+  --hud-b4-border: rgba(244, 67, 54, 0.85);
+  --hud-b4-color: #f44336;
+  --hud-b5-bg: rgba(183, 28, 28, 0.3);
+  --hud-b5-border: rgba(183, 28, 28, 0.9);
+  --hud-b5-color: #b71c1c;
+}

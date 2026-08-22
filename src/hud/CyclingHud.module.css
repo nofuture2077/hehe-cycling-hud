@@ -1,0 +1,59 @@
+.root {
+  position: fixed;
+  inset: 0;
+  width: 1920px;
+  height: 1080px;
+  color: #fff;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* --- top-left: tight cluster of rounded-rect chips --- */
+
+.chipCluster {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+}
+
+.chipCluster > .hor {
+  display: flex;
+  flex-direction: row;
+}
+
+.chipCluster.matchWidth {
+  align-items: stretch;
+}
+
+.topLeft {
+  top: 40px;
+  left: 40px;
+}
+
+.chipRow {
+  display: flex;
+  gap: 3px;
+}
+
+.trackMapSpacing {
+  margin-top: 14px;
+  margin-left: 6px;
+}
+
+/* --- bottom-right: elevation profile stacked above the circular gauges --- */
+
+.gaugeRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+}
+
+.bottomRight {
+  bottom: 40px;
+  right: 40px;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 10px;
+}

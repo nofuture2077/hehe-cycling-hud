@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TrackMap } from './TrackMap';
-import { parseGpx, parseGpxWaypoints } from '../../gpx/parseGpx';
-import gpxContent from '../../gpx/fixtures/road-to-japantag.gpx?raw';
+import { parseGpx, parseGpxWaypoints } from '../core/gpx/parseGpx';
+import gpxContent from '../core/gpx/fixtures/road-to-japantag.gpx?raw';
 
 const points = parseGpx(gpxContent);
 const waypoints = parseGpxWaypoints(gpxContent);

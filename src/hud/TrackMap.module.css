@@ -13,7 +13,7 @@
 
 .track {
   fill: none;
-  stroke: #4dd0e1;
+  stroke: var(--hud-accent, #4dd0e1);
   stroke-width: 2.5;
   stroke-linejoin: round;
   stroke-linecap: round;
@@ -48,16 +48,4 @@
 @keyframes markerBlink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.25; }
-}
-
-[data-theme='mono'] .track {
-  stroke: var(--mono-accent, #e6e6e8);
-}
-
-[data-theme='cockpit'] .track {
-  stroke: var(--cockpit-accent, #a8e063);
-}
-
-[data-theme='japan'] .track {
-  stroke: var(--japan-accent, #e30016);
 }

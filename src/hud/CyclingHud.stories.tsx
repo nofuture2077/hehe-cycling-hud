@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import CyclingHud, { type CyclingData, type CyclingHudConfig } from './CyclingHud';
-import { defaultConfig, defaultPause } from './types';
-import { parseGpx } from '../../gpx/parseGpx';
-import gpxContent from '../../gpx/fixtures/road-to-japantag.gpx?raw';
-import type { GpxTrack, LogoData } from '../../hooks/useMoblinCyclingHud';
+import { defaultConfig, defaultPause } from '../core/types';
+import { parseGpx } from '../core/gpx/parseGpx';
+import gpxContent from '../core/gpx/fixtures/road-to-japantag.gpx?raw';
+import type { GpxTrack, LogoData } from '../core/types';
 
 const gpxTrack: GpxTrack = { id: 'road-to-japantag', filename: 'road-to-japantag.gpx', content: gpxContent };
 const sampleLogoSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="50" cy="50" r="45" fill="#e63946"/></svg>';
@@ -64,6 +64,7 @@ export const Default: Story = {
   args: {
     config: {
       "theme": "classic",
+      "layout": "default",
 
       "visible": {
         "speed": true,

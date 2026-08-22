@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Gauge } from './Gauge';
 import { NumberValue } from './NumberValue';
 import { IconHeart } from './icons/Icons';
-import { heartRateZone, heartbeatSeconds } from './format';
+import { heartRateZone, heartbeatSeconds } from '../core/zones';
 import styles from './Gauge.module.css';
 
 const meta: Meta<typeof Gauge> = {

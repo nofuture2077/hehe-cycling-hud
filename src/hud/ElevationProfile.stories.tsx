@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { GpxPoint } from '../../gpx/parseGpx';
+import type { GpxPoint } from '../core/gpx/parseGpx';
 import { ElevationProfile } from './ElevationProfile';
-import { parseGpx } from '../../gpx/parseGpx';
-import gpxContent from '../../gpx/fixtures/road-to-japantag.gpx?raw';
+import { parseGpx } from '../core/gpx/parseGpx';
+import gpxContent from '../core/gpx/fixtures/road-to-japantag.gpx?raw';
 
 const points = parseGpx(gpxContent);
 const midPoint = points[Math.floor(points.length / 2)];

@@ -1,0 +1,104 @@
+.chip {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px 8px 10px;
+  border-radius: 12px;
+  background: var(--hud-bg, rgba(20, 22, 26, 0.72));
+  backdrop-filter: var(--hud-chip-backdrop-filter, blur(8px));
+  border: 2px solid var(--hud-border, var(--accent, #4dd0e1));
+}
+
+/* --- combined distance + elevation card, grouped like a sports-computer stats tile --- */
+
+.statsCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.statsDistance {
+  gap: 18px;
+}
+
+.statsDistanceItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.statsDistanceItem:nth-child(2) .chipIcon {
+  color: var(--hud-accent, #b0bec5);
+}
+
+.statsDistanceItem:nth-child(3) .chipIcon {
+  color: var(--hud-accent, #f2c94c);
+}
+
+.statsElevation {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.statsElevationRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.remaining {
+  --accent: var(--hud-accent, #f2c94c);
+}
+
+.chipIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  color: var(--accent, #4dd0e1);
+  filter: var(--hud-chipicon-filter, drop-shadow(0 1px 3px rgba(0, 0, 0, 0.7)));
+  flex: none;
+  margin-right: 0.5em;
+}
+
+.text {
+  font-size: 22px;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+  white-space: nowrap;
+}
+
+.value {
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+  white-space: nowrap;
+}
+
+.unit {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+  margin-left: 2px;
+}
+
+.location {
+  --accent: var(--hud-accent, #f39);
+}
+
+.distance {
+  --accent: var(--hud-accent, #4dd0e1);
+}
+
+.gain {
+  --accent: var(--hud-accent, #81c784);
+}
+
+.loss {
+  --accent: var(--hud-accent, #e57373);
+}

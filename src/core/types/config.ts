@@ -1,28 +1,3 @@
-export interface CyclingData {
-  speedKmh: number;
-  maxSpeedKmh: number;
-  distanceKm: number;
-  splitDistanceKm: number;
-  city: string;
-  region: string;
-  country: string;
-  countryFlag: string;
-  temperatureC: number | null;
-  localTime: string;
-  gradientPercent: number;
-  maxGradientPercent: number;
-  elevationGainM: number;
-  elevationLossM: number;
-  splitElevationGainM: number;
-  splitElevationLossM: number;
-  heartRateBpm: number;
-  powerWatts: number;
-  sessionMaxHeartRateBpm: number;
-  sessionMaxPowerWatts: number;
-  latitude: number | null;
-  longitude: number | null;
-}
-
 export interface CyclingHudVisibility {
   speed: boolean;
   distance: boolean;
@@ -53,11 +28,17 @@ export interface CyclingHudVisibility {
   showLogo: boolean;
 }
 
-export type CyclingHudTheme = 'classic' | 'mono' | 'cockpit' | 'japan';
+// raw strings, not closed unions: core just passes through whatever names arrive from config, so
+// any HUD layer can define its own set of supported theme/layout names without a core change.
+// theme = colors/fonts/spacing only; layout = which widget renders where - independent axes.
+export type CyclingHudTheme = string;
+export type CyclingHudLayout = string;
 
 export interface CyclingHudConfig {
-  // overall visual style of the HUD
+  // overall visual style of the HUD - a HUD layer decides which names it recognizes
   theme: CyclingHudTheme;
+  // arrangement of widgets on screen - a HUD layer decides which names it recognizes
+  layout: CyclingHudLayout;
   visible: CyclingHudVisibility;
   // dynamic elements hide themselves below these thresholds
   minSpeedKmh: number;
@@ -75,6 +56,7 @@ export interface CyclingHudConfig {
 
 export const defaultConfig: CyclingHudConfig = {
   theme: 'classic',
+  layout: 'default',
   visible: {
     speed: true,
     distance: true,
@@ -107,21 +89,4 @@ export const defaultConfig: CyclingHudConfig = {
   maxHeartRateBpm: 190,
   averagePowerWatts: 250,
   gpxMapRadius: 50000,
-};
-
-export interface LogoData {
-  filename: string;
-  mimeType: string;
-  content: string; // base64-encoded
-}
-
-export interface PauseInfo {
-  onBreak: boolean;
-  currentBreakSeconds: number;
-  totalBreakSeconds: number;
-  breakCount: number;
-}
-
-export const defaultPause: PauseInfo = {
-  onBreak: false, currentBreakSeconds: 0, totalBreakSeconds: 0, breakCount: 0,
 };

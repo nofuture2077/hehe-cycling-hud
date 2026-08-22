@@ -1,8 +1,10 @@
 import { Component, type ReactNode } from 'react';
 import ReactDOM from 'react-dom/client';
-import CyclingHud, { type CyclingData } from './components/cycling/CyclingHud';
-import { useMoblinCyclingHud } from './hooks/useMoblinCyclingHud';
+import { type CyclingData, useCyclingCore } from './core';
+import { getLayout } from './hud/registry';
 import { useVersionCheck } from './hooks/useVersionCheck';
+
+const { Component: CyclingHud } = getLayout('default');
 
 // ponytail: fallback so the design still renders when opened outside a Moblin browser source
 const previewData: CyclingData = {
@@ -73,7 +75,7 @@ class HudErrorBoundary extends Component<{ children: ReactNode }, { error: Error
   }
 }
 
-function DebugPanel({ status, debug }: { status: string; debug: ReturnType<typeof useMoblinCyclingHud>['debug'] }) {
+function DebugPanel({ status, debug }: { status: string; debug: ReturnType<typeof useCyclingCore>['debug'] }) {
   return (
     <div
       style={{
@@ -103,7 +105,7 @@ last telemetry raw: ${debug.lastTelemetryRaw ?? '-'}`}
 }
 
 function CyclingRoot() {
-  const { data, config, pause, status, error, debug, debugVisible, gpxTrack, logo } = useMoblinCyclingHud();
+  const { data, config, pause, status, error, debug, debugVisible, gpxTrack, logo } = useCyclingCore();
 
   // Long-lived browser-source sessions must pick up a new build without a manual OBS reload.
   useVersionCheck({

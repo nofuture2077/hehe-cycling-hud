@@ -1,0 +1,34 @@
+/* japan theme: white and red, flat panels that heat from white to hinomaru red. */
+[data-theme='japan'] {
+  --hud-bg: rgba(20, 10, 10, 0.78);
+  --hud-border: rgba(255, 255, 255, 0.75);
+  --hud-accent: #e30016;
+
+  --hud-b1-bg: var(--hud-bg);
+  --hud-b1-border: var(--hud-border);
+  --hud-b1-color: #ffffff;
+  --hud-b2-bg: rgba(255, 255, 255, 0.1);
+  --hud-b2-border: rgba(255, 210, 210, 0.75);
+  --hud-b2-color: #f5c6c6;
+  --hud-b3-bg: rgba(227, 0, 22, 0.18);
+  --hud-b3-border: rgba(255, 140, 140, 0.85);
+  --hud-b3-color: #ff8c8c;
+  --hud-b4-bg: rgba(227, 0, 22, 0.3);
+  --hud-b4-border: rgba(227, 0, 22, 0.85);
+  --hud-b4-color: #ff4d4d;
+  --hud-b5-bg: rgba(227, 0, 22, 0.45);
+  --hud-b5-border: var(--hud-accent);
+  --hud-b5-color: var(--hud-accent);
+
+  --hud-mountain1-gradient: linear-gradient(to top, var(--hud-accent), #ffffff);
+  --hud-mountain2-gradient: linear-gradient(to top, var(--hud-accent), #ffffff);
+  --hud-mountain3-gradient: linear-gradient(to top, var(--hud-accent), #ffffff);
+  --hud-mountain4-gradient: linear-gradient(to top, var(--hud-accent), #ffffff);
+  --hud-bgicon-opacity: 0.2;
+  --hud-pausebadge-bg: rgba(227, 0, 22, 0.6);
+  --hud-pausebadge-border: var(--hud-border);
+
+  --hud-gauge-backdrop-filter: none;
+  --hud-chip-backdrop-filter: none;
+  --hud-chipicon-filter: none;
+}

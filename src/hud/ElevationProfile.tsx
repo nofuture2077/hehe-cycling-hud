@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import type { GpxPoint } from '../../gpx/parseGpx';
-import { distanceMeters, findNearestPointIndex, CLOSE_THRESHOLD_METERS } from '../../gpx/trackStats';
+import type { GpxPoint } from '../core/gpx/parseGpx';
+import { distanceMeters, findNearestPointIndex, CLOSE_THRESHOLD_METERS } from '../core/gpx/trackStats';
 import styles from './ElevationProfile.module.css';
 
 const VIEWBOX_WIDTH = 240;

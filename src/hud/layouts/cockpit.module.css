@@ -1,0 +1,39 @@
+/* cockpit layout: both clusters sit side by side on one bottom-center line (no stacking, no
+   panel) - purely positional, no color here (see src/hud/themes/*.css for that). Combinable with
+   any theme. Self-contained (doesn't depend on CyclingHud.module.css's .chipCluster), since that
+   class's column-direction default would conflict with this layout's row-direction clusters. */
+
+.topLeft {
+  position: absolute;
+  bottom: 40px;
+  right: 50%;
+  margin-right: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.topLeft.matchWidth {
+  align-items: stretch;
+}
+
+.hor {
+  display: flex;
+  flex-direction: row;
+}
+
+.bottomRight {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  margin-left: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.trackMapSpacing {
+  margin-left: 14px;
+}

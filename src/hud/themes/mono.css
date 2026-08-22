@@ -1,0 +1,38 @@
+/* mono theme: flat grayscale, single neutral accent, brightness instead of hue for zones.
+   Pure design tokens - no component/layout knowledge. Consumed via var() with fallbacks in
+   Gauge.module.css/Chips.module.css/TrackMap.module.css/ElevationProfile.module.css, so this
+   file is the only place mono's colors live. */
+[data-theme='mono'] {
+  --hud-bg: rgba(24, 24, 26, 0.78);
+  --hud-border: rgba(210, 210, 215, 0.55);
+  --hud-accent: #d7d9dc;
+
+  /* five shared intensity buckets, cutting across speed/gradient/heart-rate/power gauges */
+  --hud-b1-bg: var(--hud-bg);
+  --hud-b1-border: var(--hud-border);
+  --hud-b1-color: var(--hud-accent);
+  --hud-b2-bg: rgba(255, 255, 255, 0.06);
+  --hud-b2-border: rgba(230, 230, 232, 0.65);
+  --hud-b2-color: #e6e6e8;
+  --hud-b3-bg: rgba(255, 255, 255, 0.1);
+  --hud-b3-border: rgba(200, 200, 204, 0.75);
+  --hud-b3-color: #cfcfd2;
+  --hud-b4-bg: rgba(255, 255, 255, 0.16);
+  --hud-b4-border: rgba(170, 170, 175, 0.85);
+  --hud-b4-color: #aeaeb2;
+  --hud-b5-bg: rgba(255, 255, 255, 0.22);
+  --hud-b5-border: rgba(255, 255, 255, 0.95);
+  --hud-b5-color: #ffffff;
+
+  --hud-mountain1-gradient: linear-gradient(to top, #6e6e72, #d0d0d4);
+  --hud-mountain2-gradient: linear-gradient(to top, #6e6e72, #d0d0d4);
+  --hud-mountain3-gradient: linear-gradient(to top, #6e6e72, #d0d0d4);
+  --hud-mountain4-gradient: linear-gradient(to top, #6e6e72, #d0d0d4);
+  --hud-bgicon-opacity: 0.16;
+  --hud-pausebadge-bg: rgba(255, 255, 255, 0.18);
+  --hud-pausebadge-border: rgba(255, 255, 255, 0.85);
+
+  --hud-gauge-backdrop-filter: none;
+  --hud-chip-backdrop-filter: none;
+  --hud-chipicon-filter: none;
+}
