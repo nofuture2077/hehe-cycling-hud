@@ -1,0 +1,40 @@
+/* shared typography + spacing tokens, applied regardless of which theme is selected. These used
+   to live only under [data-theme='classic'], so mono/matrix/japan silently fell back to the
+   hardcoded per-component defaults instead - which drifted from classic's values in a couple of
+   spots (e.g. chip unit size, map label size). Defining them here once means every theme gets
+   the same type scale and spacing by default, while still being free to override individual
+   steps under its own [data-theme='x'] block (CSS specificity/source-order gives the later,
+   more specific theme file the win). */
+[data-theme] {
+  --hud-font-family: 'Rajdhani', sans-serif;
+  --hud-font-weight-regular: 500;
+  --hud-font-weight-semibold: 600;
+  --hud-font-weight-bold: 700;
+  --hud-font-weight-black: 800;
+
+  --hud-font-size-map-label: 11px;
+  --hud-font-size-elevation-legend: 11px;
+
+  --hud-font-size-gauge-value: 58px;
+  --hud-font-size-gauge-value-big: 82px;
+  --hud-font-size-gauge-unit: 18px;
+  --hud-font-size-gauge-unit-big: 20px;
+
+  --hud-font-size-chip-text: 24px;
+  --hud-font-size-chip-unit: 20px;
+  --hud-chip-padding: 4px 16px 4px 10px;
+  --hud-radius-chip: 8px;
+
+  --hud-font-size-gauge-secondary: 22px;
+  --hud-font-size-gauge-secondary-big: 24px;
+  --hud-font-size-pause-badge: 28px;
+  --hud-font-size-pause-value-big: 48px;
+
+  /* generic spacing scale, shared across chip/gauge/elevation gaps, padding and margins */
+  --hud-space-1: 2px;
+  --hud-space-2: 4px;
+  --hud-space-3: 6px;
+  --hud-space-4: 8px;
+  --hud-space-5: 16px;
+  --hud-space-6: 18px;
+}

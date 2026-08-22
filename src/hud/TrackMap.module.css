@@ -38,7 +38,7 @@
 
 .waypointLabel {
   fill: #fff;
-  font-size: 7px;
+  font-size: var(--hud-font-size-map-label, 7px);
   text-anchor: middle;
   paint-order: stroke;
   stroke: #000;

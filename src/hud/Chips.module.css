@@ -1,8 +1,8 @@
 .chip {
   display: flex;
   align-items: center;
-  padding: 8px 16px 8px 10px;
-  border-radius: 12px;
+  padding: var(--hud-chip-padding, 8px 16px 8px 10px);
+  border-radius: var(--hud-radius-chip, 12px);
   background: var(--hud-bg, rgba(20, 22, 26, 0.72));
   backdrop-filter: var(--hud-chip-backdrop-filter, blur(8px));
   border: 2px solid var(--hud-border, var(--accent, #4dd0e1));
@@ -14,17 +14,17 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 8px;
+  gap: var(--hud-space-4, 8px);
 }
 
 .statsDistance {
-  gap: 18px;
+  gap: var(--hud-space-6, 18px);
 }
 
 .statsDistanceItem {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--hud-space-3, 6px);
 }
 
 .statsDistanceItem:nth-child(2) .chipIcon {
@@ -38,13 +38,13 @@
 .statsElevation {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--hud-space-5, 16px);
 }
 
 .statsElevationRow {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--hud-space-3, 6px);
 }
 
 .remaining {
@@ -64,27 +64,27 @@
 }
 
 .text {
-  font-size: 22px;
-  font-weight: 600;
+  font-size: var(--hud-font-size-chip-text, 22px);
+  font-weight: var(--hud-font-weight-semibold, 600);
   color: #fff;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
   white-space: nowrap;
 }
 
 .value {
-  font-size: 22px;
-  font-weight: 700;
+  font-size: var(--hud-font-size-chip-text, 22px);
+  font-weight: var(--hud-font-weight-bold, 700);
   color: #fff;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
   white-space: nowrap;
 }
 
 .unit {
-  font-size: 14px;
-  font-weight: 700;
+  font-size: var(--hud-font-size-chip-unit, 14px);
+  font-weight: var(--hud-font-weight-bold, 700);
   color: #fff;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
-  margin-left: 2px;
+  margin-left: var(--hud-space-1, 2px);
 }
 
 .location {

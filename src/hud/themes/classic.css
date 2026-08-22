@@ -1,4 +1,4 @@
-/* classic theme: the original, no-theme-selected look. Unlike mono/cockpit/japan, classic never
+/* classic theme: the original, no-theme-selected look. Unlike mono/matrix/japan, classic never
    had one unifying accent - each widget type keeps its own hand-picked color (speed/gradient
    cyan, heart rate pink, power amber, pause purple, location pink, distance cyan, gain green,
    loss red) and border, so --hud-accent/--hud-border are deliberately left unset here: setting
@@ -13,6 +13,7 @@
    their ramp at bucket 2. Everything else below is an exact match for what was previously
    hardcoded per-component - setting it here changes nothing, it just gives classic a home. */
 [data-theme='classic'] {
+  /* typography + spacing now live in base.css, shared by every theme - see that file. */
   --hud-bg: rgba(20, 22, 26, 0.72);
   --hud-gauge-bg: rgba(46, 125, 50, 0.35);
   --hud-gauge-backdrop-filter: blur(8px);

@@ -1,7 +1,8 @@
 /* every theme is a standalone file defining its own design tokens (colors, opacity, gradients)
    as CSS custom properties scoped under its [data-theme='x'] selector - components consume these
    via var(..., <fallback>), so adding a theme never requires touching component CSS. */
+@import './base.css';
 @import './classic.css';
 @import './mono.css';
-@import './cockpit.css';
+@import './matrix.css';
 @import './japan.css';

@@ -1,11 +1,11 @@
-/* cockpit theme: telemetry-strip amber/green accent, colors only. Only the level-1 bucket and
+/* matrix theme: telemetry-strip amber/green accent, colors only. Only the level-1 bucket and
    gauge background are re-themed - buckets 2-5, the mountain gradients, bgIcon opacity, and the
    pause badge fall back to the classic component defaults, same as before this file existed.
    The bottom-center repositioning historically bundled with "cockpit" is now a separate,
    independently-selectable layout - see src/hud/layouts/CockpitLayout.tsx and
    src/hud/layouts/cockpit.module.css. Pick this theme with any layout, or that layout with any
    theme. */
-[data-theme='cockpit'] {
+[data-theme='matrix'] {
   --hud-bg: rgba(12, 16, 14, 0.82);
   --hud-border: rgba(120, 255, 170, 0.4);
   --hud-accent: #7dffa8;

@@ -213,43 +213,43 @@
 }
 
 .gaugeUnit {
-  font-size: 18px;
-  font-weight: 700;
+  font-size: var(--hud-font-size-gauge-unit, 18px);
+  font-weight: var(--hud-font-weight-bold, 700);
   color: inherit;
   line-height: 1em;
   /* text-transform: uppercase;*/
 }
 
 .gaugeBig .gaugeUnit {
-  font-size: 20px;
+  font-size: var(--hud-font-size-gauge-unit-big, 20px);
   line-height: 1em;
 }
 
 .gaugeValue {
-  font-size: 58px;
-  font-weight: 700;
+  font-size: var(--hud-font-size-gauge-value, 58px);
+  font-weight: var(--hud-font-weight-bold, 700);
   color: inherit;
   line-height: 0.8;
   letter-spacing: 0.3px;
 }
 
 .gaugeBig .gaugeValue {
-  font-size: 82px;
+  font-size: var(--hud-font-size-gauge-value-big, 82px);
 }
 
 .gaugeSecondary {
   display: flex;
   align-items: center;
-  gap: 2px;
-  font-size: 22px;
-  font-weight: 500;
+  gap: var(--hud-space-1, 2px);
+  font-size: var(--hud-font-size-gauge-secondary, 22px);
+  font-weight: var(--hud-font-weight-regular, 500);
   color: inherit;
   line-height: 1.2;
   white-space: nowrap;
 }
 
 .gaugeBig .gaugeSecondary {
-  font-size: 24px;
+  font-size: var(--hud-font-size-gauge-secondary-big, 24px);
 }
 
 .gaugeSecondary svg {
@@ -272,12 +272,12 @@
 }
 
 .gaugeBig .pauseValue {
-  font-size:48px;
+  font-size: var(--hud-font-size-pause-value-big, 48px);
 }
 
 .pauseIcon {
   display: flex;
-  margin-bottom: 2px;
+  margin-bottom: var(--hud-space-1, 2px);
 }
 
 .pauseBadge {
@@ -290,13 +290,13 @@
   justify-content: center;
   width: 48px;
   height: 48px;
-  padding: 6 6px;
+  padding: var(--hud-space-3, 6px);
   border-radius: 50%;
   background: var(--hud-pausebadge-bg, rgba(255, 51, 153, 0.6));
   border: 3px solid var(--hud-pausebadge-border, rgba(255, 51, 153, 0.9));
   color: #fff;
-  font-size: 28px;
-  font-weight: 800;
+  font-size: var(--hud-font-size-pause-badge, 28px);
+  font-weight: var(--hud-font-weight-black, 800);
   line-height: 1;
 }
 
