@@ -8,6 +8,7 @@ const preview: Preview = {
         classic: 'classic',
         mono: 'mono',
         cockpit: 'cockpit',
+        japan: 'japan',
       },
       defaultTheme: 'classic',
       attributeName: 'data-theme',

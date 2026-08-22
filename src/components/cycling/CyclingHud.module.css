@@ -8,6 +8,11 @@
   --cockpit-bg: rgba(12, 16, 14, 0.82);
   --cockpit-border: rgba(120, 255, 170, 0.4);
   --cockpit-accent: #7dffa8;
+
+  /* japan theme palette: white and red, hinomaru accent */
+  --japan-bg: rgba(20, 10, 10, 0.78);
+  --japan-border: rgba(255, 255, 255, 0.75);
+  --japan-accent: #e30016;
 }
 
 .root {

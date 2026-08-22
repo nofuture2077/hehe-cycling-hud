@@ -147,3 +147,28 @@
 [data-theme='cockpit'] .statsDistanceItem:nth-child(3) .chipIcon {
   color: var(--cockpit-accent);
 }
+
+/* --- japan theme: white and red, flat panels --- */
+
+[data-theme='japan'] .chip {
+  background: var(--japan-bg);
+  backdrop-filter: none;
+  border-color: var(--japan-border);
+}
+
+[data-theme='japan'] .location,
+[data-theme='japan'] .distance,
+[data-theme='japan'] .gain,
+[data-theme='japan'] .loss,
+[data-theme='japan'] .remaining {
+  --accent: var(--japan-accent);
+}
+
+[data-theme='japan'] .chipIcon {
+  filter: none;
+}
+
+[data-theme='japan'] .statsDistanceItem:nth-child(2) .chipIcon,
+[data-theme='japan'] .statsDistanceItem:nth-child(3) .chipIcon {
+  color: var(--japan-accent);
+}

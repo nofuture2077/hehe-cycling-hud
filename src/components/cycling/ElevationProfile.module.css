@@ -42,6 +42,10 @@
   color: var(--cockpit-accent, #a8e063);
 }
 
+[data-theme='japan'] .legendValue {
+  color: var(--japan-accent, #e30016);
+}
+
 .line {
   fill: none;
   stroke: #f9a825;
@@ -72,4 +76,8 @@
 
 [data-theme='cockpit'] .line {
   stroke: var(--cockpit-accent, #a8e063);
+}
+
+[data-theme='japan'] .line {
+  stroke: var(--japan-accent, #e30016);
 }

@@ -160,7 +160,7 @@ function thresholdsFromConfig(profileConfig: Record<string, unknown> | undefined
   return result as unknown as Thresholds;
 }
 
-const VALID_THEMES: CyclingHudTheme[] = ['classic', 'mono', 'cockpit'];
+const VALID_THEMES: CyclingHudTheme[] = ['classic', 'mono', 'cockpit', 'japan'];
 
 // profile.config key carrying the HUD's visual theme, set via Settings > Connect > Moblin
 const THEME_CONFIG_KEY = 'cyclingHudTheme';

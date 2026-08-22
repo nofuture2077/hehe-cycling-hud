@@ -440,3 +440,80 @@
   border-color: var(--cockpit-border);
   --level-color: var(--cockpit-accent);
 }
+
+/* --- japan theme: white and red, flat panels that heat from white to hinomaru red --- */
+
+[data-theme='japan'] .gauge {
+  backdrop-filter: none;
+}
+
+[data-theme='japan'] .speed,
+[data-theme='japan'] .gradient,
+[data-theme='japan'] .pause,
+[data-theme='japan'] .heartRate,
+[data-theme='japan'] .power {
+  --accent: var(--japan-accent);
+}
+
+[data-theme='japan'] .speedLevel1,
+[data-theme='japan'] .gradientLevel1 {
+  background: var(--japan-bg);
+  border-color: var(--japan-border);
+  --level-color: #ffffff;
+}
+
+[data-theme='japan'] .speedLevel2,
+[data-theme='japan'] .gradientLevel2,
+[data-theme='japan'] .heartRateLevel1,
+[data-theme='japan'] .powerLevel1 {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 210, 210, 0.75);
+  --level-color: #f5c6c6;
+}
+
+[data-theme='japan'] .speedLevel3,
+[data-theme='japan'] .gradientLevel3,
+[data-theme='japan'] .heartRateLevel2,
+[data-theme='japan'] .heartRateLevel3,
+[data-theme='japan'] .powerLevel2,
+[data-theme='japan'] .powerLevel3 {
+  background: rgba(227, 0, 22, 0.18);
+  border-color: rgba(255, 140, 140, 0.85);
+  --level-color: #ff8c8c;
+}
+
+[data-theme='japan'] .speedLevel4,
+[data-theme='japan'] .gradientLevel4,
+[data-theme='japan'] .heartRateLevel4,
+[data-theme='japan'] .powerLevel4,
+[data-theme='japan'] .powerLevel5 {
+  background: rgba(227, 0, 22, 0.3);
+  border-color: rgba(227, 0, 22, 0.85);
+  --level-color: #ff4d4d;
+}
+
+[data-theme='japan'] .speedLevel5,
+[data-theme='japan'] .heartRateLevel5,
+[data-theme='japan'] .powerLevel6,
+[data-theme='japan'] .powerLevel7 {
+  background: rgba(227, 0, 22, 0.45);
+  border-color: var(--japan-accent);
+  --level-color: var(--japan-accent);
+}
+
+[data-theme='japan'] .mountain1,
+[data-theme='japan'] .mountain2,
+[data-theme='japan'] .mountain3,
+[data-theme='japan'] .mountain4 {
+  background: linear-gradient(to top, var(--japan-accent), #ffffff);
+}
+
+[data-theme='japan'] .bgIcon {
+  opacity: 0.2;
+}
+
+[data-theme='japan'] .pauseBadge {
+  background: rgba(227, 0, 22, 0.6);
+  border-color: var(--japan-border);
+  color: #fff;
+}

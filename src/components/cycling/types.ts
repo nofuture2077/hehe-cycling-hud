@@ -53,7 +53,7 @@ export interface CyclingHudVisibility {
   showLogo: boolean;
 }
 
-export type CyclingHudTheme = 'classic' | 'mono' | 'cockpit';
+export type CyclingHudTheme = 'classic' | 'mono' | 'cockpit' | 'japan';
 
 export interface CyclingHudConfig {
   // overall visual style of the HUD

@@ -103,6 +103,12 @@ export const Default: Story = {
   },
 };
 
+export const Japan: Story = {
+  args: {
+    config: { ...defaultConfig, theme: 'japan' },
+  },
+};
+
 export const SplitMode: Story = {
   args: {
     config: { ...defaultConfig, visible: { ...defaultConfig.visible, split: true } },

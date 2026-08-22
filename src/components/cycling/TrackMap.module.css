@@ -57,3 +57,7 @@
 [data-theme='cockpit'] .track {
   stroke: var(--cockpit-accent, #a8e063);
 }
+
+[data-theme='japan'] .track {
+  stroke: var(--japan-accent, #e30016);
+}
