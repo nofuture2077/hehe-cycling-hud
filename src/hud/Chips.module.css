@@ -3,7 +3,7 @@
   align-items: center;
   padding: var(--hud-chip-padding, 8px 16px 8px 10px);
   border-radius: var(--hud-radius-chip, 12px);
-  background: var(--hud-bg, rgba(20, 22, 26, 0.72));
+  background: var(--hud-chip-bg, var(--hud-bg, rgba(20, 22, 26, 0.72)));
   backdrop-filter: var(--hud-chip-backdrop-filter, blur(8px));
   border: 2px solid var(--hud-border, var(--accent, #4dd0e1));
 }
@@ -60,7 +60,10 @@
   color: var(--accent, #4dd0e1);
   filter: var(--hud-chipicon-filter, drop-shadow(0 1px 3px rgba(0, 0, 0, 0.7)));
   flex: none;
-  margin-right: 0.5em;
+}
+
+.location .chipIcon {
+  margin-right: 0.4rem;
 }
 
 .text {

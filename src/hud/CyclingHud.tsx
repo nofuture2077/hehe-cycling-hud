@@ -1,6 +1,7 @@
+import { useEffect } from 'react';
 import { useGpxProgress } from '../core/useGpxProgress';
 import { useHudVisibility } from '../core/useHudVisibility';
-import { resolveTheme } from './theme';
+import { resolveTheme, loadThemeFont } from './theme';
 import { resolveLayout } from './layout';
 import { getLayout } from './layouts/registry';
 import {
@@ -27,9 +28,14 @@ export default function CyclingHud({
   const gpx = useGpxProgress(gpxTrack, data);
   const visibility = useHudVisibility(data, config, pause, gpx, logo !== null);
   const Layout = getLayout(resolveLayout(config.layout));
+  const theme = resolveTheme(config.theme);
+
+  useEffect(() => {
+    loadThemeFont(theme);
+  }, [theme]);
 
   return (
-    <div className={styles.root} data-theme={resolveTheme(config.theme)}>
+    <div className={styles.root} data-theme={theme}>
       <Layout ctx={{ data, config, pause, logo, gpx, visibility }} />
     </div>
   );

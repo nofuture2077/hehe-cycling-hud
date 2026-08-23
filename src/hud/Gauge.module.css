@@ -230,7 +230,9 @@
   font-weight: var(--hud-font-weight-bold, 700);
   color: inherit;
   line-height: 0.8;
-  letter-spacing: 0.3px;
+  letter-spacing: var(--hud-gauge-value-letter-spacing, 0.3px);
+  position: relative;
+  top: var(--hud-gauge-value-offset-y, 0px);
 }
 
 .gaugeBig .gaugeValue {

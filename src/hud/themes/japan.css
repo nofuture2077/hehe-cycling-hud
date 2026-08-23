@@ -1,6 +1,24 @@
 /* japan theme: white and red, flat panels that heat from white to hinomaru red. */
 [data-theme='japan'] {
+  --hud-font-family: 'Michroma', 'Rajdhani', sans-serif;
+  --hud-font-weight-regular: 400;
+  --hud-font-weight-semibold: 400;
+  --hud-font-weight-bold: 400;
+  --hud-font-weight-black: 400;
+  --hud-gauge-value-letter-spacing: 0px;
+  --hud-number-decimal-gap: 0px;
+  --hud-gauge-value-offset-y: -6px;
+  --hud-font-size-gauge-value: 36px;
+  --hud-font-size-gauge-value-big: 52px;
+  --hud-font-size-gauge-unit: 11px;
+  --hud-font-size-gauge-unit-big: 13px;
+  --hud-font-size-gauge-secondary: 14px;
+  --hud-font-size-gauge-secondary-big: 16px;
+  --hud-font-size-chip-text: 15px;
+  --hud-font-size-chip-unit: 12px;
+  --hud-logo-height: 8rem;
   --hud-bg: rgba(20, 10, 10, 0.78);
+  --hud-chip-bg: rgba(227, 0, 22, 0.18);
   --hud-border: rgba(255, 255, 255, 0.75);
   --hud-accent: #e30016;
 

@@ -6,8 +6,7 @@ export function LogoWidget({ ctx }: { ctx: HudContext }) {
     <div>
       <img
         src={`data:${ctx.logo.mimeType};base64,${ctx.logo.content}`}
-        height={100}
-        style={{ marginRight: 20 }}
+        style={{ height: 'var(--hud-logo-height, 100px)', marginRight: 20 }}
       />
     </div>
   );
