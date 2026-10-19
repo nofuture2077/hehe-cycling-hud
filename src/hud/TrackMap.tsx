@@ -89,6 +89,14 @@ export function TrackMap({
   return (
     <div className={styles.wrapper}>
       <svg className={styles.map} viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}>
+        <defs>
+          <pattern id="hud-map-grid" width={20} height={20} patternUnits="userSpaceOnUse">
+            <path className={styles.grid} d="M 0 0 L 0 20 M 0 0 L 20 0" />
+          </pattern>
+        </defs>
+        <rect className={styles.gridBg} width={VIEWBOX_SIZE} height={VIEWBOX_SIZE} fill="url(#hud-map-grid)" />
+        <path className={styles.scanWedge} d={`M 100 100 L 100 6 A 94 94 0 0 1 166.5 33.5 Z`} />
+        <circle className={styles.frame} cx={100} cy={100} r={96} />
         <polyline className={styles.track} points={polylinePoints} />
         {result.waypointMarkers.map((w, i) => (
           <g key={i}>

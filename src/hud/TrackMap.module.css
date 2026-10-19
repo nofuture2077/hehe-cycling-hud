@@ -13,15 +13,16 @@
 
 .track {
   fill: none;
-  stroke: var(--hud-accent, #4dd0e1);
+  stroke: var(--hud-map-track-color, var(--hud-accent, #4dd0e1));
   stroke-width: 2.5;
   stroke-linejoin: round;
   stroke-linecap: round;
   vector-effect: non-scaling-stroke;
+  filter: var(--hud-map-track-glow, none);
 }
 
 .marker {
-  fill: #ff5c8a;
+  fill: var(--hud-map-marker-color, #ff5c8a);
   stroke: #fff;
   stroke-width: 1.5;
 }
@@ -31,7 +32,7 @@
 }
 
 .waypoint {
-  fill: #ffcc4d;
+  fill: var(--hud-map-waypoint-color, #ffcc4d);
   stroke: #3a3a3a;
   stroke-width: 1;
 }
@@ -48,4 +49,35 @@
 @keyframes markerBlink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.25; }
+}
+
+/* --- opt-in netrunner minimap dressing: invisible unless a theme sets grid/scan opacity --- */
+
+.grid {
+  stroke: var(--hud-map-grid-color, #00f0ff);
+  stroke-width: 0.5;
+}
+
+.gridBg {
+  opacity: var(--hud-map-grid-opacity, 0);
+}
+
+.frame {
+  fill: none;
+  stroke: var(--hud-map-grid-color, transparent);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 5;
+  opacity: var(--hud-map-grid-opacity, 0);
+}
+
+.scanWedge {
+  fill: var(--hud-map-grid-color, #00f0ff);
+  opacity: var(--hud-map-scan-opacity, 0);
+  transform-origin: 50% 50%;
+  animation: mapScan 4s linear infinite;
+}
+
+@keyframes mapScan {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }

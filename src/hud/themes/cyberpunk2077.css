@@ -1,0 +1,89 @@
+/* cyberpunk2077 theme: replicates the game's actual UI chrome, not just a color swap - neon
+   cyan/pink-on-black, cut-corner rectangular panels with a real visible border (like the game's
+   quest/inventory tabs), floating viewfinder corner brackets, a segmented tick-ring on the
+   circular gauges (like its cyberware/vitals meters), uppercase tracked labels, and an occasional
+   RGB-split glitch flicker on text. Chrome runs cyan through the low/mid zones and shifts to hot
+   pink/red only at the extreme end, the way the game's HUD stays cool until something's critical.
+   Uses the shared effect tokens from base.css so all of this is consumed generically by
+   Chips.module.css, Gauge.module.css, CyclingHud.module.css and TrackMap.module.css - nothing
+   theme-specific lives in those files. */
+[data-theme='cyberpunk2077'] {
+  --hud-font-family: 'Chakra Petch', 'Rajdhani', sans-serif;
+  --hud-gauge-value-letter-spacing: 1px;
+  --hud-text-transform: uppercase;
+  --hud-letter-spacing: 1.5px;
+  --hud-glitch-anim: hud-rgb-glitch 7s steps(1) infinite;
+
+  --hud-bg: rgba(8, 10, 14, 0.85);
+  --hud-chip-bg: rgba(8, 10, 14, 0.85);
+  --hud-border: #00f0ff;
+  --hud-accent: #00f0ff;
+
+  /* cut-corner rectangle instead of a rounded chip - both top-right and bottom-left corners
+     angled. The native border (set via --hud-border above) already covers the 4 straight edges
+     correctly; --hud-chip-ring-* fills in just the 2 diagonal cut edges with a matching-color
+     ring overlay (see Chips.module.css for how the ring shape is built) without touching the
+     chip's own background, so translucent --hud-chip-bg colors on other themes are unaffected. */
+  --hud-radius-chip: 0px;
+  --hud-chip-clip-path: polygon(
+    12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px
+  );
+  --hud-chip-ring-display: block;
+  --hud-chip-ring-color: #00f0ff;
+  --hud-chip-ring-clip-path: polygon(
+    evenodd,
+    12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px,
+    12px 2px, calc(100% - 2px) 2px, calc(100% - 2px) calc(100% - 12px),
+    calc(100% - 12px) calc(100% - 2px), 2px calc(100% - 2px), 2px 12px
+  );
+  --hud-glow: 0 0 8px rgba(0, 240, 255, 0.4);
+
+  /* floating viewfinder corner brackets outside the panel edge */
+  --hud-corner-display: block;
+  --hud-corner-color: #00f0ff;
+  --hud-corner-size: 12px;
+
+  /* segmented tick-ring around the circular gauges */
+  --hud-gauge-ring-display: block;
+
+  --hud-scanline-opacity: 0.04;
+
+  /* five shared intensity buckets: chrome stays cyan through the low/mid zones, shifts to hot
+     pink then red only at the extreme end - the game reserves red for actually critical states */
+  --hud-b1-bg: rgba(0, 240, 255, 0.1);
+  --hud-b1-border: rgba(0, 240, 255, 0.7);
+  --hud-b1-color: #00f0ff;
+  --hud-b2-bg: rgba(0, 240, 255, 0.16);
+  --hud-b2-border: rgba(0, 240, 255, 0.85);
+  --hud-b2-color: #4dfcff;
+  --hud-b3-bg: rgba(255, 32, 121, 0.2);
+  --hud-b3-border: rgba(255, 32, 121, 0.85);
+  --hud-b3-color: #ff2079;
+  --hud-b4-bg: rgba(255, 0, 144, 0.28);
+  --hud-b4-border: rgba(255, 0, 144, 0.95);
+  --hud-b4-color: #ff0090;
+  --hud-b5-bg: rgba(255, 0, 60, 0.32);
+  --hud-b5-border: rgba(255, 0, 60, 1);
+  --hud-b5-color: #ff003c;
+
+  --hud-mountain1-gradient: linear-gradient(to top, #0a4a52, #00f0ff);
+  --hud-mountain2-gradient: linear-gradient(to top, #0a4a52, #4dfcff);
+  --hud-mountain3-gradient: linear-gradient(to top, #7a0a3a, #ff2079);
+  --hud-mountain4-gradient: linear-gradient(to top, #7a001e, #ff003c);
+  --hud-bgicon-opacity: 0.2;
+  --hud-pausebadge-bg: rgba(255, 0, 144, 0.6);
+  --hud-pausebadge-border: rgba(255, 0, 144, 0.95);
+
+  --hud-gauge-backdrop-filter: none;
+  --hud-chip-backdrop-filter: none;
+  --hud-chipicon-filter: drop-shadow(0 0 3px currentColor);
+
+  /* netrunner minimap dressing: cyan trail, pink live-position blip, dashed tick-ring frame */
+  --hud-map-track-color: #00f0ff;
+  --hud-map-track-glow: drop-shadow(0 0 3px #00f0ff);
+  --hud-map-marker-color: #ff2079;
+  --hud-map-waypoint-color: #00f0ff;
+  --hud-map-grid-color: rgba(0, 240, 255, 0.55);
+  --hud-map-grid-opacity: 0.3;
+  --hud-map-scan-opacity: 0.1;
+}

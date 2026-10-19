@@ -110,6 +110,20 @@ export const Japan: Story = {
   },
 };
 
+export const Cyberpunk2077: Story = {
+  args: {
+    config: { ...defaultConfig, theme: 'cyberpunk2077', visible: { ...defaultConfig.visible, showGpxMap: true } },
+    data: { ...sampleData, latitude: gpxMidPoint.lat, longitude: gpxMidPoint.lon },
+  },
+};
+
+export const CyberpunkNetrunnerLayout: Story = {
+  args: {
+    config: { ...defaultConfig, theme: 'cyberpunk2077', layout: 'netrunner', visible: { ...defaultConfig.visible, showGpxMap: true } },
+    data: { ...sampleData, latitude: gpxMidPoint.lat, longitude: gpxMidPoint.lon },
+  },
+};
+
 export const SplitMode: Story = {
   args: {
     config: { ...defaultConfig, visible: { ...defaultConfig.visible, split: true } },

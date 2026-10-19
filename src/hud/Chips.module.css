@@ -1,11 +1,62 @@
+/* the chip keeps its original single-layer background + real `border` - that's the only way a
+   translucent --hud-chip-bg (e.g. japan's reddish rgba(227,0,22,0.18)) still composites directly
+   against the true backdrop behind the HUD, instead of against an artificial layer that would
+   wash out the color. A real `border` only has geometry along the box's original straight edges
+   though, so clip-path cuts straight through it at a cut corner and leaves that edge bare.
+   ::before fixes just that: an opt-in ring-shaped overlay (clip-path: polygon(evenodd, outer...,
+   inner...) - two closed loops with the even-odd fill rule punches a transparent hole in the
+   middle) that paints only the border-width-wide strip along the cut, on top of the chip's own
+   background - invisible (display: none) unless a theme sets --hud-chip-ring-display. */
 .chip {
+  position: relative;
   display: flex;
   align-items: center;
   padding: var(--hud-chip-padding, 8px 16px 8px 10px);
   border-radius: var(--hud-radius-chip, 12px);
+  clip-path: var(--hud-chip-clip-path, none);
   background: var(--hud-chip-bg, var(--hud-bg, rgba(20, 22, 26, 0.72)));
   backdrop-filter: var(--hud-chip-backdrop-filter, blur(8px));
   border: 2px solid var(--hud-border, var(--accent, #4dd0e1));
+  box-shadow: var(--hud-glow, none);
+}
+
+.chip::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  display: var(--hud-chip-ring-display, none);
+  clip-path: var(--hud-chip-ring-clip-path, none);
+  background: var(--hud-chip-ring-color, transparent);
+  pointer-events: none;
+}
+
+/* opt-in viewfinder-style corner brackets, floating just outside the panel edge - a single
+   pseudo-element with 4 tiny gradient "bars" forming an L at two opposite corners, invisible
+   (display: none) unless a theme sets --hud-corner-display */
+.chip::after {
+  content: '';
+  position: absolute;
+  inset: calc(var(--hud-corner-size, 10px) * -1 / 2);
+  display: var(--hud-corner-display, none);
+  pointer-events: none;
+  background:
+    linear-gradient(var(--hud-corner-color, transparent), var(--hud-corner-color, transparent))
+      top left / var(--hud-corner-size, 10px) 2px no-repeat,
+    linear-gradient(var(--hud-corner-color, transparent), var(--hud-corner-color, transparent))
+      top left / 2px var(--hud-corner-size, 10px) no-repeat,
+    linear-gradient(var(--hud-corner-color, transparent), var(--hud-corner-color, transparent))
+      bottom right / var(--hud-corner-size, 10px) 2px no-repeat,
+    linear-gradient(var(--hud-corner-color, transparent), var(--hud-corner-color, transparent))
+      bottom right / 2px var(--hud-corner-size, 10px) no-repeat;
+}
+
+/* :global so theme files (plain CSS, not modules) can reference this name literally via
+   --hud-glitch-anim - CSS modules would otherwise hash it like any other local identifier */
+@keyframes :global(hud-rgb-glitch) {
+  0%, 88%, 100% { text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7); transform: translate(0, 0); }
+  90% { text-shadow: -2px 0 rgba(255, 0, 90, 0.8), 2px 0 rgba(0, 220, 255, 0.8); transform: translate(-1px, 0); }
+  91% { text-shadow: 2px 0 rgba(255, 0, 90, 0.8), -2px 0 rgba(0, 220, 255, 0.8); transform: translate(1px, 0); }
+  92% { text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7); transform: translate(0, 0); }
 }
 
 /* --- combined distance + elevation card, grouped like a sports-computer stats tile --- */
@@ -71,7 +122,10 @@
   font-weight: var(--hud-font-weight-semibold, 600);
   color: #fff;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+  text-transform: var(--hud-text-transform, none);
+  letter-spacing: var(--hud-letter-spacing, normal);
   white-space: nowrap;
+  animation: var(--hud-glitch-anim, none);
 }
 
 .value {
@@ -79,7 +133,10 @@
   font-weight: var(--hud-font-weight-bold, 700);
   color: #fff;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+  text-transform: var(--hud-text-transform, none);
+  letter-spacing: var(--hud-letter-spacing, normal);
   white-space: nowrap;
+  animation: var(--hud-glitch-anim, none);
 }
 
 .unit {
@@ -87,6 +144,7 @@
   font-weight: var(--hud-font-weight-bold, 700);
   color: #fff;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+  text-transform: var(--hud-text-transform, none);
   margin-left: var(--hud-space-1, 2px);
 }
 

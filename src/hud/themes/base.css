@@ -39,4 +39,23 @@
   --hud-space-6: 18px;
 
   --hud-logo-height: 100px;
+
+  /* shared effect primitives - neutral no-op defaults so unthemed HUDs render unaffected;
+     a theme opts in by overriding one or more of these under its own [data-theme='x'] block */
+  --hud-glow: none;
+  --hud-chip-clip-path: none;
+  --hud-chip-ring-display: none;
+  --hud-chip-ring-clip-path: none;
+  --hud-chip-ring-color: transparent;
+  --hud-gauge-clip-path: none;
+  --hud-scanline-opacity: 0;
+  --hud-map-grid-opacity: 0;
+  --hud-map-scan-opacity: 0;
+  --hud-text-transform: none;
+  --hud-letter-spacing: normal;
+  --hud-corner-display: none;
+  --hud-corner-color: transparent;
+  --hud-corner-size: 10px;
+  --hud-gauge-ring-display: none;
+  --hud-glitch-anim: none;
 }

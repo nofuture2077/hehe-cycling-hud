@@ -9,6 +9,10 @@ import { HeartRateGaugeWidget } from './HeartRateGaugeWidget';
 import { PowerGaugeWidget } from './PowerGaugeWidget';
 import { GradientGaugeWidget } from './GradientGaugeWidget';
 import { PrimaryGaugeWidget } from './PrimaryGaugeWidget';
+import { HeartRateBarWidget } from './HeartRateBarWidget';
+import { PowerBarWidget } from './PowerBarWidget';
+import { GradientBarWidget } from './GradientBarWidget';
+import { SpeedBarWidget } from './SpeedBarWidget';
 
 export type Widget = ComponentType<{ ctx: HudContext }>;
 
@@ -25,6 +29,10 @@ const widgets: Record<string, Widget> = {
   powerGauge: PowerGaugeWidget,
   gradientGauge: GradientGaugeWidget,
   primaryGauge: PrimaryGaugeWidget,
+  heartRateBar: HeartRateBarWidget,
+  powerBar: PowerBarWidget,
+  gradientBar: GradientBarWidget,
+  speedBar: SpeedBarWidget,
 };
 
 // lets a third party register a new/replacement widget under an id, then reference it from a

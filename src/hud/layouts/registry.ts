@@ -2,6 +2,7 @@ import type { ComponentType } from 'react';
 import type { HudContext } from '../context';
 import DefaultLayout from './default';
 import CockpitLayout from './CockpitLayout';
+import NetrunnerLayout from './netrunner';
 
 export type Layout = ComponentType<{ ctx: HudContext }>;
 
@@ -10,6 +11,7 @@ export type Layout = ComponentType<{ ctx: HudContext }>;
 const layouts: Record<string, Layout> = {
   default: DefaultLayout,
   cockpit: CockpitLayout,
+  netrunner: NetrunnerLayout,
 };
 
 export function registerLayout(id: string, layout: Layout) {

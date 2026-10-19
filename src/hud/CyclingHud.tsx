@@ -37,6 +37,7 @@ export default function CyclingHud({
   return (
     <div className={styles.root} data-theme={theme}>
       <Layout ctx={{ data, config, pause, logo, gpx, visibility }} />
+      <div className={styles.scanlines} />
     </div>
   );
 }

@@ -1,0 +1,51 @@
+/* netrunner layout: bottom edge is a single wide gauge strip (evokes the game's bottom
+   health/stamina/cyberware bar) with the elevation profile compressed above it as a thin strip
+   and the SystemStatus chip docked just above that - purely positional, no color here (see
+   src/hud/themes/*.css for that). Self-contained, doesn't depend on CyclingHud.module.css's
+   .chipCluster for the same reason cockpit.module.css isn't: different flex direction/placement. */
+
+.topLeft {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+}
+
+.topLeft.matchWidth {
+  align-items: stretch;
+}
+
+.hor {
+  display: flex;
+  flex-direction: row;
+}
+
+.trackMapSpacing {
+  margin-top: 14px;
+  margin-left: 6px;
+}
+
+.bottomLeft {
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.barStack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bottomRight {
+  position: absolute;
+  bottom: 40px;
+  right: 40px;
+}

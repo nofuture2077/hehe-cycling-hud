@@ -3,7 +3,7 @@ import './themes/index.css';
 // theme names this HUD layout ships CSS for (see the *.module.css `[data-theme='...']` blocks) -
 // this is HUD-layer policy, not core policy: core only passes through whatever string the user
 // configured. A third-party layout can support a completely different set of names.
-export const VALID_THEMES = ['classic', 'mono', 'matrix', 'japan'] as const;
+export const VALID_THEMES = ['classic', 'mono', 'matrix', 'japan', 'cyberpunk2077'] as const;
 export const DEFAULT_THEME = 'classic';
 
 export function resolveTheme(theme: string | undefined): string {
@@ -13,6 +13,7 @@ export function resolveTheme(theme: string | undefined): string {
 // fonts only some themes need - loaded on demand so themes that don't use them never pay for them
 const THEME_FONTS: Partial<Record<string, string>> = {
   japan: 'https://fonts.googleapis.com/css2?family=Michroma&display=swap',
+  cyberpunk2077: 'https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&display=swap',
 };
 
 const loadedThemeFonts = new Set<string>();
