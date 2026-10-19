@@ -1,0 +1,28 @@
+.wrap {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  color: #fff;
+  font-size: 20px;
+  font-weight: var(--hud-numeral-weight, 300);
+  font-variant-numeric: tabular-nums;
+  text-shadow: var(--hud-soft-shadow, 0 2px 14px rgba(0, 0, 0, 0.45));
+}
+
+.line {
+  flex: 1;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+}
+
+.end {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.unit {
+  font-size: 0.62em;
+  font-weight: var(--hud-font-weight-semibold, 600);
+  color: var(--hud-muted, rgba(255, 255, 255, 0.62));
+}

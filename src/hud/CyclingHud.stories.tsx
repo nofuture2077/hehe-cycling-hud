@@ -124,6 +124,48 @@ export const CyberpunkNetrunnerLayout: Story = {
   },
 };
 
+const vividConfig = (layout: string): CyclingHudConfig => ({
+  ...defaultConfig,
+  theme: 'vivid',
+  layout,
+  visible: {
+    ...defaultConfig.visible,
+    locationTemperature: true,
+    showGpxElevationMap: true,
+    showGpxWaypoints: true,
+    showGpxRemainingDistance: true,
+    showLogo: false,
+  },
+});
+const vividData: CyclingData = { ...sampleData, latitude: gpxMidPoint.lat, longitude: gpxMidPoint.lon };
+
+export const VividFloat: Story = {
+  args: { config: vividConfig('float'), data: vividData },
+};
+
+export const VividFloatNoRemaining: Story = {
+  args: {
+    config: { ...vividConfig('float'), visible: { ...vividConfig('float').visible, showGpxRemainingDistance: false } },
+    data: vividData,
+  },
+};
+
+export const VividRings: Story = {
+  args: { config: vividConfig('rings'), data: vividData },
+};
+
+export const VividRingsPause: Story = {
+  args: {
+    config: vividConfig('rings'),
+    data: vividData,
+    pause: { onBreak: true, currentBreakSeconds: 95, totalBreakSeconds: 720, breakCount: 3 },
+  },
+};
+
+export const VividRibbon: Story = {
+  args: { config: vividConfig('ribbon'), data: vividData },
+};
+
 export const SplitMode: Story = {
   args: {
     config: { ...defaultConfig, visible: { ...defaultConfig.visible, split: true } },

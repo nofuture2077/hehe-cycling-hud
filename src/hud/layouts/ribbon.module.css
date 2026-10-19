@@ -1,0 +1,26 @@
+/* ribbon layout - purely positional, see minimal/MetricRibbon.module.css for the strip itself */
+
+.topLeft {
+  position: absolute;
+  top: 48px;
+  left: 56px;
+  display: flex;
+  align-items: center;
+}
+
+.topRight {
+  position: absolute;
+  top: 48px;
+  right: 56px;
+}
+
+.bottomCenter {
+  position: absolute;
+  bottom: 44px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}

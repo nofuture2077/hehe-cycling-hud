@@ -1,0 +1,29 @@
+/* rings layout - purely positional, see minimal/MetricRings.module.css for the rings themselves */
+
+.topLeft {
+  position: absolute;
+  top: 48px;
+  left: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 22px;
+}
+
+.hor {
+  display: flex;
+  align-items: center;
+}
+
+.map {
+  margin-left: 4px;
+}
+
+.bottomRight {
+  position: absolute;
+  bottom: 48px;
+  right: 56px;
+  display: flex;
+  align-items: flex-end;
+  gap: 36px;
+}

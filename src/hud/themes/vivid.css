@@ -1,0 +1,74 @@
+/* vivid theme: clean, modern, colorful - made for the panel-less float/rings/ribbon layouts.
+   Color comes from metric identity rather than one accent: speed is sky, heart rate coral, power
+   violet, gradient lime, elevation amber, distance teal - so a glance at a hue tells you which
+   number it is. Light geometric type (Outfit) and soft shadows instead of boxes keep it minimal.
+   On the older chip/gauge layouts it still works: the shared intensity buckets map to the same
+   colorful ramp, and chips get a frosted-glass look. */
+[data-theme='vivid'] {
+  --hud-font-family: 'Outfit', 'Rajdhani', sans-serif;
+  --hud-numeral-weight: 300;
+  --hud-font-weight-regular: 400;
+  --hud-font-weight-semibold: 500;
+  --hud-font-weight-bold: 600;
+  --hud-font-weight-black: 700;
+
+  --hud-metric-speed: #38bdf8;
+  --hud-metric-hr: #ff5d73;
+  --hud-metric-power: #a78bfa;
+  --hud-metric-grade: #a3e635;
+  --hud-metric-elev: #fbbf24;
+  --hud-metric-distance: #2dd4bf;
+  --hud-metric-pause: #f472b6;
+  --hud-route-gradient: linear-gradient(90deg, #2dd4bf, #38bdf8 35%, #a78bfa 70%, #ff5d73);
+
+  --hud-muted: rgba(255, 255, 255, 0.62);
+  --hud-soft-shadow: 0 2px 14px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.35);
+  --hud-line-track: rgba(255, 255, 255, 0.18);
+
+  --hud-glass-bg: rgba(255, 255, 255, 0.08);
+  --hud-glass-border: rgba(255, 255, 255, 0.14);
+  --hud-glass-divider: rgba(255, 255, 255, 0.1);
+  --hud-glass-filter: blur(18px) saturate(140%);
+  --hud-glass-radius: 22px;
+
+  --hud-accent: #38bdf8;
+  --hud-bg: rgba(255, 255, 255, 0.08);
+  --hud-chip-bg: rgba(255, 255, 255, 0.08);
+  --hud-border: rgba(255, 255, 255, 0.14);
+  --hud-radius-chip: 14px;
+  --hud-gauge-bg: rgba(255, 255, 255, 0.08);
+  --hud-gauge-backdrop-filter: blur(18px) saturate(140%);
+  --hud-chip-backdrop-filter: blur(18px) saturate(140%);
+  --hud-chipicon-filter: none;
+  --hud-bgicon-opacity: 0.18;
+  --hud-pausebadge-bg: rgba(244, 114, 182, 0.55);
+  --hud-pausebadge-border: rgba(244, 114, 182, 0.9);
+
+  /* colorful intensity ramp for the chip/gauge layouts: sky -> lime -> amber -> coral -> magenta */
+  --hud-b1-bg: rgba(56, 189, 248, 0.12);
+  --hud-b1-border: rgba(56, 189, 248, 0.8);
+  --hud-b1-color: #38bdf8;
+  --hud-b2-bg: rgba(163, 230, 53, 0.12);
+  --hud-b2-border: rgba(163, 230, 53, 0.8);
+  --hud-b2-color: #a3e635;
+  --hud-b3-bg: rgba(251, 191, 36, 0.14);
+  --hud-b3-border: rgba(251, 191, 36, 0.85);
+  --hud-b3-color: #fbbf24;
+  --hud-b4-bg: rgba(255, 93, 115, 0.18);
+  --hud-b4-border: rgba(255, 93, 115, 0.9);
+  --hud-b4-color: #ff5d73;
+  --hud-b5-bg: rgba(236, 72, 153, 0.24);
+  --hud-b5-border: rgba(236, 72, 153, 0.95);
+  --hud-b5-color: #ec4899;
+
+  --hud-mountain1-gradient: linear-gradient(to top, #0e7490, #38bdf8);
+  --hud-mountain2-gradient: linear-gradient(to top, #4d7c0f, #a3e635);
+  --hud-mountain3-gradient: linear-gradient(to top, #b45309, #fbbf24);
+  --hud-mountain4-gradient: linear-gradient(to top, #be123c, #ff5d73);
+
+  /* track map: teal route, coral live position, white waypoints */
+  --hud-map-track-color: #2dd4bf;
+  --hud-map-track-glow: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.45));
+  --hud-map-marker-color: #ff5d73;
+  --hud-map-waypoint-color: #ffffff;
+}

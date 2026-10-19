@@ -1,0 +1,83 @@
+/* panel-less value block shared by the float/rings/ribbon layouts - legibility over video comes
+   from a soft shadow instead of a background box */
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+  text-shadow: var(--hud-soft-shadow, 0 2px 14px rgba(0, 0, 0, 0.45));
+  transition: opacity 0.6s ease;
+}
+
+.fading {
+  opacity: 0;
+}
+
+.value {
+  display: flex;
+  align-items: baseline;
+  gap: 0.18em;
+  font-weight: var(--hud-numeral-weight, 300);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.unit {
+  font-size: 0.34em;
+  font-weight: var(--hud-font-weight-semibold, 600);
+  letter-spacing: 0.02em;
+  color: var(--metric-color);
+}
+
+.dot {
+  align-self: center;
+  width: 0.3em;
+  height: 0.3em;
+  margin-right: 0.12em;
+  border-radius: 50%;
+  background: var(--metric-color);
+  /* glow grows with zone - the only place intensity shows besides fill amount */
+  box-shadow: 0 0 calc(var(--zone, 1) * 4px) var(--metric-color);
+  transition: box-shadow 0.4s ease;
+}
+
+.label {
+  margin-top: 6px;
+  font-size: 15px;
+  font-weight: var(--hud-font-weight-regular, 500);
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  color: var(--hud-muted, rgba(255, 255, 255, 0.62));
+}
+
+.hero {
+  font-size: 100px;
+}
+
+.hero .unit {
+  font-size: 0.26em;
+}
+
+.md {
+  font-size: 56px;
+}
+
+.sm {
+  font-size: 30px;
+}
+
+.sm .label {
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.stacked {
+  align-items: center;
+}
+
+.stacked .value {
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}

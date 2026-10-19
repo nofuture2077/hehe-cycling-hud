@@ -1,0 +1,55 @@
+.location,
+.stats {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+  text-shadow: var(--hud-soft-shadow, 0 2px 14px rgba(0, 0, 0, 0.45));
+}
+
+.location {
+  gap: 0;
+  font-size: 22px;
+  font-weight: var(--hud-font-weight-regular, 500);
+  letter-spacing: 0.01em;
+}
+
+.flag {
+  margin-right: 10px;
+}
+
+.sep {
+  margin: 0 10px;
+  color: var(--hud-muted, rgba(255, 255, 255, 0.5));
+}
+
+.stats {
+  gap: 22px;
+  margin-top: 4px;
+  font-size: 28px;
+  font-weight: var(--hud-numeral-weight, 300);
+}
+
+.stat {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.glyph {
+  font-size: 0.75em;
+  font-weight: var(--hud-font-weight-bold, 700);
+  color: var(--stat-color);
+}
+
+.unit {
+  font-size: 0.5em;
+  font-weight: var(--hud-font-weight-semibold, 600);
+  color: var(--stat-color);
+}
+
+.secondary {
+  font-size: 0.6em;
+  color: var(--hud-muted, rgba(255, 255, 255, 0.62));
+}

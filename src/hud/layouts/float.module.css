@@ -1,0 +1,42 @@
+/* float layout: panel-less, type straight on the video - purely positional, colors come from the
+   theme tokens consumed by the minimal/ components */
+
+.topLeft {
+  position: absolute;
+  top: 48px;
+  left: 56px;
+  display: flex;
+  align-items: center;
+}
+
+.bottomLeft {
+  position: absolute;
+  bottom: 96px;
+  left: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.bottomRight {
+  position: absolute;
+  bottom: 104px;
+  right: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.bottomLeft.atEdge,
+.bottomRight.atEdge {
+  bottom: 44px;
+}
+
+.bottomEdge {
+  position: absolute;
+  bottom: 44px;
+  left: 56px;
+  right: 56px;
+}

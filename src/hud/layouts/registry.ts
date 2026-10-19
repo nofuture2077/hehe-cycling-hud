@@ -3,6 +3,9 @@ import type { HudContext } from '../context';
 import DefaultLayout from './default';
 import CockpitLayout from './CockpitLayout';
 import NetrunnerLayout from './netrunner';
+import FloatLayout from './float';
+import RingsLayout from './rings';
+import RibbonLayout from './ribbon';
 
 export type Layout = ComponentType<{ ctx: HudContext }>;
 
@@ -12,6 +15,9 @@ const layouts: Record<string, Layout> = {
   default: DefaultLayout,
   cockpit: CockpitLayout,
   netrunner: NetrunnerLayout,
+  float: FloatLayout,
+  rings: RingsLayout,
+  ribbon: RibbonLayout,
 };
 
 export function registerLayout(id: string, layout: Layout) {
