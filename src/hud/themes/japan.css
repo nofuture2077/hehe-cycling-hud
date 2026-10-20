@@ -49,4 +49,27 @@
   --hud-gauge-backdrop-filter: none;
   --hud-chip-backdrop-filter: none;
   --hud-chipicon-filter: none;
+
+  /* float/rings/ribbon: white and hinomaru red only; Michroma runs very wide, so the numerals
+     are scaled down the same way the gauge sizes above are */
+  --hud-minimal-scale: 0.68;
+  --hud-minimal-value-letter-spacing: 0px;
+  --hud-minimal-label-transform: uppercase;
+  --hud-minimal-label-letter-spacing: 0.12em;
+  --hud-metric-speed: #ffffff;
+  --hud-metric-hr: #e30016;
+  --hud-metric-power: #ff8c8c;
+  --hud-metric-grade: #f5c6c6;
+  --hud-metric-elev: #ff4d4d;
+  --hud-metric-distance: #ffffff;
+  --hud-metric-pause: #e30016;
+  --hud-route-gradient: linear-gradient(90deg, #ffffff, #e30016);
+  --hud-muted: rgba(255, 220, 220, 0.65);
+  --hud-line-head: #e30016;
+  --hud-line-head-halo: rgba(255, 255, 255, 0.6);
+  --hud-glass-bg: var(--hud-bg);
+  --hud-glass-border: var(--hud-border);
+  --hud-glass-divider: rgba(255, 255, 255, 0.25);
+  --hud-glass-filter: none;
+  --hud-glass-radius: 8px;
 }

@@ -35,4 +35,20 @@
   --hud-gauge-backdrop-filter: none;
   --hud-chip-backdrop-filter: none;
   --hud-chipicon-filter: none;
+
+  /* float/rings/ribbon: no hues - metrics are told apart by brightness, same as the zones */
+  --hud-metric-speed: #ffffff;
+  --hud-metric-hr: #e6e6e8;
+  --hud-metric-power: #c4c4c8;
+  --hud-metric-grade: #9e9ea3;
+  --hud-metric-elev: #cfcfd2;
+  --hud-metric-distance: #e6e6e8;
+  --hud-metric-pause: #ffffff;
+  --hud-route-gradient: linear-gradient(90deg, #6e6e72, #ffffff);
+  --hud-muted: rgba(210, 210, 215, 0.6);
+  --hud-glass-bg: var(--hud-bg);
+  --hud-glass-border: var(--hud-border);
+  --hud-glass-divider: rgba(210, 210, 215, 0.2);
+  --hud-glass-filter: none;
+  --hud-glass-radius: 8px;
 }

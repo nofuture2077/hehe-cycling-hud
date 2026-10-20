@@ -86,4 +86,31 @@
   --hud-map-grid-color: rgba(0, 240, 255, 0.55);
   --hud-map-grid-opacity: 0.3;
   --hud-map-scan-opacity: 0.1;
+
+  /* float/rings/ribbon: neon cyan chrome with one signature color per metric, glowing type,
+     square ribbon with the same corner brackets as the chips */
+  --hud-numeral-weight: var(--hud-font-weight-semibold);
+  --hud-minimal-value-letter-spacing: 1px;
+  --hud-minimal-label-transform: uppercase;
+  --hud-minimal-label-letter-spacing: 1.5px;
+  --hud-metric-speed: #00f0ff;
+  --hud-metric-hr: #ff003c;
+  --hud-metric-power: #fcee0a;
+  --hud-metric-grade: #00ff9f;
+  --hud-metric-elev: #ff2079;
+  --hud-metric-distance: #4dfcff;
+  --hud-metric-pause: #ff0090;
+  --hud-route-gradient: linear-gradient(90deg, #00f0ff, #ff2079 70%, #ff003c);
+  --hud-muted: rgba(0, 240, 255, 0.7);
+  --hud-soft-shadow: 0 0 8px rgba(0, 240, 255, 0.45), 0 1px 3px rgba(0, 0, 0, 0.8);
+  --hud-line-track: rgba(0, 240, 255, 0.18);
+  --hud-line-marker: rgba(0, 240, 255, 0.45);
+  --hud-line-head: #ff2079;
+  --hud-line-head-halo: rgba(255, 32, 121, 0.3);
+  --hud-glass-bg: var(--hud-bg);
+  --hud-glass-border: var(--hud-border);
+  --hud-glass-divider: rgba(0, 240, 255, 0.25);
+  --hud-glass-filter: none;
+  --hud-glass-radius: 0px;
+  --hud-glass-shadow: var(--hud-glow);
 }

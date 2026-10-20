@@ -3,7 +3,7 @@
   align-items: center;
   gap: 18px;
   color: #fff;
-  font-size: 20px;
+  font-size: calc(20px * var(--hud-minimal-scale, 1));
   font-weight: var(--hud-numeral-weight, 300);
   font-variant-numeric: tabular-nums;
   text-shadow: var(--hud-soft-shadow, 0 2px 14px rgba(0, 0, 0, 0.45));

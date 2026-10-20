@@ -27,4 +27,7 @@ function injectVersionPlugin() {
 
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), injectVersionPlugin()],
+  server: {
+    port: 5175,
+  },
 });

@@ -32,6 +32,26 @@ const previewData: CyclingData = {
   longitude: null,
 };
 
+// shown instead of previewData when HeheChat's settings preview embeds the HUD (#...&preview=true)
+const isPreview = new URLSearchParams(window.location.hash.slice(1)).get('preview') === 'true';
+const demoData: CyclingData = {
+  ...previewData,
+  speedKmh: 27.4,
+  maxSpeedKmh: 48.1,
+  distanceKm: 42.3,
+  splitDistanceKm: 12.1,
+  gradientPercent: 4.2,
+  maxGradientPercent: 9.8,
+  elevationGainM: 610,
+  elevationLossM: 540,
+  splitElevationGainM: 180,
+  splitElevationLossM: 150,
+  heartRateBpm: 142,
+  powerWatts: 215,
+  sessionMaxHeartRateBpm: 171,
+  sessionMaxPowerWatts: 480,
+};
+
 interface BannerProps {
   background: string;
   color: string;
@@ -122,7 +142,7 @@ function CyclingRoot() {
       {status === 'error' && (
         <Banner background="#c62828" color="#fff">Moblin-Verbindung fehlgeschlagen: {error}</Banner>
       )}
-      <CyclingHud data={data ?? previewData} config={config} pause={pause} gpxTrack={gpxTrack} logo={logo} />
+      <CyclingHud data={data ?? (isPreview ? demoData : previewData)} config={config} pause={pause} gpxTrack={gpxTrack} logo={logo} />
       {debugVisible && <DebugPanel status={status} debug={debug} />}
     </>
   );

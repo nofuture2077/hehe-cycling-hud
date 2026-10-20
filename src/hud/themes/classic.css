@@ -41,4 +41,19 @@
   --hud-b5-bg: rgba(183, 28, 28, 0.3);
   --hud-b5-border: rgba(183, 28, 28, 0.9);
   --hud-b5-color: #b71c1c;
+
+  /* float/rings/ribbon: each metric keeps the hue its chip/gauge has in the classic layouts, and
+     the ribbon gets the same dark blurred panel as the chips */
+  --hud-numeral-weight: var(--hud-font-weight-semibold);
+  --hud-metric-speed: #4dd0e1;
+  --hud-metric-hr: #ff3399;
+  --hud-metric-power: #f2c94c;
+  --hud-metric-grade: #81c784;
+  --hud-metric-elev: #ff9800;
+  --hud-metric-distance: #4dd0e1;
+  --hud-metric-pause: #ce93d8;
+  --hud-route-gradient: linear-gradient(90deg, #4dd0e1, #81c784 40%, #fbc02d 70%, #f44336);
+  --hud-glass-bg: rgba(20, 22, 26, 0.72);
+  --hud-glass-filter: blur(8px);
+  --hud-glass-radius: 12px;
 }

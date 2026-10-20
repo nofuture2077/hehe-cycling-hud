@@ -15,4 +15,25 @@
   --hud-b1-color: var(--hud-accent);
 
   --hud-gauge-bg: rgba(12, 16, 14, 0.4);
+
+  /* float/rings/ribbon: phosphor greens for the live metrics, amber for the alert-ish ones */
+  --hud-metric-speed: #7dffa8;
+  --hud-metric-hr: #ffb454;
+  --hud-metric-power: #c8ff7d;
+  --hud-metric-grade: #3fd9a0;
+  --hud-metric-elev: #ffd27d;
+  --hud-metric-distance: #7dffa8;
+  --hud-metric-pause: #ffb454;
+  --hud-route-gradient: linear-gradient(90deg, #1f7a4a, #7dffa8 60%, #ffb454);
+  --hud-muted: rgba(160, 255, 195, 0.6);
+  --hud-soft-shadow: 0 0 10px rgba(125, 255, 168, 0.25), 0 1px 3px rgba(0, 0, 0, 0.7);
+  --hud-line-track: rgba(120, 255, 170, 0.18);
+  --hud-line-marker: rgba(120, 255, 170, 0.4);
+  --hud-line-head: #7dffa8;
+  --hud-line-head-halo: rgba(125, 255, 168, 0.2);
+  --hud-glass-bg: var(--hud-bg);
+  --hud-glass-border: var(--hud-border);
+  --hud-glass-divider: rgba(120, 255, 170, 0.18);
+  --hud-glass-filter: none;
+  --hud-glass-radius: 6px;
 }

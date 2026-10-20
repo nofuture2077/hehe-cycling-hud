@@ -20,7 +20,7 @@
   gap: 0.18em;
   font-weight: var(--hud-numeral-weight, 300);
   line-height: 1;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--hud-minimal-value-letter-spacing, -0.02em);
 }
 
 .unit {
@@ -46,13 +46,14 @@
   margin-top: 6px;
   font-size: 15px;
   font-weight: var(--hud-font-weight-regular, 500);
-  letter-spacing: 0.08em;
-  text-transform: lowercase;
+  letter-spacing: var(--hud-minimal-label-letter-spacing, 0.08em);
+  text-transform: var(--hud-minimal-label-transform, lowercase);
   color: var(--hud-muted, rgba(255, 255, 255, 0.62));
 }
 
+/* --hud-minimal-scale lets wide display fonts (e.g. japan's Michroma) shrink the numerals */
 .hero {
-  font-size: 100px;
+  font-size: calc(100px * var(--hud-minimal-scale, 1));
 }
 
 .hero .unit {
@@ -60,11 +61,11 @@
 }
 
 .md {
-  font-size: 56px;
+  font-size: calc(56px * var(--hud-minimal-scale, 1));
 }
 
 .sm {
-  font-size: 30px;
+  font-size: calc(30px * var(--hud-minimal-scale, 1));
 }
 
 .sm .label {

@@ -20,16 +20,7 @@
   --hud-metric-distance: #2dd4bf;
   --hud-metric-pause: #f472b6;
   --hud-route-gradient: linear-gradient(90deg, #2dd4bf, #38bdf8 35%, #a78bfa 70%, #ff5d73);
-
-  --hud-muted: rgba(255, 255, 255, 0.62);
-  --hud-soft-shadow: 0 2px 14px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.35);
-  --hud-line-track: rgba(255, 255, 255, 0.18);
-
-  --hud-glass-bg: rgba(255, 255, 255, 0.08);
-  --hud-glass-border: rgba(255, 255, 255, 0.14);
-  --hud-glass-divider: rgba(255, 255, 255, 0.1);
-  --hud-glass-filter: blur(18px) saturate(140%);
-  --hud-glass-radius: 22px;
+  /* muted text, soft shadow and the frosted ribbon glass use the base.css defaults */
 
   --hud-accent: #38bdf8;
   --hud-bg: rgba(255, 255, 255, 0.08);
