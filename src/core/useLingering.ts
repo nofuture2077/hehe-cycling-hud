@@ -1,9 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 
 // keeps a dynamic element visible for lingerMs after it becomes inactive, fading it out
-// smoothly at the end instead of an abrupt disappearance
-export function useLingering(active: boolean, lingerMs: number): { visible: boolean; fading: boolean } {
-  const [visible, setVisible] = useState(active);
+// smoothly at the end instead of an abrupt disappearance. With activateMs, a hidden element only
+// appears once active has held that long, so brief blips don't pop it up (and then linger)
+export function useLingering(
+  active: boolean,
+  lingerMs: number,
+  activateMs = 0,
+): { visible: boolean; fading: boolean } {
+  const [visible, setVisible] = useState(active && activateMs <= 0);
   const [fading, setFading] = useState(false);
   const visibleRef = useRef(visible);
   visibleRef.current = visible;
@@ -11,8 +16,12 @@ export function useLingering(active: boolean, lingerMs: number): { visible: bool
   useEffect(() => {
     if (active) {
       setFading(false);
-      setVisible(true);
-      return undefined;
+      if (visibleRef.current || activateMs <= 0) {
+        setVisible(true);
+        return undefined;
+      }
+      const activateTimer = setTimeout(() => setVisible(true), activateMs);
+      return () => clearTimeout(activateTimer);
     }
     if (!visibleRef.current) return undefined;
 
@@ -27,7 +36,7 @@ export function useLingering(active: boolean, lingerMs: number): { visible: bool
       clearTimeout(fadeTimer);
       clearTimeout(hideTimer);
     };
-  }, [active, lingerMs]);
+  }, [active, lingerMs, activateMs]);
 
   return { visible, fading };
 }

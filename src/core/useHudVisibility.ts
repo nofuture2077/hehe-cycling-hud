@@ -2,6 +2,10 @@ import { useLingering } from './useLingering';
 import type { CyclingData, CyclingHudConfig, PauseInfo } from './types';
 import type { GpxProgress } from './useGpxProgress';
 
+// the gradient must stay above minGradientPercent this long before the gauge appears - otherwise a
+// slope hovering around the threshold pops it up on every blip and the linger keeps it on screen
+const GRADIENT_ACTIVATE_MS = 5000;
+
 export interface HudVisibility {
   showSpeed: boolean;
   showGradient: boolean;
@@ -41,7 +45,7 @@ export function useHudVisibility(
   const gradientActive = visible.gradient && gradientAboveThreshold && gradientMovingOk;
 
   const speedLinger = useLingering(speedActive, config.hideLingerMs);
-  const gradientLinger = useLingering(gradientActive, config.hideLingerMs);
+  const gradientLinger = useLingering(gradientActive, config.hideLingerMs, GRADIENT_ACTIVATE_MS);
   const showSpeed = speedLinger.visible && !pause.onBreak;
   const showGradient = gradientLinger.visible && !pause.onBreak;
   const showPause = pause.onBreak;
