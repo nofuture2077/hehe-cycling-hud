@@ -29,11 +29,14 @@ export function TrackMap({
   position = null,
   radiusMeters = null,
   waypoints = [],
+  nearestIndex: matchedIndex,
 }: {
   points: GpxPoint[];
   position?: { lat: number; lon: number } | null;
   radiusMeters?: number | null;
   waypoints?: GpxWaypoint[];
+  // progress-aware track index from useGpxProgress - falls back to a plain nearest-point search
+  nearestIndex?: number;
 }) {
   const result = useMemo(() => {
     if (points.length === 0) return null;
@@ -42,7 +45,7 @@ export function TrackMap({
     const projected = project(points, avgLatRad);
     const projectedWaypoints = project(waypoints, avgLatRad);
 
-    const nearestIndex = position ? findNearestPointIndex(points, position.lat, position.lon) : -1;
+    const nearestIndex = !position ? -1 : matchedIndex ?? findNearestPointIndex(points, position.lat, position.lon);
     const nearestDistance = nearestIndex >= 0 && position
       ? distanceMeters(points[nearestIndex], position)
       : Infinity;
@@ -80,7 +83,7 @@ export function TrackMap({
       .map(({ w, svg }) => ({ ...svg, name: w.name }));
 
     return { svgPoints, marker, waypointMarkers };
-  }, [points, position, radiusMeters, waypoints]);
+  }, [points, position, radiusMeters, waypoints, matchedIndex]);
 
   if (!result) return null;
 

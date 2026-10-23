@@ -6,6 +6,6 @@ export function ElevationProfileWidget({ ctx }: { ctx: HudContext }) {
   if (!visibility.showGpxElevationMap) return null;
   const position = config.visible.showGpxElevationPosition ? gpx.position : null;
   return (
-    <ElevationProfile points={gpx.points} position={position} radiusMeters={config.gpxMapRadius} />
+    <ElevationProfile points={gpx.points} position={position} radiusMeters={config.gpxMapRadius} nearestIndex={gpx.nearestIndex} />
   );
 }

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { distanceMeters, findNearestPointIndex } from '../../core/gpx/trackStats';
+import { cumulativeDistances, findNearestPointIndex } from '../../core/gpx/trackStats';
 import type { GpxProgress } from '../../core/useGpxProgress';
 
 export interface RouteProgressInfo {
@@ -15,11 +15,7 @@ export interface RouteProgressInfo {
 export function useRouteProgress(gpx: GpxProgress): RouteProgressInfo | null {
   const { points, waypoints } = gpx;
 
-  const cumulative = useMemo(() => {
-    const acc: number[] = [0];
-    for (let i = 1; i < points.length; i += 1) acc.push(acc[i - 1] + distanceMeters(points[i - 1], points[i]));
-    return acc;
-  }, [points]);
+  const cumulative = useMemo(() => cumulativeDistances(points), [points]);
 
   const totalM = cumulative[cumulative.length - 1] ?? 0;
 

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import type { GpxPoint } from '../core/gpx/parseGpx';
-import { distanceMeters, findNearestPointIndex, CLOSE_THRESHOLD_METERS } from '../core/gpx/trackStats';
+import { cumulativeDistances, distanceMeters, findNearestPointIndex, CLOSE_THRESHOLD_METERS } from '../core/gpx/trackStats';
 import styles from './ElevationProfile.module.css';
 
 const VIEWBOX_WIDTH = 240;
@@ -15,21 +15,21 @@ export function ElevationProfile({
   points,
   position = null,
   radiusMeters = null,
+  nearestIndex: matchedIndex,
 }: {
   points: GpxPoint[];
   position?: { lat: number; lon: number } | null;
   radiusMeters?: number | null;
+  // progress-aware track index from useGpxProgress - falls back to a plain nearest-point search
+  nearestIndex?: number;
 }) {
   const result = useMemo(() => {
     if (points.length === 0) return null;
 
     // cumulative distance along the track gives the x-axis
-    const cumulative: number[] = [0];
-    for (let i = 1; i < points.length; i += 1) {
-      cumulative.push(cumulative[i - 1] + distanceMeters(points[i - 1], points[i]));
-    }
+    const cumulative = cumulativeDistances(points);
 
-    const nearestIndex = position ? findNearestPointIndex(points, position.lat, position.lon) : -1;
+    const nearestIndex = !position ? -1 : matchedIndex ?? findNearestPointIndex(points, position.lat, position.lon);
     const nearestDistance = nearestIndex >= 0 && position
       ? distanceMeters(points[nearestIndex], position)
       : Infinity;
@@ -72,7 +72,7 @@ export function ElevationProfile({
       : null;
 
     return { svgPoints, marker, minEle, maxEle };
-  }, [points, position, radiusMeters]);
+  }, [points, position, radiusMeters, matchedIndex]);
 
   if (!result) return null;
 
