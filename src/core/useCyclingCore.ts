@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from 
 import type { MoblinTelemetryData } from '../types/moblin';
 import { parseMessage, isSystemMessageType, HeheChatMessage, SystemMessage } from '../commons/message';
 import { version } from '../../package.json';
+import { createGradientSmoother } from './smoothing';
 import type {
   CyclingData, CyclingHudConfig, CyclingHudTheme, CyclingHudLayout, LogoData, PauseInfo,
   GpxTrack, MoblinConnectionStatus, MoblinDebugInfo,
@@ -352,6 +353,7 @@ function firstHeartRate(heartRates: Record<string, number | null> | undefined): 
 function toCyclingData(
   t: MoblinTelemetryData,
   maxSpeedKmh: number,
+  gradientPercent: number,
   maxGradientPercent: number,
   sessionMaxHeartRateBpm: number,
   sessionMaxPowerWatts: number,
@@ -367,7 +369,7 @@ function toCyclingData(
     countryFlag: str(t.data.countryFlag),
     temperatureC: t.data.temperature ?? null,
     localTime: toLocalTime(t.data.date, t.data.timezone),
-    gradientPercent: num(t.data.slopePercent),
+    gradientPercent,
     maxGradientPercent,
     elevationGainM: num(t.data.altitudeAscent),
     elevationLossM: num(t.data.altitudeDescent),
@@ -448,11 +450,13 @@ export function useCyclingCore(): {
   const maxGradientRef = useRef(0);
   const maxHeartRateSessionRef = useRef(0);
   const maxPowerSessionRef = useRef(0);
+  const gradientSmootherRef = useRef(createGradientSmoother());
   useEffect(() => {
     maxSpeedRef.current = 0;
     maxGradientRef.current = 0;
     maxHeartRateSessionRef.current = 0;
     maxPowerSessionRef.current = 0;
+    gradientSmootherRef.current.reset();
   }, [streamStartSignal]);
 
   // telemetry comes from HeheServer over a plain WebSocket, using the same
@@ -580,7 +584,7 @@ export function useCyclingCore(): {
             lastTelemetryRaw: safeStringify(msg.data),
           }));
           const speedKmh = num(msg.data.speed) * 3.6;
-          const gradientPercent = num(msg.data.slopePercent);
+          const gradientPercent = gradientSmootherRef.current.push(num(msg.data.slopePercent), Date.now());
           const heartRateBpm = firstHeartRate(msg.data.heartRates);
           const powerWatts = num(msg.data.cyclingPower);
           maxSpeedRef.current = Math.max(maxSpeedRef.current, speedKmh);
@@ -592,6 +596,7 @@ export function useCyclingCore(): {
             data: toCyclingData(
               { data: msg.data },
               maxSpeedRef.current,
+              gradientPercent,
               maxGradientRef.current,
               maxHeartRateSessionRef.current,
               maxPowerSessionRef.current,
