@@ -11,7 +11,8 @@ export interface RouteProgressInfo {
   markers: number[];
 }
 
-// how far along the active GPX track the rider is - null when there's no track or no live fix
+// how far along the active GPX track (or the manual distance goal) the rider is - null when there's
+// neither, or a track but no live fix
 export function useRouteProgress(gpx: GpxProgress): RouteProgressInfo | null {
   const { points, waypoints } = gpx;
 
@@ -26,6 +27,11 @@ export function useRouteProgress(gpx: GpxProgress): RouteProgressInfo | null {
     [waypoints, points, cumulative, totalM],
   );
 
+  if (gpx.goalDistanceKm > 0) {
+    const totalKm = gpx.goalDistanceKm;
+    const doneKm = Math.max(0, totalKm - gpx.remainingDistanceKm);
+    return { percent: (doneKm / totalKm) * 100, doneKm, totalKm, remainingKm: gpx.remainingDistanceKm, markers: [] };
+  }
   if (totalM <= 0 || gpx.nearestIndex < 0) return null;
   const doneM = cumulative[gpx.nearestIndex];
   return {

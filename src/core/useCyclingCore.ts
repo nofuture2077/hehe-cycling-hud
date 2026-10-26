@@ -121,6 +121,8 @@ interface Thresholds {
   pauseMinDistanceM: number;
   maxHeartRateBpm: number;
   averagePowerWatts: number;
+  goalDistanceKm: number;
+  goalElevationM: number;
 }
 
 const defaultThresholds: Thresholds = {
@@ -135,6 +137,8 @@ const defaultThresholds: Thresholds = {
   pauseMinDistanceM: 100,
   maxHeartRateBpm: 190,
   averagePowerWatts: 250,
+  goalDistanceKm: 0,
+  goalElevationM: 0,
 };
 
 // profile.config keys carrying each threshold, set via Settings > Connect > Moblin
@@ -150,6 +154,8 @@ const THRESHOLD_CONFIG_KEYS: Record<keyof Thresholds, string> = {
   pauseMinDistanceM: 'cyclingHudPauseMinDistanceM',
   maxHeartRateBpm: 'cyclingHudMaxHeartRateBpm',
   averagePowerWatts: 'cyclingHudAveragePowerWatts',
+  goalDistanceKm: 'cyclingHudGoalDistanceKm',
+  goalElevationM: 'cyclingHudGoalElevationM',
 };
 
 const THRESHOLD_BOOLEAN_KEYS: (keyof Thresholds)[] = ['gradientOnlyWhenMoving', 'pauseEnabled'];
@@ -685,6 +691,8 @@ export function useCyclingCore(): {
     hideLingerMs: thresholds.hideLingerSeconds * 1000,
     maxHeartRateBpm: thresholds.maxHeartRateBpm,
     averagePowerWatts: thresholds.averagePowerWatts,
+    goalDistanceKm: thresholds.goalDistanceKm,
+    goalElevationM: thresholds.goalElevationM,
     gpxMapRadius,
   };
 

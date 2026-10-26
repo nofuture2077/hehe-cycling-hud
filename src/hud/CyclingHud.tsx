@@ -25,7 +25,7 @@ export default function CyclingHud({
   gpxTrack?: GpxTrack | null;
   logo?: LogoData | null;
 }) {
-  const gpx = useGpxProgress(gpxTrack, data);
+  const gpx = useGpxProgress(gpxTrack, data, config);
   const visibility = useHudVisibility(data, config, pause, gpx, logo !== null);
   const Layout = getLayout(resolveLayout(config.layout));
   const theme = resolveTheme(config.theme);

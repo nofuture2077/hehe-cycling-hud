@@ -19,7 +19,7 @@ export default function FloatLayout({ ctx }: { ctx: HudContext }) {
   const { visibility, gpx } = ctx;
   // same condition RouteProgressWidget renders under - without the route line, the bottom
   // clusters drop down to the edge instead of leaving an empty band
-  const showRoute = visibility.showGpxRemainingDistance && gpx.nearestIndex >= 0;
+  const showRoute = visibility.showGpxRemainingDistance && (gpx.nearestIndex >= 0 || gpx.goalDistanceKm > 0);
   const bottomClass = showRoute ? '' : styles.atEdge;
 
   return (

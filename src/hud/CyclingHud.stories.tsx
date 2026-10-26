@@ -98,6 +98,8 @@ export const Default: Story = {
       "hideLingerMs": 10000,
       "maxHeartRateBpm": 190,
       "averagePowerWatts": 250,
+      "goalDistanceKm": 0,
+      "goalElevationM": 0,
       "gpxMapRadius": 50000
     },
     data: { ...sampleData, distanceKm: 950, latitude: gpxMidPoint.lat, longitude: gpxMidPoint.lon },
@@ -147,6 +149,20 @@ export const VividFloatNoRemaining: Story = {
   args: {
     config: { ...vividConfig('float'), visible: { ...vividConfig('float').visible, showGpxRemainingDistance: false } },
     data: vividData,
+  },
+};
+
+// no GPX track: remaining distance/elevation and the route line come from the manual goals
+export const VividFloatGoalNoGpx: Story = {
+  args: {
+    config: {
+      ...vividConfig('float'),
+      visible: { ...vividConfig('float').visible, showGpxRemainingElevation: true },
+      goalDistanceKm: 120,
+      goalElevationM: 1500,
+    },
+    data: vividData,
+    gpxTrack: null,
   },
 };
 

@@ -50,6 +50,9 @@ export interface CyclingHudConfig {
   // personal baselines the heart rate/power gauges use to compute zones
   maxHeartRateBpm: number;
   averagePowerWatts: number;
+  // fallback route totals (km / m gain) for remaining distance/elevation when no GPX track is active; 0 = off
+  goalDistanceKm: number;
+  goalElevationM: number;
   // radius (meters) around the live position the map crops to; null shows the whole track
   gpxMapRadius: number | null;
 }
@@ -88,5 +91,7 @@ export const defaultConfig: CyclingHudConfig = {
   hideLingerMs: 10000,
   maxHeartRateBpm: 190,
   averagePowerWatts: 250,
+  goalDistanceKm: 0,
+  goalElevationM: 0,
   gpxMapRadius: 50000,
 };

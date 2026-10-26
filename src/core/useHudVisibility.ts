@@ -33,7 +33,7 @@ export function useHudVisibility(
   data: CyclingData,
   config: CyclingHudConfig,
   pause: PauseInfo,
-  gpx: Pick<GpxProgress, 'points' | 'waypoints'>,
+  gpx: Pick<GpxProgress, 'points' | 'waypoints' | 'goalDistanceKm' | 'goalElevationM'>,
   logoPresent: boolean,
 ): HudVisibility {
   const { visible } = config;
@@ -54,8 +54,8 @@ export function useHudVisibility(
   const showGpxMap = visible.showGpxMap && gpx.points.length > 0;
   const showGpxWaypoints = visible.showGpxWaypoints && gpx.waypoints.length > 0;
   const showGpxElevationMap = visible.showGpxElevationMap && gpx.points.length > 0;
-  const showGpxRemainingDistance = visible.showGpxRemainingDistance && gpx.points.length > 0;
-  const showGpxRemainingElevation = visible.showGpxRemainingElevation && gpx.points.length > 0;
+  const showGpxRemainingDistance = visible.showGpxRemainingDistance && (gpx.points.length > 0 || gpx.goalDistanceKm > 0);
+  const showGpxRemainingElevation = visible.showGpxRemainingElevation && (gpx.points.length > 0 || gpx.goalElevationM > 0);
 
   const showTopChips = visible.location || visible.distance || showElevation || showGpxMap;
   const showBottomGauges = showSpeed || showGradient || showPause;
