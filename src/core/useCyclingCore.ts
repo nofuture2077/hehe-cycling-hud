@@ -427,6 +427,9 @@ function safeStringify(value: unknown): string {
 export function useCyclingCore(): {
   data: CyclingData | null;
   config: CyclingHudConfig;
+  // false until the first sharedata/profile message - render nothing before this, or the
+  // default theme/layout flashes for a moment before the user's real one arrives
+  configLoaded: boolean;
   pause: PauseInfo;
   status: MoblinConnectionStatus;
   error: string | null;
@@ -443,6 +446,7 @@ export function useCyclingCore(): {
   const [logo, setLogo] = useState<LogoData | null>(null);
   const [theme, setTheme] = useState<CyclingHudTheme>(DEFAULT_THEME);
   const [layout, setLayout] = useState<CyclingHudLayout>(DEFAULT_LAYOUT);
+  const [configLoaded, setConfigLoaded] = useState(false);
   const [status, setStatus] = useState<MoblinConnectionStatus>('waiting');
   const [error, setError] = useState<string | null>(null);
   const [streamStartSignal, setStreamStartSignal] = useState(0);
@@ -550,6 +554,7 @@ export function useCyclingCore(): {
           setGpxMapRadius(gpxMapRadiusFromConfig(msg.profile?.config));
           setTheme(themeFromConfig(msg.profile?.config));
           setLayout(layoutFromConfig(msg.profile?.config));
+          setConfigLoaded(true);
           return;
         }
 
@@ -560,6 +565,7 @@ export function useCyclingCore(): {
           setGpxMapRadius(gpxMapRadiusFromConfig(msg.profile?.config));
           setTheme(themeFromConfig(msg.profile?.config));
           setLayout(layoutFromConfig(msg.profile?.config));
+          setConfigLoaded(true);
           return;
         }
 
@@ -696,7 +702,7 @@ export function useCyclingCore(): {
     gpxMapRadius,
   };
 
-  return { data, config, pause, status, error, debug, debugVisible: sections.debug, gpxTrack, logo };
+  return { data, config, configLoaded, pause, status, error, debug, debugVisible: sections.debug, gpxTrack, logo };
 }
 
 // deprecated: kept as an alias for one release so nothing importing the old Moblin-specific name
