@@ -1,7 +1,7 @@
 import { useMemo, useRef } from 'react';
 import { parseGpx, parseGpxWaypoints, type GpxPoint, type GpxWaypoint } from './gpx/parseGpx';
 import { cumulativeDistances, matchTrackIndex, remainingDistanceMeters, remainingElevationGainMeters } from './gpx/trackStats';
-import type { CyclingData, GpxTrack } from './types';
+import type { CyclingData, CyclingHudConfig, GpxTrack } from './types';
 
 export interface GpxProgress {
   points: GpxPoint[];
@@ -10,6 +10,9 @@ export interface GpxProgress {
   nearestIndex: number;
   remainingDistanceKm: number;
   remainingElevationGainM: number;
+  // manual goals from config, only non-zero while no GPX track is loaded (the track always wins)
+  goalDistanceKm: number;
+  goalElevationM: number;
 }
 
 // last matched track index plus the odometer reading at that moment - lets the next match
@@ -22,7 +25,11 @@ interface LastMatch {
 
 // derives the rider's live progress along an active GPX track from raw telemetry - shared by any
 // layout that wants to render a track map, elevation profile, or "distance/elevation remaining"
-export function useGpxProgress(gpxTrack: GpxTrack | null, data: CyclingData): GpxProgress {
+export function useGpxProgress(
+  gpxTrack: GpxTrack | null,
+  data: CyclingData,
+  config: Pick<CyclingHudConfig, 'goalDistanceKm' | 'goalElevationM' | 'visible'>,
+): GpxProgress {
   const points = useMemo(() => (gpxTrack ? parseGpx(gpxTrack.content) : []), [gpxTrack]);
   const waypoints = useMemo(() => (gpxTrack ? parseGpxWaypoints(gpxTrack.content) : []), [gpxTrack]);
   const cumulative = useMemo(() => cumulativeDistances(points), [points]);
@@ -45,8 +52,19 @@ export function useGpxProgress(gpxTrack: GpxTrack | null, data: CyclingData): Gp
     lastMatch.current = { points, index: nearestIndex, odometerKm: data.distanceKm };
   }
 
-  const remainingDistanceKm = nearestIndex >= 0 ? remainingDistanceMeters(points, nearestIndex) / 1000 : 0;
-  const remainingElevationGainM = nearestIndex >= 0 ? remainingElevationGainMeters(points, nearestIndex) : 0;
+  // no track: fall back to the manual goals, measured against whichever counter the HUD displays
+  const goalDistanceKm = points.length ? 0 : config.goalDistanceKm;
+  const goalElevationM = points.length ? 0 : config.goalElevationM;
+  const riddenKm = config.visible.split ? data.splitDistanceKm : data.distanceKm;
+  const climbedM = config.visible.split ? data.splitElevationGainM : data.elevationGainM;
 
-  return { points, waypoints, position, nearestIndex, remainingDistanceKm, remainingElevationGainM };
+  let remainingDistanceKm = nearestIndex >= 0 ? remainingDistanceMeters(points, nearestIndex) / 1000 : 0;
+  let remainingElevationGainM = nearestIndex >= 0 ? remainingElevationGainMeters(points, nearestIndex) : 0;
+  if (goalDistanceKm > 0) remainingDistanceKm = Math.max(0, goalDistanceKm - riddenKm);
+  if (goalElevationM > 0) remainingElevationGainM = Math.max(0, goalElevationM - climbedM);
+
+  return {
+    points, waypoints, position, nearestIndex, remainingDistanceKm, remainingElevationGainM,
+    goalDistanceKm, goalElevationM,
+  };
 }

@@ -72,7 +72,7 @@ export function MetricRibbonWidget({ ctx }: { ctx: HudContext }) {
     segments.push({
       key: 'elevation',
       color: METRIC_COLORS.elev,
-      percent: route && total > 0 ? (climbed / total) * 100 : 100,
+      percent: (route || gpx.goalElevationM > 0) && total > 0 ? (climbed / total) * 100 : 100,
       value: fmt(climbed),
       unit: 'm',
       label: 'climbed',
