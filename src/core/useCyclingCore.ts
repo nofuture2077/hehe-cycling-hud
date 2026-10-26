@@ -663,33 +663,36 @@ export function useCyclingCore(): {
     data?.speedKmh ?? 0, data?.distanceKm ?? 0, thresholds, data !== null, streamStartSignal
   );
 
+  // master switch: when off, every element hides - including the pause gauge, which isn't a
+  // visibility flag. Pause tracking itself keeps running so stats survive toggling it back on
+  const on = sections.enabled;
   const config: CyclingHudConfig = {
     theme,
     layout,
     visible: {
-      speed: sections.enabled && sections.speed,
-      distance: sections.enabled && sections.distance,
-      location: sections.enabled && sections.location,
-      locationCity: sections.locationCity,
-      locationRegion: sections.locationRegion,
-      locationCountry: sections.locationCountry,
-      locationFlag: sections.locationFlag,
-      locationTemperature: sections.locationTemperature,
-      locationLocalTime: sections.locationLocalTime,
-      gradient: sections.enabled && sections.gradient,
-      elevation: sections.enabled && sections.elevation,
-      heartRate: sections.enabled && sections.heartRate,
-      power: sections.enabled && sections.power,
-      split: sections.split,
-      showMax: sections.showMax,
-      showGpxMap: sections.showGpxMap,
-      showGpxElevationMap: sections.showGpxElevationMap,
-      showGpxPosition: sections.showGpxPosition,
-      showGpxElevationPosition: sections.showGpxElevationPosition,
-      showGpxRemainingDistance: sections.showGpxRemainingDistance,
-      showGpxRemainingElevation: sections.showGpxRemainingElevation,
-      showGpxWaypoints: sections.showGpxWaypoints,
-      showLogo: sections.showLogo,
+      speed: on && sections.speed,
+      distance: on && sections.distance,
+      location: on && sections.location,
+      locationCity: on && sections.locationCity,
+      locationRegion: on && sections.locationRegion,
+      locationCountry: on && sections.locationCountry,
+      locationFlag: on && sections.locationFlag,
+      locationTemperature: on && sections.locationTemperature,
+      locationLocalTime: on && sections.locationLocalTime,
+      gradient: on && sections.gradient,
+      elevation: on && sections.elevation,
+      heartRate: on && sections.heartRate,
+      power: on && sections.power,
+      split: on && sections.split,
+      showMax: on && sections.showMax,
+      showGpxMap: on && sections.showGpxMap,
+      showGpxElevationMap: on && sections.showGpxElevationMap,
+      showGpxPosition: on && sections.showGpxPosition,
+      showGpxElevationPosition: on && sections.showGpxElevationPosition,
+      showGpxRemainingDistance: on && sections.showGpxRemainingDistance,
+      showGpxRemainingElevation: on && sections.showGpxRemainingElevation,
+      showGpxWaypoints: on && sections.showGpxWaypoints,
+      showLogo: on && sections.showLogo,
     },
     minSpeedKmh: thresholds.minSpeedKmh,
     minGradientPercent: thresholds.minGradientPercent,
@@ -702,7 +705,7 @@ export function useCyclingCore(): {
     gpxMapRadius,
   };
 
-  return { data, config, configLoaded, pause, status, error, debug, debugVisible: sections.debug, gpxTrack, logo };
+  return { data, config, configLoaded, pause: on ? pause : emptyPause, status, error, debug, debugVisible: sections.debug, gpxTrack, logo };
 }
 
 // deprecated: kept as an alias for one release so nothing importing the old Moblin-specific name
