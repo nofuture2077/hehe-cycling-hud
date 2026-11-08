@@ -374,7 +374,7 @@ function toCyclingData(
     country: str(t.data.country),
     countryFlag: str(t.data.countryFlag),
     temperatureC: t.data.temperature ?? null,
-    localTime: toLocalTime(t.data.date, t.data.timezone),
+    localTime: toLocalTime(t.data.date, t.data.timeZone),
     gradientPercent,
     maxGradientPercent,
     elevationGainM: num(t.data.altitudeAscent),
