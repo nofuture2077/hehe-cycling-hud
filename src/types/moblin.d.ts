@@ -26,7 +26,7 @@ export interface MoblinTelemetryData {
     // JSONEncoder/JSONDecoder default to encoding Date as a Double in that reference
     date: number | null;
     // IANA identifier, e.g. "Europe/Berlin"
-    timezone: string | null;
+    timeZone: string | null;
     heartRates: Record<string, number | null>;
     activeEnergyBurned: number | null;
     workoutDistance: number | null;
