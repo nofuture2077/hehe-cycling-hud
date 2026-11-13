@@ -1,7 +1,8 @@
-import { Component, type ReactNode } from 'react';
+import { Component, type ReactNode, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { type CyclingData, useCyclingCore } from './core';
 import { getLayout } from './hud/registry';
+import { isHudWidget } from './hud/layouts/widget';
 import { useVersionCheck } from './hooks/useVersionCheck';
 
 const { Component: CyclingHud } = getLayout('default');
@@ -124,8 +125,27 @@ last telemetry raw: ${debug.lastTelemetryRaw ?? '-'}`}
   );
 }
 
+// HeheChat's unified overlay source shows one cluster per frame (#...&widget=gauges&slot=bottom-right)
+// and moves a frame by changing the slot in its hash, which doesn't reload the page
+const hashParam = (name: string) => new URLSearchParams(window.location.hash.slice(1)).get(name);
+const widgetParam = hashParam('widget');
+const widget = isHudWidget(widgetParam) ? widgetParam : undefined;
+
+function useSlot() {
+  const [slot, setSlot] = useState(() => hashParam('slot') ?? undefined);
+
+  useEffect(() => {
+    const update = () => setSlot(hashParam('slot') ?? undefined);
+    window.addEventListener('hashchange', update);
+    return () => window.removeEventListener('hashchange', update);
+  }, []);
+
+  return slot;
+}
+
 function CyclingRoot() {
   const { data, config, configLoaded, pause, status, error, debug, debugVisible, gpxTrack, logo } = useCyclingCore();
+  const slot = useSlot();
 
   // Long-lived browser-source sessions must pick up a new build without a manual OBS reload.
   useVersionCheck({
@@ -143,7 +163,15 @@ function CyclingRoot() {
         <Banner background="#c62828" color="#fff">Moblin-Verbindung fehlgeschlagen: {error}</Banner>
       )}
       {configLoaded && (
-        <CyclingHud data={data ?? (isPreview ? demoData : previewData)} config={config} pause={pause} gpxTrack={gpxTrack} logo={logo} />
+        <CyclingHud
+          data={data ?? (isPreview ? demoData : previewData)}
+          config={config}
+          pause={pause}
+          gpxTrack={gpxTrack}
+          logo={logo}
+          widget={widget}
+          slot={slot}
+        />
       )}
       {debugVisible && <DebugPanel status={status} debug={debug} />}
     </>

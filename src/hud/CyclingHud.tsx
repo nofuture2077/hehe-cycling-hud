@@ -4,6 +4,7 @@ import { useHudVisibility } from '../core/useHudVisibility';
 import { resolveTheme, loadThemeFont, isThemeFontReady } from './theme';
 import { resolveLayout } from './layout';
 import { getLayout } from './layouts/registry';
+import WidgetLayout, { type HudWidgetId } from './layouts/widget';
 import {
   type CyclingData, type CyclingHudConfig, type LogoData, type PauseInfo, type GpxTrack,
   defaultConfig, defaultPause,
@@ -18,12 +19,17 @@ export default function CyclingHud({
   pause = defaultPause,
   gpxTrack = null,
   logo = null,
+  widget,
+  slot = 'top-left',
 }: {
   data: CyclingData;
   config?: CyclingHudConfig;
   pause?: PauseInfo;
   gpxTrack?: GpxTrack | null;
   logo?: LogoData | null;
+  // show just this cluster, filling the page, instead of the configured layout (layouts/widget.tsx)
+  widget?: HudWidgetId;
+  slot?: string;
 }) {
   const gpx = useGpxProgress(gpxTrack, data, config);
   const visibility = useHudVisibility(data, config, pause, gpx, logo !== null);
@@ -43,9 +49,15 @@ export default function CyclingHud({
     };
   }, [theme]);
 
+  const ctx = { data, config, pause, logo, gpx, visibility };
+
   return (
-    <div className={styles.root} data-theme={theme} style={fontsReady ? undefined : { visibility: 'hidden' }}>
-      <Layout ctx={{ data, config, pause, logo, gpx, visibility }} />
+    <div
+      className={`${styles.root} ${widget ? styles.widget : ''}`}
+      data-theme={theme}
+      style={fontsReady ? undefined : { visibility: 'hidden' }}
+    >
+      {widget ? <WidgetLayout ctx={ctx} widget={widget} slot={slot} /> : <Layout ctx={ctx} />}
       <div className={styles.scanlines} />
     </div>
   );
