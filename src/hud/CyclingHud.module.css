@@ -66,10 +66,30 @@
   gap: 14px;
 }
 
-.bottomRight {
-  bottom: 40px;
-  right: 40px;
+.gaugeCluster {
   flex-direction: row;
   align-items: flex-end;
   gap: 10px;
+}
+
+.bottomRight {
+  bottom: 40px;
+  right: 40px;
+}
+
+/* --- single widget: one cluster filling its own frame (layouts/widget.tsx) --- */
+
+.root.widget {
+  width: 100vw;
+  height: 100vh;
+}
+
+.frame {
+  position: absolute;
+  inset: 0;
+  display: flex;
+}
+
+.framed {
+  position: relative;
 }

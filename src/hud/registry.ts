@@ -1,6 +1,7 @@
 import type { ComponentType } from 'react';
 import type { CyclingData, CyclingHudConfig, GpxTrack, LogoData, PauseInfo } from '../core/types';
 import CyclingHud from './CyclingHud';
+import type { HudWidgetId } from './layouts/widget';
 
 export interface CyclingHudProps {
   data: CyclingData;
@@ -8,6 +9,8 @@ export interface CyclingHudProps {
   pause?: PauseInfo;
   gpxTrack?: GpxTrack | null;
   logo?: LogoData | null;
+  widget?: HudWidgetId;
+  slot?: string;
 }
 
 export interface HudLayout {
