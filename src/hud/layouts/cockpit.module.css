@@ -3,35 +3,36 @@
    any theme. Self-contained (doesn't depend on CyclingHud.module.css's .chipCluster), since that
    class's column-direction default would conflict with this layout's row-direction clusters. */
 
-.topLeft {
-  position: absolute;
-  bottom: 40px;
-  right: 50%;
-  margin-right: 10px;
+.info,
+.gauges {
   display: flex;
   flex-direction: row;
   align-items: flex-end;
   gap: 10px;
 }
 
-.topLeft.matchWidth {
+.info.matchWidth {
   align-items: stretch;
+}
+
+/* where the clusters sit in the full layout - a single widget (layouts/widget.tsx) leaves these out */
+.left {
+  position: absolute;
+  bottom: 40px;
+  right: 50%;
+  margin-right: 10px;
+}
+
+.right {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  margin-left: 10px;
 }
 
 .hor {
   display: flex;
   flex-direction: row;
-}
-
-.bottomRight {
-  position: absolute;
-  bottom: 40px;
-  left: 50%;
-  margin-left: 10px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  gap: 10px;
 }
 
 .trackMapSpacing {

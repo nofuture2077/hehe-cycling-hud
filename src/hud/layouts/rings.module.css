@@ -1,9 +1,6 @@
 /* rings layout - purely positional, see minimal/MetricRings.module.css for the rings themselves */
 
-.topLeft {
-  position: absolute;
-  top: 48px;
-  left: 56px;
+.info {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -19,11 +16,21 @@
   margin-left: 4px;
 }
 
+.gauges {
+  display: flex;
+  align-items: flex-end;
+  gap: 36px;
+}
+
+/* where the clusters sit in the full layout - a single widget (layouts/widget.tsx) leaves these out */
+.topLeft {
+  position: absolute;
+  top: 48px;
+  left: 56px;
+}
+
 .bottomRight {
   position: absolute;
   bottom: 48px;
   right: 56px;
-  display: flex;
-  align-items: flex-end;
-  gap: 36px;
 }

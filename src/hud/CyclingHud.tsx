@@ -27,13 +27,14 @@ export default function CyclingHud({
   pause?: PauseInfo;
   gpxTrack?: GpxTrack | null;
   logo?: LogoData | null;
-  // show just this cluster, filling the page, instead of the configured layout (layouts/widget.tsx)
+  // show just this cluster of the configured layout, filling the page (layouts/widget.tsx)
   widget?: HudWidgetId;
   slot?: string;
 }) {
   const gpx = useGpxProgress(gpxTrack, data, config);
   const visibility = useHudVisibility(data, config, pause, gpx, logo !== null);
-  const Layout = getLayout(resolveLayout(config.layout));
+  const layout = resolveLayout(config.layout);
+  const { Layout } = getLayout(layout);
   const theme = resolveTheme(config.theme);
 
   // stay invisible until the theme's fonts are in, so text doesn't flash in a fallback font first
@@ -57,7 +58,7 @@ export default function CyclingHud({
       data-theme={theme}
       style={fontsReady ? undefined : { visibility: 'hidden' }}
     >
-      {widget ? <WidgetLayout ctx={ctx} widget={widget} slot={slot} /> : <Layout ctx={ctx} />}
+      {widget ? <WidgetLayout ctx={ctx} layout={layout} widget={widget} slot={slot} /> : <Layout ctx={ctx} />}
       <div className={styles.scanlines} />
     </div>
   );

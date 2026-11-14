@@ -1,5 +1,6 @@
 import { getWidget } from '../widgets/registry';
 import type { HudContext } from '../context';
+import type { ClusterProps, LayoutWidgets } from './registry';
 import styles from '../CyclingHud.module.css';
 
 const Logo = getWidget('logo');
@@ -11,13 +12,6 @@ const HeartRateGauge = getWidget('heartRateGauge');
 const PowerGauge = getWidget('powerGauge');
 const GradientGauge = getWidget('gradientGauge');
 const PrimaryGauge = getWidget('primaryGauge');
-
-// the two clusters take the class that places them: a corner of the screen in the default layout
-// below, or the frame of a single widget (layouts/widget.tsx)
-interface ClusterProps {
-  ctx: HudContext;
-  className: string;
-}
 
 // logo, location, distance/elevation stats, optional track map
 export function InfoCluster({ ctx, className }: ClusterProps) {
@@ -71,3 +65,8 @@ export default function DefaultLayout({ ctx }: { ctx: HudContext }) {
     </>
   );
 }
+
+export const widgets: LayoutWidgets = {
+  info: { width: 520, height: 150, Cluster: InfoCluster },
+  gauges: { width: 760, height: 140, Cluster: GaugeCluster },
+};

@@ -1,11 +1,29 @@
 /* ribbon layout - purely positional, see minimal/MetricRibbon.module.css for the strip itself */
 
+.name {
+  display: flex;
+  align-items: center;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 22px;
+}
+
+.gauges {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+/* where the clusters sit in the full layout - a single widget (layouts/widget.tsx) leaves these out */
 .topLeft {
   position: absolute;
   top: 48px;
   left: 56px;
-  display: flex;
-  align-items: center;
 }
 
 .topRight {
@@ -19,8 +37,4 @@
   bottom: 44px;
   left: 50%;
   transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
 }
