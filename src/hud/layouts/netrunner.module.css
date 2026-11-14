@@ -4,17 +4,14 @@
    src/hud/themes/*.css for that). Self-contained, doesn't depend on CyclingHud.module.css's
    .chipCluster for the same reason cockpit.module.css isn't: different flex direction/placement. */
 
-.topLeft {
-  position: absolute;
-  top: 40px;
-  left: 40px;
+.info {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 3px;
 }
 
-.topLeft.matchWidth {
+.info.matchWidth {
   align-items: stretch;
 }
 
@@ -28,20 +25,29 @@
   margin-left: 6px;
 }
 
-.bottomLeft {
-  position: absolute;
-  bottom: 40px;
-  left: 40px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
-}
-
 .barStack {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.gauges {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+}
+
+/* where the clusters sit in the full layout - a single widget (layouts/widget.tsx) leaves these out */
+.topLeft {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+}
+
+.bottomLeft {
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
 }
 
 .bottomRight {
