@@ -191,6 +191,14 @@ function layoutFromConfig(profileConfig: Record<string, unknown> | undefined): C
   return typeof value === 'string' && value.length > 0 ? value : DEFAULT_LAYOUT;
 }
 
+// HeheChat's unified overlay source passes a block's settings in the hash instead (see useCyclingCore): the same keys
+// as the profile config, plus the logo as an image of the block (data URL), shown whenever there is one
+function logoFromSettings(settings: Record<string, unknown>): LogoData | null {
+  const image = Array.isArray(settings.cyclingHudLogo) ? settings.cyclingHudLogo[0] : undefined;
+  const match = typeof image?.data === 'string' ? /^data:([^;,]+);base64,(.*)$/.exec(image.data) : null;
+  return match ? { filename: 'logo', mimeType: match[1], content: match[2] } : null;
+}
+
 const emptyPause: PauseInfo = {
   onBreak: false, currentBreakSeconds: 0, totalBreakSeconds: 0, breakCount: 0,
 };
@@ -423,8 +431,10 @@ function safeStringify(value: unknown): string {
 // public entry point of the "core" layer: owns the WebSocket connection, telemetry parsing,
 // session/pause tracking, and config resolution. Any HUD layout - the built-in one or a
 // third-party replacement - is meant to call only this hook and render from its output, without
-// reimplementing the connection or domain logic itself
-export function useCyclingCore(): {
+// reimplementing the connection or domain logic itself.
+// settings: the settings of a block of HeheChat's unified overlay source (a cluster shown on its
+// own), which replace the profile config and the uploaded logo; null for the standalone HUD
+export function useCyclingCore(settings: Record<string, unknown> | null = null): {
   data: CyclingData | null;
   config: CyclingHudConfig;
   // false until the first sharedata/profile message - render nothing before this, or the
@@ -439,14 +449,10 @@ export function useCyclingCore(): {
   logo: LogoData | null;
 } {
   const [data, setData] = useState<CyclingData | null>(null);
-  const [sections, setSections] = useState<Sections>(defaultSections);
-  const [thresholds, setThresholds] = useState<Thresholds>(defaultThresholds);
-  const [gpxMapRadius, setGpxMapRadius] = useState<number | null>(null);
+  // the profile config, undefined until the first sharedata/profile message
+  const [profileConfig, setProfileConfig] = useState<Record<string, unknown> | undefined>(undefined);
   const [gpxTrack, setGpxTrack] = useState<GpxTrack | null>(null);
-  const [logo, setLogo] = useState<LogoData | null>(null);
-  const [theme, setTheme] = useState<CyclingHudTheme>(DEFAULT_THEME);
-  const [layout, setLayout] = useState<CyclingHudLayout>(DEFAULT_LAYOUT);
-  const [configLoaded, setConfigLoaded] = useState(false);
+  const [uploadedLogo, setLogo] = useState<LogoData | null>(null);
   const [status, setStatus] = useState<MoblinConnectionStatus>('waiting');
   const [error, setError] = useState<string | null>(null);
   const [streamStartSignal, setStreamStartSignal] = useState(0);
@@ -549,23 +555,13 @@ export function useCyclingCore(): {
               channels: Object.fromEntries(channels.map((c) => [c, true])),
             }));
           }
-          setSections(sectionsFromConfig(msg.profile?.config));
-          setThresholds(thresholdsFromConfig(msg.profile?.config));
-          setGpxMapRadius(gpxMapRadiusFromConfig(msg.profile?.config));
-          setTheme(themeFromConfig(msg.profile?.config));
-          setLayout(layoutFromConfig(msg.profile?.config));
-          setConfigLoaded(true);
+          setProfileConfig(msg.profile?.config ?? {});
           return;
         }
 
         // pushed whenever the user changes settings elsewhere while this source stays open
         if (msg.type === 'profile') {
-          setSections(sectionsFromConfig(msg.profile?.config));
-          setThresholds(thresholdsFromConfig(msg.profile?.config));
-          setGpxMapRadius(gpxMapRadiusFromConfig(msg.profile?.config));
-          setTheme(themeFromConfig(msg.profile?.config));
-          setLayout(layoutFromConfig(msg.profile?.config));
-          setConfigLoaded(true);
+          setProfileConfig(msg.profile?.config ?? {});
           return;
         }
 
@@ -643,6 +639,15 @@ export function useCyclingCore(): {
       ws?.close();
     };
   }, []);
+
+  const source = settings ?? profileConfig;
+  const logo = settings ? logoFromSettings(settings) : uploadedLogo;
+  const sections = { ...sectionsFromConfig(source), ...(settings ? { showLogo: true } : {}) };
+  const thresholds = thresholdsFromConfig(source);
+  const gpxMapRadius = gpxMapRadiusFromConfig(source);
+  const theme = themeFromConfig(source);
+  const layout = layoutFromConfig(source);
+  const configLoaded = source !== undefined;
 
   // releases buffered telemetry once it's old enough, so the HUD lags behind live by delaySeconds
   useEffect(() => {
