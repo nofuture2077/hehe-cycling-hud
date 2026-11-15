@@ -400,6 +400,12 @@ function toCyclingData(
 
 export type { MoblinConnectionStatus, MoblinDebugInfo, GpxTrack, LogoData };
 
+interface BackendMessage {
+  type?: string;
+  data?: MoblinTelemetryData['data'] & { message?: string };
+  profile?: { config?: Record<string, unknown> & { channels?: string[] } };
+}
+
 const INITIAL_RECONNECT_DELAY_MS = 1000;
 const MAX_RECONNECT_DELAY_MS = 30000;
 const RECONNECT_BACKOFF = 1.5;
@@ -477,9 +483,115 @@ export function useCyclingCore(settings: Record<string, unknown> | null = null):
 
   // telemetry comes from HeheServer over a plain WebSocket, using the same
   // browser-source sink token as chat/alert sources - independent of any Moblin browser-source
-  // lifecycle, so both keep updating while backgrounded/not rendered by Moblin
+  // lifecycle, so both keep updating while backgrounded/not rendered by Moblin.
+  // A widget of HeheChat's unified overlay source (settings given) opens no connection: the
+  // overlay relays the messages it needs (Stats, gpx-track, streamOnline) from its own one
+  const widgetMode = settings !== null;
   useEffect(() => {
     const token = getQueryVariable(window.location.hash.substring(1), 'token');
+
+    // what a backend message changes; send answers over the connection (none in widget mode)
+    function handleMessage(msg: BackendMessage, send?: (data: Record<string, unknown>) => void) {
+      // the active GPX track, pushed by HeheServer whenever the user selects one in
+      // HeheChat > Settings > Connect > GPX (or immediately on connect if one is already active)
+      if (msg.type === 'gpx-track') {
+        const track = (msg as unknown as { data?: GpxTrack }).data;
+        if (track) setGpxTrack(track);
+        return;
+      }
+
+      // the active logo, pushed by HeheServer whenever the user uploads/removes one in
+      // HeheChat > Settings > Connect > Moblin (or immediately on connect if one is already set)
+      if (msg.type === 'logo') {
+        const logoData = (msg as unknown as { data?: LogoData | null }).data;
+        setLogo(logoData ?? null);
+        return;
+      }
+
+      // sharedata arrives right after the sink handshake - use it to subscribe to the
+      // channel(s) we belong to (starts the telemetry feed) and to read the HUD section
+      // toggles from Settings > Connect > Moblin
+      if (msg.type === 'sharedata') {
+        const channels = msg.profile?.config?.channels ?? [];
+        if (channels.length && send) {
+          send({
+            type: 'subscribe',
+            token,
+            source: 'Telemetry HUD',
+            version,
+            channels: Object.fromEntries(channels.map((c) => [c, true])),
+          });
+        }
+        setProfileConfig(msg.profile?.config ?? {});
+        return;
+      }
+
+      // pushed whenever the user changes settings elsewhere while this source stays open
+      if (msg.type === 'profile') {
+        setProfileConfig(msg.profile?.config ?? {});
+        return;
+      }
+
+      // chat itself isn't used for HUD control anymore (moved to Settings > Connect > Moblin),
+      // but keep receiving it - a future feature will show chat overlaid on the HUD
+      if (msg.type === 'msg') {
+        // a fresh stream start means the rider hasn't ridden anything yet this session, even
+        // though Moblin's cumulative distance isn't reset - use it to reset pause tracking so
+        // leftover distance from a previous stream can't immediately satisfy pauseMinDistanceM
+        if (msg.data?.message) {
+          try {
+            const parsed = parseMessage(msg.data.message);
+            if (isSystemMessageType(parsed) && (parsed as SystemMessage).subType === 'streamOnline') {
+              setStreamStartSignal((s) => s + 1);
+            }
+          } catch {
+            // ignore malformed lines - handleIncomingChat below already guards its own parse
+          }
+        }
+        handleIncomingChat(msg.data?.message, setDebug);
+        return;
+      }
+
+      if (msg.type === 'Stats' && msg.data) {
+        setDebug((d) => ({
+          ...d,
+          telemetryCount: d.telemetryCount + 1,
+          lastTelemetryRaw: safeStringify(msg.data),
+        }));
+        const speedKmh = num(msg.data.speed) * 3.6;
+        const gradientPercent = gradientSmootherRef.current.push(num(msg.data.slopePercent), Date.now());
+        const heartRateBpm = firstHeartRate(msg.data.heartRates);
+        const powerWatts = num(msg.data.cyclingPower);
+        maxSpeedRef.current = Math.max(maxSpeedRef.current, speedKmh);
+        maxGradientRef.current = Math.max(maxGradientRef.current, Math.abs(gradientPercent));
+        maxHeartRateSessionRef.current = Math.max(maxHeartRateSessionRef.current, heartRateBpm);
+        maxPowerSessionRef.current = Math.max(maxPowerSessionRef.current, powerWatts);
+        bufferRef.current.push({
+          t: Date.now(),
+          data: toCyclingData(
+            { data: msg.data },
+            maxSpeedRef.current,
+            gradientPercent,
+            maxGradientRef.current,
+            maxHeartRateSessionRef.current,
+            maxPowerSessionRef.current,
+          ),
+        });
+      }
+    }
+
+    if (widgetMode) {
+      const onMessage = (ev: MessageEvent) => {
+        if (ev.source === window.parent && ev.data?.type === 'hehe-hud:message' && ev.data.data) {
+          handleMessage(ev.data.data);
+        }
+      };
+      window.addEventListener('message', onMessage);
+      // the overlay answers with what it already has, e.g. the active GPX track
+      window.parent.postMessage({ type: 'hehe-hud:ready' }, '*');
+      setStatus('subscribed');
+      return () => window.removeEventListener('message', onMessage);
+    }
 
     if (!token) {
       setStatus('error');
@@ -509,11 +621,7 @@ export function useCyclingCore(settings: Record<string, unknown> | null = null):
       });
 
       ws.addEventListener('message', (event) => {
-        let msg: {
-          type?: string;
-          data?: MoblinTelemetryData['data'] & { message?: string };
-          profile?: { config?: Record<string, unknown> & { channels?: string[] } };
-        };
+        let msg: BackendMessage;
         try {
           msg = JSON.parse(event.data);
         } catch {
@@ -525,92 +633,7 @@ export function useCyclingCore(settings: Record<string, unknown> | null = null):
           return;
         }
 
-        // the active GPX track, pushed by HeheServer whenever the user selects one in
-        // HeheChat > Settings > Connect > GPX (or immediately on connect if one is already active)
-        if (msg.type === 'gpx-track') {
-          const track = (msg as unknown as { data?: GpxTrack }).data;
-          if (track) setGpxTrack(track);
-          return;
-        }
-
-        // the active logo, pushed by HeheServer whenever the user uploads/removes one in
-        // HeheChat > Settings > Connect > Moblin (or immediately on connect if one is already set)
-        if (msg.type === 'logo') {
-          const logoData = (msg as unknown as { data?: LogoData | null }).data;
-          setLogo(logoData ?? null);
-          return;
-        }
-
-        // sharedata arrives right after the sink handshake - use it to subscribe to the
-        // channel(s) we belong to (starts the telemetry feed) and to read the HUD section
-        // toggles from Settings > Connect > Moblin
-        if (msg.type === 'sharedata') {
-          const channels = msg.profile?.config?.channels ?? [];
-          if (channels.length) {
-            ws!.send(JSON.stringify({
-              type: 'subscribe',
-              token,
-              source: 'Telemetry HUD',
-              version,
-              channels: Object.fromEntries(channels.map((c) => [c, true])),
-            }));
-          }
-          setProfileConfig(msg.profile?.config ?? {});
-          return;
-        }
-
-        // pushed whenever the user changes settings elsewhere while this source stays open
-        if (msg.type === 'profile') {
-          setProfileConfig(msg.profile?.config ?? {});
-          return;
-        }
-
-        // chat itself isn't used for HUD control anymore (moved to Settings > Connect > Moblin),
-        // but keep receiving it - a future feature will show chat overlaid on the HUD
-        if (msg.type === 'msg') {
-          // a fresh stream start means the rider hasn't ridden anything yet this session, even
-          // though Moblin's cumulative distance isn't reset - use it to reset pause tracking so
-          // leftover distance from a previous stream can't immediately satisfy pauseMinDistanceM
-          if (msg.data?.message) {
-            try {
-              const parsed = parseMessage(msg.data.message);
-              if (isSystemMessageType(parsed) && (parsed as SystemMessage).subType === 'streamOnline') {
-                setStreamStartSignal((s) => s + 1);
-              }
-            } catch {
-              // ignore malformed lines - handleIncomingChat below already guards its own parse
-            }
-          }
-          handleIncomingChat(msg.data?.message, setDebug);
-          return;
-        }
-
-        if (msg.type === 'Stats' && msg.data) {
-          setDebug((d) => ({
-            ...d,
-            telemetryCount: d.telemetryCount + 1,
-            lastTelemetryRaw: safeStringify(msg.data),
-          }));
-          const speedKmh = num(msg.data.speed) * 3.6;
-          const gradientPercent = gradientSmootherRef.current.push(num(msg.data.slopePercent), Date.now());
-          const heartRateBpm = firstHeartRate(msg.data.heartRates);
-          const powerWatts = num(msg.data.cyclingPower);
-          maxSpeedRef.current = Math.max(maxSpeedRef.current, speedKmh);
-          maxGradientRef.current = Math.max(maxGradientRef.current, Math.abs(gradientPercent));
-          maxHeartRateSessionRef.current = Math.max(maxHeartRateSessionRef.current, heartRateBpm);
-          maxPowerSessionRef.current = Math.max(maxPowerSessionRef.current, powerWatts);
-          bufferRef.current.push({
-            t: Date.now(),
-            data: toCyclingData(
-              { data: msg.data },
-              maxSpeedRef.current,
-              gradientPercent,
-              maxGradientRef.current,
-              maxHeartRateSessionRef.current,
-              maxPowerSessionRef.current,
-            ),
-          });
-        }
+        handleMessage(msg, (data) => ws!.send(JSON.stringify(data)));
       });
 
       ws.addEventListener('close', () => {
