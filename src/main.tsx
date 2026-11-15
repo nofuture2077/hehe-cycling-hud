@@ -125,27 +125,42 @@ last telemetry raw: ${debug.lastTelemetryRaw ?? '-'}`}
   );
 }
 
-// HeheChat's unified overlay source shows one cluster per frame (#...&widget=gauges&slot=bottom-right)
-// and moves a frame by changing the slot in its hash, which doesn't reload the page
+// HeheChat's unified overlay source shows one cluster per frame (#...&widget=gauges&slot=bottom-right&settings={...})
+// with the settings of its block, and moves a frame or changes its settings by changing its hash, which doesn't
+// reload the page
 const hashParam = (name: string) => new URLSearchParams(window.location.hash.slice(1)).get(name);
 const widgetParam = hashParam('widget');
 const widget = isHudWidget(widgetParam) ? widgetParam : undefined;
 
-function useSlot() {
-  const [slot, setSlot] = useState(() => hashParam('slot') ?? undefined);
+function readSettings(): Record<string, unknown> {
+  try {
+    const settings = JSON.parse(hashParam('settings') ?? '{}');
+    return settings && typeof settings === 'object' && !Array.isArray(settings) ? settings : {};
+  } catch {
+    return {};
+  }
+}
+
+function useHashParam<T>(read: () => T) {
+  const [value, setValue] = useState(read);
 
   useEffect(() => {
-    const update = () => setSlot(hashParam('slot') ?? undefined);
+    const update = () => setValue(read);
     window.addEventListener('hashchange', update);
     return () => window.removeEventListener('hashchange', update);
   }, []);
 
-  return slot;
+  return value;
 }
 
+const readSlot = () => hashParam('slot') ?? undefined;
+// the standalone HUD reads its settings from the profile
+const readWidgetSettings = () => (widget ? readSettings() : null);
+
 function CyclingRoot() {
-  const { data, config, configLoaded, pause, status, error, debug, debugVisible, gpxTrack, logo } = useCyclingCore();
-  const slot = useSlot();
+  const settings = useHashParam(readWidgetSettings);
+  const { data, config, configLoaded, pause, status, error, debug, debugVisible, gpxTrack, logo } = useCyclingCore(settings);
+  const slot = useHashParam(readSlot);
 
   // Long-lived browser-source sessions must pick up a new build without a manual OBS reload.
   useVersionCheck({

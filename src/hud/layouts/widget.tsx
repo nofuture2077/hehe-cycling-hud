@@ -81,9 +81,9 @@ export default function WidgetLayout({
           transformOrigin: `${vertical === 'middle' ? 'center' : vertical} ${horizontal}`,
         }}
       >
-        {/* the map is a widget of its own, so the other clusters leave it out */}
+        {/* the map is a widget of its own, shown whenever there is a track, so the other clusters leave it out */}
         <Cluster
-          ctx={widget === 'map' ? ctx : { ...ctx, visibility: { ...ctx.visibility, showGpxMap: false } }}
+          ctx={{ ...ctx, visibility: { ...ctx.visibility, showGpxMap: widget === 'map' && ctx.gpx.points.length > 0 } }}
           className={styles.framed}
         />
       </div>
