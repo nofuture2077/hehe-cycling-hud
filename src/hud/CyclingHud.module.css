@@ -30,13 +30,13 @@
   position: absolute;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: var(--hud-align, flex-start);
   gap: 3px;
 }
 
 .chipCluster > .hor {
   display: flex;
-  flex-direction: row;
+  flex-direction: var(--hud-row, row);
 }
 
 .chipCluster.matchWidth {
@@ -92,4 +92,16 @@
 
 .framed {
   position: relative;
+}
+
+/* a cluster on the right or in the middle of the screen leans its parts that way: the layouts' CSS reads these
+   (--hud-align for stacked parts and lines, --hud-row for the logo's row), the full layout leaves them unset */
+.frame[data-align='right'] {
+  --hud-align: flex-end;
+  --hud-row: row-reverse;
+  --hud-logo-margin: 0 0 0 20px;
+}
+
+.frame[data-align='center'] {
+  --hud-align: center;
 }

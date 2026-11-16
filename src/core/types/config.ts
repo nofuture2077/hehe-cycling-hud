@@ -55,7 +55,30 @@ export interface CyclingHudConfig {
   goalElevationM: number;
   // radius (meters) around the live position the map crops to; null shows the whole track
   gpxMapRadius: number | null;
+  // how the track map and elevation profile look
+  trackStyle: TrackStyle;
 }
+
+export interface TrackStyle {
+  // the panel behind the map or profile: 'none', 'glass', 'dark' or 'light' (hud/trackLook.ts)
+  panel: string;
+  // the color of the track's line, a CSS color; '' leaves it to the theme
+  lineColor: string;
+  // grid lines behind the track; null leaves it to the theme
+  grid: boolean | null;
+  // the profile's height axis starts at 0 m (sea level) instead of the lowest point shown
+  elevationFromZero: boolean;
+  // the smallest height range the profile spans, so a flat stretch reads as flat
+  elevationMinSpanM: number;
+}
+
+export const defaultTrackStyle: TrackStyle = {
+  panel: 'none',
+  lineColor: '',
+  grid: null,
+  elevationFromZero: false,
+  elevationMinSpanM: 200,
+};
 
 export const defaultConfig: CyclingHudConfig = {
   theme: 'classic',
@@ -94,4 +117,5 @@ export const defaultConfig: CyclingHudConfig = {
   goalDistanceKm: 0,
   goalElevationM: 0,
   gpxMapRadius: 50000,
+  trackStyle: defaultTrackStyle,
 };

@@ -21,7 +21,7 @@ function InfoCluster({ ctx, className }: ClusterProps) {
     <div className={`${styles.info} ${visibility.showElevation ? styles.matchWidth : ''} ${className}`}>
       <div className={styles.hor}>
         <Logo ctx={ctx} />
-        <div style={{ display: 'flex', gap: 10, flexDirection: 'column' }}>
+        <div style={{ display: 'flex', gap: 10, flexDirection: 'column', alignItems: 'var(--hud-align, stretch)' }}>
           <LocationChip ctx={ctx} />
           <StatsCard ctx={ctx} />
         </div>
@@ -50,12 +50,12 @@ function Bars({ ctx }: { ctx: HudContext }) {
 // are in the bottom corners of the full layout
 function GaugeCluster({ ctx, className }: ClusterProps) {
   const { visibility } = ctx;
-  if (!visibility.showAnyGauge && !visibility.showElevation) return null;
+  if (!visibility.showAnyGauge) return null;
 
   return (
     <div className={`${styles.gauges} ${className}`}>
-      {visibility.showAnyGauge && <Bars ctx={ctx} />}
-      {visibility.showElevation && <ElevationProfile ctx={ctx} />}
+      <Bars ctx={ctx} />
+      {visibility.showGpxElevationMap && <ElevationProfile ctx={ctx} />}
     </div>
   );
 }
@@ -77,7 +77,7 @@ export default function NetrunnerLayout({ ctx }: { ctx: HudContext }) {
           <Bars ctx={ctx} />
         </div>
       )}
-      {visibility.showElevation && (
+      {visibility.showGpxElevationMap && (
         <div className={styles.bottomRight}>
           <ElevationProfile ctx={ctx} />
         </div>

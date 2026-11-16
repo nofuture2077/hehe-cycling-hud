@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import { cumulativeDistances, findNearestPointIndex } from '../../core/gpx/trackStats';
 import type { GpxProgress } from '../../core/useGpxProgress';
 
@@ -11,10 +11,13 @@ export interface RouteProgressInfo {
   markers: number[];
 }
 
-// how far along the active GPX track (or the manual distance goal) the rider is - null when there's
-// neither, or a track but no live fix
+// how far along the active GPX track (or the manual distance goal) the rider is - null when there's neither. Without a
+// live fix on the track (not there yet, a detour, no GPS) it stays where the rider was last matched, at the start
+// before that
 export function useRouteProgress(gpx: GpxProgress): RouteProgressInfo | null {
   const { points, waypoints } = gpx;
+  const lastIndex = useRef<{ points: GpxProgress['points']; index: number } | null>(null);
+  if (gpx.nearestIndex >= 0) lastIndex.current = { points, index: gpx.nearestIndex };
 
   const cumulative = useMemo(() => cumulativeDistances(points), [points]);
 
@@ -32,13 +35,14 @@ export function useRouteProgress(gpx: GpxProgress): RouteProgressInfo | null {
     const doneKm = Math.max(0, totalKm - gpx.remainingDistanceKm);
     return { percent: (doneKm / totalKm) * 100, doneKm, totalKm, remainingKm: gpx.remainingDistanceKm, markers: [] };
   }
-  if (totalM <= 0 || gpx.nearestIndex < 0) return null;
-  const doneM = cumulative[gpx.nearestIndex];
+  if (totalM <= 0) return null;
+  const index = lastIndex.current?.points === points ? lastIndex.current.index : 0;
+  const doneM = cumulative[index];
   return {
     percent: (doneM / totalM) * 100,
     doneKm: doneM / 1000,
     totalKm: totalM / 1000,
-    remainingKm: gpx.remainingDistanceKm,
+    remainingKm: (totalM - doneM) / 1000,
     markers,
   };
 }

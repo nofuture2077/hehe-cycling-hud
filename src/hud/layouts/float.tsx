@@ -14,10 +14,12 @@ const ElevationProfile = getWidget('elevationProfile');
 
 // same condition RouteProgressWidget renders under
 function showRoute({ visibility, gpx }: HudContext) {
-  return visibility.showGpxRemainingDistance && (gpx.nearestIndex >= 0 || gpx.goalDistanceKm > 0);
+  return visibility.showGpxRemainingDistance && (gpx.points.length > 1 || gpx.goalDistanceKm > 0);
 }
 
-function InfoCluster({ ctx, className }: ClusterProps) {
+// route: the full layout shows the remaining distance on its route line, so the stats leave it out. A single widget
+// (layouts/widget.tsx) shows it in the stats, the route line belongs to the gauges cluster.
+function InfoCluster({ ctx, className, route = false }: ClusterProps & { route?: boolean }) {
   const { visibility } = ctx;
   if (!visibility.showTopChips && !visibility.showLogo) return null;
 
@@ -26,7 +28,7 @@ function InfoCluster({ ctx, className }: ClusterProps) {
       <Logo ctx={ctx} />
       <div>
         <MinimalLocation ctx={ctx} />
-        <StatsLine ctx={ctx} skipRemainingDistance={showRoute(ctx)} />
+        <StatsLine ctx={ctx} skipRemainingDistance={route} />
       </div>
     </div>
   );
@@ -54,7 +56,8 @@ function Maps({ ctx }: { ctx: HudContext }) {
 }
 
 // a single widget (layouts/widget.tsx) has speed and maps side by side above the route line, as they
-// are along the bottom of the full layout
+// are along the bottom of the full layout. The cluster is as wide as its frame (stretch), so the route line runs
+// across all of it.
 function GaugeCluster({ ctx, className }: ClusterProps) {
   return (
     <div className={`${styles.gauges} ${className}`}>
@@ -78,7 +81,7 @@ export default function FloatLayout({ ctx }: { ctx: HudContext }) {
 
   return (
     <>
-      <InfoCluster ctx={ctx} className={styles.topLeft} />
+      <InfoCluster ctx={ctx} className={styles.topLeft} route={route} />
 
       <div className={`${styles.bottomLeft} ${bottomClass}`}>
         <Speed ctx={ctx} />
@@ -99,5 +102,5 @@ export default function FloatLayout({ ctx }: { ctx: HudContext }) {
 
 export const widgets: LayoutWidgets = {
   info: { width: 690, height: 140, Cluster: InfoCluster },
-  gauges: { width: 600, height: 210, Cluster: GaugeCluster },
+  gauges: { width: 600, height: 210, stretch: true, Cluster: GaugeCluster },
 };

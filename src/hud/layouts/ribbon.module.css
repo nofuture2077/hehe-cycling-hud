@@ -2,13 +2,14 @@
 
 .name {
   display: flex;
+  flex-direction: var(--hud-row, row);
   align-items: center;
 }
 
 .info {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: var(--hud-align, flex-start);
   gap: 22px;
 }
 

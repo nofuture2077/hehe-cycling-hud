@@ -12,6 +12,7 @@ export function TrackMapWidget({ ctx }: { ctx: HudContext }) {
       radiusMeters={config.gpxMapRadius}
       nearestIndex={gpx.nearestIndex}
       waypoints={visibility.showGpxWaypoints ? gpx.waypoints : []}
+      look={config.trackStyle}
     />
   );
 }

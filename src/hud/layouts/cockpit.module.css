@@ -32,7 +32,7 @@
 
 .hor {
   display: flex;
-  flex-direction: row;
+  flex-direction: var(--hud-row, row);
 }
 
 .trackMapSpacing {

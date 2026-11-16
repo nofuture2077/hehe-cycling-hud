@@ -3,13 +3,14 @@
 
 .info {
   display: flex;
+  flex-direction: var(--hud-row, row);
   align-items: center;
 }
 
 .speed {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: var(--hud-align, flex-start);
   gap: 16px;
 }
 
@@ -29,7 +30,7 @@
 .gaugeRow {
   display: flex;
   align-items: flex-end;
-  justify-content: space-between;
+  justify-content: var(--hud-align, space-between);
   gap: 56px;
 }
 
