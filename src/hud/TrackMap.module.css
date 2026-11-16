@@ -67,7 +67,7 @@
   stroke: var(--hud-map-grid-color, transparent);
   stroke-width: 1.5;
   stroke-dasharray: 4 5;
-  opacity: var(--hud-map-grid-opacity, 0);
+  opacity: var(--hud-map-frame-opacity, var(--hud-map-grid-opacity, 0));
 }
 
 .scanWedge {

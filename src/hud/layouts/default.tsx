@@ -22,7 +22,7 @@ export function InfoCluster({ ctx, className }: ClusterProps) {
     <div className={`${styles.chipCluster} ${className} ${visibility.showElevation ? styles.matchWidth : ''}`}>
       <div className={styles.hor}>
         <Logo ctx={ctx} />
-        <div style={{ display: 'flex', gap: 10, flexDirection: 'column' }}>
+        <div style={{ display: 'flex', gap: 10, flexDirection: 'column', alignItems: 'var(--hud-align, stretch)' }}>
           <LocationChip ctx={ctx} />
           <StatsCard ctx={ctx} />
         </div>

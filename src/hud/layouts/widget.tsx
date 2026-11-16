@@ -1,19 +1,20 @@
 import { useEffect, useState } from 'react';
 import type { HudContext } from '../context';
 import { getWidget } from '../widgets/registry';
-import { getLayout, type ClusterProps } from './registry';
+import { getLayout, type ClusterProps, type LayoutWidgets } from './registry';
 import styles from '../CyclingHud.module.css';
 
 const TrackMap = getWidget('trackMap');
+const ElevationProfile = getWidget('elevationProfile');
 
-// the clusters of the configured layout, each on its own and without the layout's placement, and
-// the track map - for HeheChat's unified overlay source, which shows a cluster in a frame of its
+// the clusters of the configured layout, each on its own and without the layout's placement, the
+// track map and the elevation profile - for HeheChat's unified overlay source, which shows a cluster in a frame of its
 // own and places that frame per OBS scene (#token=...&widget=gauges&slot=bottom-right).
 // HeheChat gives the frame the shape of the default layout's cluster (BLOCK_TYPES in its
 // src/components/overlay/blocks.tsx), and the cluster is scaled to fit it - by its design size
 // (`widgets` of each layout), not by what is on screen right now, so it doesn't grow and shrink as
 // gauges come and go.
-const HUD_WIDGET_IDS = ['info', 'gauges', 'map'] as const;
+const HUD_WIDGET_IDS = ['info', 'gauges', 'map', 'elevation'] as const;
 
 export type HudWidgetId = (typeof HUD_WIDGET_IDS)[number];
 
@@ -29,21 +30,35 @@ function MapCluster({ ctx, className }: ClusterProps) {
   );
 }
 
-// looks the same in every layout
-const MAP_WIDGET = { width: 240, height: 240, Cluster: MapCluster };
+function ElevationCluster({ ctx, className }: ClusterProps) {
+  return (
+    <div className={className}>
+      <ElevationProfile ctx={ctx} />
+    </div>
+  );
+}
 
-// how much the design size has to shrink or grow to fit the frame
+// look the same in every layout
+const OWN_WIDGETS: Record<'map' | 'elevation', LayoutWidgets['info']> = {
+  map: { width: 240, height: 240, Cluster: MapCluster },
+  elevation: { width: 240, height: 112, Cluster: ElevationCluster },
+};
+
+// how much the design size has to shrink or grow to fit the frame, and the frame's width at that scale
 function useFrameScale(width: number, height: number) {
-  const [scale, setScale] = useState(1);
+  const [frame, setFrame] = useState({ scale: 1, width });
 
   useEffect(() => {
-    const update = () => setScale(Math.min(window.innerWidth / width, window.innerHeight / height));
+    const update = () => {
+      const scale = Math.min(window.innerWidth / width, window.innerHeight / height);
+      setFrame({ scale, width: window.innerWidth / scale });
+    };
     update();
     window.addEventListener('resize', update);
     return () => window.removeEventListener('resize', update);
   }, [width, height]);
 
-  return scale;
+  return frame;
 }
 
 const FLEX_ALIGN: Record<string, string> = {
@@ -68,22 +83,36 @@ export default function WidgetLayout({
   widget: HudWidgetId;
   slot: string;
 }) {
-  const { width, height, Cluster } = widget === 'map' ? MAP_WIDGET : getLayout(layout).widgets[widget];
-  const scale = useFrameScale(width, height);
+  const { width, height, stretch, Cluster } =
+    widget === 'map' || widget === 'elevation' ? OWN_WIDGETS[widget] : getLayout(layout).widgets[widget];
+  const { scale, width: frameWidth } = useFrameScale(width, height);
   const [vertical = 'top', horizontal = 'left'] = slot.split('-');
 
   return (
-    <div className={styles.frame} style={{ alignItems: FLEX_ALIGN[vertical], justifyContent: FLEX_ALIGN[horizontal] }}>
+    <div
+      className={styles.frame}
+      data-align={horizontal}
+      style={{ alignItems: FLEX_ALIGN[vertical], justifyContent: FLEX_ALIGN[horizontal] }}
+    >
       <div
         style={{
           flexShrink: 0,
+          width: stretch ? frameWidth : undefined,
           transform: `scale(${scale})`,
           transformOrigin: `${vertical === 'middle' ? 'center' : vertical} ${horizontal}`,
         }}
       >
-        {/* the map is a widget of its own, shown whenever there is a track, so the other clusters leave it out */}
+        {/* the map and the elevation profile are widgets of their own, shown whenever there is a track, so the other
+            clusters leave them out */}
         <Cluster
-          ctx={{ ...ctx, visibility: { ...ctx.visibility, showGpxMap: widget === 'map' && ctx.gpx.points.length > 0 } }}
+          ctx={{
+            ...ctx,
+            visibility: {
+              ...ctx.visibility,
+              showGpxMap: widget === 'map' && ctx.gpx.points.length > 0,
+              showGpxElevationMap: widget === 'elevation' && ctx.gpx.points.length > 0,
+            },
+          }}
           className={styles.framed}
         />
       </div>

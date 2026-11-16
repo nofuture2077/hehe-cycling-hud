@@ -1,6 +1,7 @@
 .location,
 .stats {
   display: flex;
+  justify-content: var(--hud-align, flex-start);
   align-items: baseline;
   flex-wrap: wrap;
   color: #fff;

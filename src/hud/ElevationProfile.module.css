@@ -1,50 +1,55 @@
+/* the elevation profile: a filled chart with the highest and lowest height inside its left edge. Colors from the
+   theme (--hud-accent) unless the block sets --hud-elevation-color; panel and grid from hud/trackLook.ts */
+
 .container {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--hud-space-3, 6px);
-}
-
-.wrapper {
-  display: flex;
-  align-items: stretch;
-  gap: var(--hud-space-2, 4px);
 }
 
 .profile {
-  width: 200px;
-  height: 108px;
   display: block;
+  overflow: visible;
 }
 
-.legend {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  height: 108px;
-  padding: var(--hud-space-1, 2px) 0;
+.line {
+  fill: none;
+  stroke: var(--hud-elevation-color, var(--hud-accent, #f9a825));
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  filter: var(--hud-map-track-glow, none);
+}
+
+.areaTop {
+  stop-color: var(--hud-elevation-color, var(--hud-accent, #f9a825));
+  stop-opacity: 0.35;
+}
+
+.areaBottom {
+  stop-color: var(--hud-elevation-color, var(--hud-accent, #f9a825));
+  stop-opacity: 0;
+}
+
+/* grid lines: invisible unless a theme or the block's grid setting sets the opacity */
+.grid line {
+  stroke: var(--hud-map-grid-color, rgba(255, 255, 255, 0.12));
+  stroke-width: 1;
+  opacity: var(--hud-map-grid-opacity, 0);
+  shape-rendering: crispEdges;
 }
 
 .legendValue {
   font-size: var(--hud-font-size-elevation-legend, 11px);
   font-weight: var(--hud-font-weight-semibold, 600);
-  color: var(--hud-accent, #f9a825);
-  line-height: 1;
-  white-space: nowrap;
-}
-
-.line {
-  fill: none;
-  stroke: var(--hud-accent, #f9a825);
-  stroke-width: 2;
+  fill: #fff;
+  fill-opacity: 0.85;
+  paint-order: stroke;
+  stroke: rgba(0, 0, 0, 0.55);
+  stroke-width: 3px;
   stroke-linejoin: round;
-  stroke-linecap: round;
-  vector-effect: non-scaling-stroke;
 }
 
 .marker {
-  fill: #ff5c8a;
+  fill: var(--hud-map-marker-color, #ff5c8a);
   stroke: #fff;
   stroke-width: 1.5;
 }

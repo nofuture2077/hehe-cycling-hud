@@ -100,7 +100,8 @@ export const Default: Story = {
       "averagePowerWatts": 250,
       "goalDistanceKm": 0,
       "goalElevationM": 0,
-      "gpxMapRadius": 50000
+      "gpxMapRadius": 50000,
+      "trackStyle": defaultConfig.trackStyle
     },
     data: { ...sampleData, distanceKm: 950, latitude: gpxMidPoint.lat, longitude: gpxMidPoint.lon },
   },

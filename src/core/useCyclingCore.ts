@@ -5,8 +5,9 @@ import { version } from '../../package.json';
 import { createGradientSmoother } from './smoothing';
 import type {
   CyclingData, CyclingHudConfig, CyclingHudTheme, CyclingHudLayout, LogoData, PauseInfo,
-  GpxTrack, MoblinConnectionStatus, MoblinDebugInfo,
+  GpxTrack, MoblinConnectionStatus, MoblinDebugInfo, TrackStyle,
 } from './types';
+import { defaultTrackStyle } from './types';
 
 interface Sections {
   enabled: boolean;
@@ -92,6 +93,19 @@ const CONFIG_KEYS: Record<keyof Sections, string> = {
   showGpxWaypoints: 'showGpxWaypoints',
   showLogo: 'cyclingHudShowLogo',
 };
+
+// the look of the track map and elevation profile, set per block of HeheChat's unified overlay source
+function trackStyleFromConfig(source: Record<string, unknown> | undefined): TrackStyle {
+  const { cyclingHudPanel: panel, cyclingHudLineColor: lineColor, cyclingHudGrid: grid,
+    cyclingHudElevationFromZero: fromZero, cyclingHudElevationMinSpanM: minSpan } = source ?? {};
+  return {
+    panel: typeof panel === 'string' ? panel : defaultTrackStyle.panel,
+    lineColor: typeof lineColor === 'string' ? lineColor : defaultTrackStyle.lineColor,
+    grid: typeof grid === 'boolean' ? grid : defaultTrackStyle.grid,
+    elevationFromZero: typeof fromZero === 'boolean' ? fromZero : defaultTrackStyle.elevationFromZero,
+    elevationMinSpanM: typeof minSpan === 'number' && minSpan > 0 ? minSpan : defaultTrackStyle.elevationMinSpanM,
+  };
+}
 
 // gpxMapRadius is a number|null (null = full track), so it can't go through
 // THRESHOLD_CONFIG_KEYS which only accepts plain numbers
@@ -495,8 +509,9 @@ export function useCyclingCore(settings: Record<string, unknown> | null = null):
       // the active GPX track, pushed by HeheServer whenever the user selects one in
       // HeheChat > Settings > Connect > GPX (or immediately on connect if one is already active)
       if (msg.type === 'gpx-track') {
-        const track = (msg as unknown as { data?: GpxTrack }).data;
-        if (track) setGpxTrack(track);
+        // null: the streamer follows no track any more
+        const track = (msg as unknown as { data?: GpxTrack | null }).data;
+        setGpxTrack(track ?? null);
         return;
       }
 
@@ -731,6 +746,7 @@ export function useCyclingCore(settings: Record<string, unknown> | null = null):
     goalDistanceKm: thresholds.goalDistanceKm,
     goalElevationM: thresholds.goalElevationM,
     gpxMapRadius,
+    trackStyle: trackStyleFromConfig(source),
   };
 
   return { data, config, configLoaded, pause: on ? pause : emptyPause, status, error, debug, debugVisible: sections.debug, gpxTrack, logo };

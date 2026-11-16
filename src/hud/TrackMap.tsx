@@ -1,6 +1,9 @@
 import { useMemo } from 'react';
 import type { GpxPoint, GpxWaypoint } from '../core/gpx/parseGpx';
 import { distanceMeters, findNearestPointIndex, CLOSE_THRESHOLD_METERS } from '../core/gpx/trackStats';
+import type { TrackStyle } from '../core/types';
+import { defaultTrackStyle } from '../core/types';
+import { trackLookStyle } from './trackLook';
 import styles from './TrackMap.module.css';
 
 const VIEWBOX_SIZE = 200;
@@ -30,6 +33,7 @@ export function TrackMap({
   radiusMeters = null,
   waypoints = [],
   nearestIndex: matchedIndex,
+  look = defaultTrackStyle,
 }: {
   points: GpxPoint[];
   position?: { lat: number; lon: number } | null;
@@ -37,6 +41,7 @@ export function TrackMap({
   waypoints?: GpxWaypoint[];
   // progress-aware track index from useGpxProgress - falls back to a plain nearest-point search
   nearestIndex?: number;
+  look?: TrackStyle;
 }) {
   const result = useMemo(() => {
     if (points.length === 0) return null;
@@ -90,7 +95,7 @@ export function TrackMap({
   const polylinePoints = result.svgPoints.map((p) => `${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(' ');
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} style={trackLookStyle(look)}>
       <svg className={styles.map} viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}>
         <defs>
           <pattern id="hud-map-grid" width={20} height={20} patternUnits="userSpaceOnUse">
