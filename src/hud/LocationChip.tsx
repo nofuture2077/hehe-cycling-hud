@@ -28,23 +28,29 @@ export function LocationChip({
   showTemperature?: boolean;
   showLocalTime?: boolean;
 }) {
-  const text = [showCity && city, showRegion && region, showCountry && country]
+  const place = [showCity && city, showRegion && region, showCountry && country]
     .filter(Boolean)
-    .join(', ') || '—';
+    .join(', ');
   const flag = showFlag && countryFlag ? countryFlag : undefined;
+  // Local time and temperature each after a dash, unless nothing comes before; '—' only while nothing else shows
+  const extras = [
+    showLocalTime && localTime,
+    showTemperature && temperatureC !== null && `${Math.round(temperatureC)}°C`,
+  ].filter(Boolean);
+  const text = place || (extras.length === 0 && !flag ? '—' : '');
 
   return (
     <div className={`${styles.chip} ${styles.location}`}>
       <span className={styles.chipIcon}>
         {flag ? <span aria-hidden="true">{flag}</span> : <IconPin />}
       </span>
-      <span className={styles.text}>{text}</span>
-      {showLocalTime && localTime && (
-        <span className={styles.value}>&nbsp;- {localTime}</span>
-      )}
-      {showTemperature && temperatureC !== null && (
-        <span className={styles.value}>&nbsp;- {Math.round(temperatureC)}°C</span>
-      )}
+      {text && <span className={styles.text}>{text}</span>}
+      {extras.map((extra, i) => (
+        <span key={i} className={styles.value}>
+          {(text || i > 0) && <>&nbsp;- </>}
+          {extra}
+        </span>
+      ))}
     </div>
   );
 }

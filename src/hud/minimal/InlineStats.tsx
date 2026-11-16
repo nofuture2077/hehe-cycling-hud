@@ -18,11 +18,12 @@ export function LocationLine({ ctx }: { ctx: HudContext }) {
   if (place) parts.push(place);
   if (visible.locationTemperature && data.temperatureC != null) parts.push(`${Math.round(data.temperatureC)}°`);
   if (visible.locationLocalTime && data.localTime) parts.push(data.localTime);
-  if (parts.length === 0) return null;
+  const flag = visible.locationFlag && data.countryFlag;
+  if (parts.length === 0 && !flag) return null;
 
   return (
     <div className={styles.location}>
-      {visible.locationFlag && data.countryFlag && <span className={styles.flag}>{data.countryFlag}</span>}
+      {flag && <span className={styles.flag}>{data.countryFlag}</span>}
       {parts.map((p, i) => (
         <span key={i}>
           {i > 0 && <span className={styles.sep}>·</span>}
