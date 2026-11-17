@@ -4,7 +4,7 @@ import { parseMessage, isSystemMessageType, HeheChatMessage, SystemMessage } fro
 import { version } from '../../package.json';
 import { createGradientSmoother } from './smoothing';
 import type {
-  CyclingData, CyclingHudConfig, CyclingHudTheme, CyclingHudLayout, LogoData, PauseInfo,
+  CyclingData, CyclingHudConfig, CyclingHudTheme, CyclingHudLayout, HudLook, LogoData, PauseInfo,
   GpxTrack, MoblinConnectionStatus, MoblinDebugInfo, TrackStyle,
 } from './types';
 import { defaultTrackStyle } from './types';
@@ -104,6 +104,20 @@ function trackStyleFromConfig(source: Record<string, unknown> | undefined): Trac
     grid: typeof grid === 'boolean' ? grid : defaultTrackStyle.grid,
     elevationFromZero: typeof fromZero === 'boolean' ? fromZero : defaultTrackStyle.elevationFromZero,
     elevationMinSpanM: typeof minSpan === 'number' && minSpan > 0 ? minSpan : defaultTrackStyle.elevationMinSpanM,
+  };
+}
+
+// the overlay theme a block of HeheChat's unified overlay source hands over, null without one
+function lookFromConfig(source: Record<string, unknown> | undefined): HudLook | null {
+  const look = source?.cyclingHudLook;
+  if (!look || typeof look !== 'object') return null;
+  const { colors, font, radius, shadow } = look as Record<string, unknown>;
+  if (!colors || typeof colors !== 'object') return null;
+  return {
+    colors: colors as HudLook['colors'],
+    font: typeof font === 'string' ? font : 'default',
+    radius: typeof radius === 'string' ? radius : 'small',
+    shadow: typeof shadow === 'string' ? shadow : 'on',
   };
 }
 
@@ -747,6 +761,7 @@ export function useCyclingCore(settings: Record<string, unknown> | null = null):
     goalElevationM: thresholds.goalElevationM,
     gpxMapRadius,
     trackStyle: trackStyleFromConfig(source),
+    look: lookFromConfig(source),
   };
 
   return { data, config, configLoaded, pause: on ? pause : emptyPause, status, error, debug, debugVisible: sections.debug, gpxTrack, logo };

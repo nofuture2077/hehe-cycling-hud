@@ -1,0 +1,54 @@
+/* the overlay theme of HeheChat's unified overlay source (hud/look.ts sets the --look-* variables and data-look on
+   the root): its colors, font, corners and shadow take the place of the theme's, whatever the theme is. What only the
+   theme has stays its own: clip-paths, glow, glitch, scanlines, weights, sizes, and the colors of grade, elevation,
+   distance and pause. Colors that need some see-through are mixed from the overlay's. */
+[data-theme][data-look] {
+  --hud-text: var(--look-text);
+  --hud-muted: var(--look-muted);
+  --hud-font-family: var(--look-font, 'Rajdhani'), 'Rajdhani', sans-serif;
+  --hud-radius-chip: var(--look-radius);
+  --hud-glass-radius: var(--look-radius);
+  --hud-soft-shadow: var(--look-shadow, 0 2px 14px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.35));
+  --hud-text-shadow: var(--look-shadow, 0 1px 3px rgba(0, 0, 0, 0.7));
+
+  --hud-accent: var(--look-accent);
+  --hud-bg: var(--look-card);
+  --hud-chip-bg: var(--look-card);
+  --hud-gauge-bg: var(--look-card);
+  --hud-glass-bg: var(--look-card);
+  --hud-border: color-mix(in srgb, var(--look-accent) 40%, transparent);
+  --hud-glass-border: color-mix(in srgb, var(--look-accent) 30%, transparent);
+
+  /* intensity steps: accent, accent 2 and accent 3 and the steps between them */
+  --look-b2: color-mix(in srgb, var(--look-accent) 50%, var(--look-accent2));
+  --look-b4: color-mix(in srgb, var(--look-accent2) 50%, var(--look-accent3));
+  --hud-b1-color: var(--look-accent);
+  --hud-b1-bg: color-mix(in srgb, var(--look-accent) 12%, transparent);
+  --hud-b1-border: color-mix(in srgb, var(--look-accent) 80%, transparent);
+  --hud-b2-color: var(--look-b2);
+  --hud-b2-bg: color-mix(in srgb, var(--look-b2) 12%, transparent);
+  --hud-b2-border: color-mix(in srgb, var(--look-b2) 85%, transparent);
+  --hud-b3-color: var(--look-accent2);
+  --hud-b3-bg: color-mix(in srgb, var(--look-accent2) 14%, transparent);
+  --hud-b3-border: color-mix(in srgb, var(--look-accent2) 85%, transparent);
+  --hud-b4-color: var(--look-b4);
+  --hud-b4-bg: color-mix(in srgb, var(--look-b4) 20%, transparent);
+  --hud-b4-border: color-mix(in srgb, var(--look-b4) 90%, transparent);
+  --hud-b5-color: var(--look-accent3);
+  --hud-b5-bg: color-mix(in srgb, var(--look-accent3) 26%, transparent);
+  --hud-b5-border: color-mix(in srgb, var(--look-accent3) 95%, transparent);
+  --hud-mountain1-gradient: linear-gradient(to top, color-mix(in srgb, var(--look-accent) 60%, black), var(--look-accent));
+  --hud-mountain2-gradient: linear-gradient(to top, color-mix(in srgb, var(--look-b2) 60%, black), var(--look-b2));
+  --hud-mountain3-gradient: linear-gradient(to top, color-mix(in srgb, var(--look-accent2) 60%, black), var(--look-accent2));
+  --hud-mountain4-gradient: linear-gradient(to top, color-mix(in srgb, var(--look-accent3) 60%, black), var(--look-accent3));
+
+  --hud-metric-speed: var(--look-accent);
+  --hud-metric-hr: var(--look-accent2);
+  --hud-metric-power: var(--look-accent3);
+  --hud-route-gradient: linear-gradient(90deg, var(--look-accent), var(--look-accent2) 50%, var(--look-accent3));
+
+  --hud-map-track-color: var(--look-accent);
+  --hud-map-marker-color: var(--look-accent2);
+  --hud-pausebadge-bg: color-mix(in srgb, var(--look-accent) 60%, transparent);
+  --hud-pausebadge-border: color-mix(in srgb, var(--look-accent) 90%, transparent);
+}
