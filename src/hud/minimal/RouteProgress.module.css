@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   gap: 18px;
-  color: #fff;
+  color: var(--hud-text, #fff);
   font-size: calc(20px * var(--hud-minimal-scale, 1));
   font-weight: var(--hud-numeral-weight, 300);
   font-variant-numeric: tabular-nums;

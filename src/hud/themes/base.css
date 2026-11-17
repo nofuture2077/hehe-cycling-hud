@@ -7,6 +7,8 @@
    more specific theme file the win). */
 [data-theme] {
   --hud-font-family: 'Rajdhani', sans-serif;
+  --hud-text: #fff;
+  --hud-text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
   --hud-font-weight-regular: 500;
   --hud-font-weight-semibold: 600;
   --hud-font-weight-bold: 700;

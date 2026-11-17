@@ -57,6 +57,18 @@ export interface CyclingHudConfig {
   gpxMapRadius: number | null;
   // how the track map and elevation profile look
   trackStyle: TrackStyle;
+  // colors, font, corners and shadow of the theme of HeheChat's unified overlay, which take the place of the theme's
+  // own; null in the standalone HUD
+  look: HudLook | null;
+}
+
+// The overlay theme of a HUD block (HeheChat src/components/overlay/theme.ts): a CSS color per role, a font family
+// ('default': the theme's own), corners ('none', 'small', 'round' or 'pill') and the text shadow ('on' or 'off')
+export interface HudLook {
+  colors: Record<'text' | 'muted' | 'background' | 'card' | 'accent' | 'accent2' | 'accent3' | 'onAccent', string>;
+  font: string;
+  radius: string;
+  shadow: string;
 }
 
 export interface TrackStyle {
@@ -118,4 +130,5 @@ export const defaultConfig: CyclingHudConfig = {
   goalElevationM: 0,
   gpxMapRadius: 50000,
   trackStyle: defaultTrackStyle,
+  look: null,
 };

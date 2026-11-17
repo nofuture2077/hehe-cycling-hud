@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useGpxProgress } from '../core/useGpxProgress';
 import { useHudVisibility } from '../core/useHudVisibility';
 import { resolveTheme, loadThemeFont, isThemeFontReady } from './theme';
+import { lookStyle } from './look';
 import { resolveLayout } from './layout';
 import { getLayout } from './layouts/registry';
 import WidgetLayout, { type HudWidgetId } from './layouts/widget';
@@ -36,19 +37,20 @@ export default function CyclingHud({
   const layout = resolveLayout(config.layout);
   const { Layout } = getLayout(layout);
   const theme = resolveTheme(config.theme);
+  const font = config.look?.font;
 
   // stay invisible until the theme's fonts are in, so text doesn't flash in a fallback font first
   const [, setFontsLoadedFor] = useState<string | null>(null);
-  const fontsReady = isThemeFontReady(theme);
+  const fontsReady = isThemeFontReady(theme, font);
   useEffect(() => {
     let cancelled = false;
-    loadThemeFont(theme).then(() => {
-      if (!cancelled) setFontsLoadedFor(theme);
+    loadThemeFont(theme, font).then(() => {
+      if (!cancelled) setFontsLoadedFor(`${theme}|${font}`);
     });
     return () => {
       cancelled = true;
     };
-  }, [theme]);
+  }, [theme, font]);
 
   const ctx = { data, config, pause, logo, gpx, visibility };
 
@@ -56,7 +58,8 @@ export default function CyclingHud({
     <div
       className={`${styles.root} ${widget ? styles.widget : ''}`}
       data-theme={theme}
-      style={fontsReady ? undefined : { visibility: 'hidden' }}
+      data-look={config.look ? '' : undefined}
+      style={{ ...lookStyle(config.look), ...(fontsReady ? {} : { visibility: 'hidden' }) }}
     >
       {widget ? <WidgetLayout ctx={ctx} layout={layout} widget={widget} slot={slot} /> : <Layout ctx={ctx} />}
       <div className={styles.scanlines} />

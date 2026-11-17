@@ -312,7 +312,7 @@
   border-radius: 50%;
   background: var(--hud-pausebadge-bg, rgba(255, 51, 153, 0.6));
   border: 3px solid var(--hud-pausebadge-border, rgba(255, 51, 153, 0.9));
-  color: #fff;
+  color: var(--hud-text, #fff);
   font-size: var(--hud-font-size-pause-badge, 28px);
   font-weight: var(--hud-font-weight-black, 800);
   line-height: 1;

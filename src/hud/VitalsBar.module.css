@@ -34,7 +34,7 @@
   text-transform: var(--hud-text-transform, uppercase);
   letter-spacing: var(--hud-letter-spacing, 1px);
   color: var(--bar-color, #fcee09);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+  text-shadow: var(--hud-text-shadow, 0 1px 3px rgba(0, 0, 0, 0.7));
   white-space: nowrap;
 }
 
@@ -47,8 +47,8 @@
   flex-shrink: 0;
   font-size: var(--hud-font-size-gauge-secondary, 22px);
   font-weight: var(--hud-font-weight-bold, 700);
-  color: #fff;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+  color: var(--hud-text, #fff);
+  text-shadow: var(--hud-text-shadow, 0 1px 3px rgba(0, 0, 0, 0.7));
   white-space: nowrap;
 }
 

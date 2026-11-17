@@ -53,24 +53,34 @@ function loadStylesheet(href: string): Promise<void> {
   });
 }
 
-// true once loadThemeFont(theme) has settled - lets the HUD skip hiding on themes it already loaded
-export function isThemeFontReady(theme: string): boolean {
-  return readyThemes.has(theme);
+// the font of an overlay theme (HudLook.font), any Google font by its family; 'default' keeps the theme's
+const lookFont = (family: string | undefined) => (family && family !== 'default' ? family : undefined);
+const fontKey = (theme: string, look?: string) => `${theme}|${lookFont(look) ?? ''}`;
+
+// true once loadThemeFont(theme, look) has settled - lets the HUD skip hiding on fonts it already loaded
+export function isThemeFontReady(theme: string, look?: string): boolean {
+  return readyThemes.has(fontKey(theme, look));
 }
 
-// resolves once the theme's font files (not just their stylesheet) are loaded, or after the timeout
-export function loadThemeFont(theme: string): Promise<void> {
-  let promise = themeFontPromises.get(theme);
+// resolves once the theme's font files (not just their stylesheet) and the overlay theme's font are loaded, or after
+// the timeout
+export function loadThemeFont(theme: string, look?: string): Promise<void> {
+  const key = fontKey(theme, look);
+  let promise = themeFontPromises.get(key);
   if (promise) return promise;
   const font = THEME_FONTS[theme];
+  const family = lookFont(look);
   const loading = Promise.all([
     loadFamily(BASE_FONT.family, BASE_FONT.weights),
     font ? loadStylesheet(font.href).then(() => loadFamily(font.family, font.weights)) : undefined,
+    family
+      ? loadStylesheet(`https://fonts.googleapis.com/css2?family=${family.replace(/ /g, '+')}&display=swap`).then(() => loadFamily(family, [400]))
+      : undefined,
   ]).catch(() => undefined);
   const timeout = new Promise((resolve) => setTimeout(resolve, FONT_LOAD_TIMEOUT_MS));
   promise = Promise.race([loading, timeout]).then(() => {
-    readyThemes.add(theme);
+    readyThemes.add(key);
   });
-  themeFontPromises.set(theme, promise);
+  themeFontPromises.set(key, promise);
   return promise;
 }

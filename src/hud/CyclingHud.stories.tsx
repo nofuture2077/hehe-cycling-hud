@@ -101,7 +101,8 @@ export const Default: Story = {
       "goalDistanceKm": 0,
       "goalElevationM": 0,
       "gpxMapRadius": 50000,
-      "trackStyle": defaultConfig.trackStyle
+      "trackStyle": defaultConfig.trackStyle,
+      "look": null
     },
     data: { ...sampleData, distanceKm: 950, latitude: gpxMidPoint.lat, longitude: gpxMidPoint.lon },
   },
