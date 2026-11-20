@@ -7,14 +7,14 @@ import type { HudContext } from '../context';
 // mirrors PrimaryGaugeWidget's speed/pause slot-sharing, just rendered as a vitals bar instead
 // of a circular gauge
 export function SpeedBarWidget({ ctx }: { ctx: HudContext }) {
-  const { data, pause, visibility } = ctx;
+  const { data, config, pause, visibility } = ctx;
   if (visibility.showPause) {
     return (
       <VitalsBar
         icon={<IconPause />}
-        label="On Break"
+        label={config.texts.onBreak}
         value={<NumberValue n={pause.currentBreakSeconds} />}
-        unit="sec"
+        unit={config.texts.unitSec}
         percent={100}
         level={2}
       />
@@ -24,9 +24,9 @@ export function SpeedBarWidget({ ctx }: { ctx: HudContext }) {
   return (
     <VitalsBar
       icon={<IconSpeed />}
-      label="Speed"
+      label={config.texts.speed}
       value={<NumberValue n={Math.max(0, data.speedKmh)} />}
-      unit="km/h"
+      unit={config.texts.unitKmh}
       percent={(Math.max(0, data.speedKmh) / 50) * 100}
       level={Math.max(1, speedLevel(data.speedKmh))}
       fading={visibility.speedFading}

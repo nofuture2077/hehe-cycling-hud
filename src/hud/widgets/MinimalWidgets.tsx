@@ -62,8 +62,8 @@ export function MetricRibbonWidget({ ctx }: { ctx: HudContext }) {
       color: METRIC_COLORS.distance,
       percent: route ? route.percent : 100,
       value: fmt(config.visible.split ? data.splitDistanceKm : data.distanceKm, 1),
-      unit: 'km',
-      label: 'distance',
+      unit: config.texts.unitKm,
+      label: config.texts.distance,
     });
   }
   if (visibility.showElevation) {
@@ -74,8 +74,8 @@ export function MetricRibbonWidget({ ctx }: { ctx: HudContext }) {
       color: METRIC_COLORS.elev,
       percent: (route || gpx.goalElevationM > 0) && total > 0 ? (climbed / total) * 100 : 100,
       value: fmt(climbed),
-      unit: 'm',
-      label: 'climbed',
+      unit: config.texts.unitM,
+      label: config.texts.climbed,
     });
   }
   return <MetricRibbon segments={segments} />;
@@ -87,6 +87,8 @@ export function RouteProgressWidget({ ctx }: { ctx: HudContext }) {
   return (
     <RouteProgress
       route={{ ...route, markers: ctx.visibility.showGpxWaypoints ? route.markers : [] }}
+      unitKm={ctx.config.texts.unitKm}
+      toGo={ctx.config.texts.toGo}
     />
   );
 }

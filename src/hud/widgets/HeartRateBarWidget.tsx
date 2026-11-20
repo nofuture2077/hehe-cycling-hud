@@ -12,9 +12,9 @@ export function HeartRateBarWidget({ ctx }: { ctx: HudContext }) {
   return (
     <VitalsBar
       icon={<IconHeart />}
-      label="HR"
+      label={ctx.config.texts.heartRateShort}
       value={<NumberValue n={data.heartRateBpm} />}
-      unit="bpm"
+      unit={ctx.config.texts.unitBpm}
       percent={percent}
       level={zone}
     />

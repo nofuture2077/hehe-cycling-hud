@@ -5,12 +5,12 @@ import styles from './RouteProgress.module.css';
 
 // full-width "how far along the route" line: gradient fill up to the rider, waypoint dots, done
 // and remaining km at either end
-export function RouteProgress({ route }: { route: RouteProgressInfo }) {
+export function RouteProgress({ route, unitKm, toGo }: { route: RouteProgressInfo; unitKm: string; toGo: string }) {
   return (
     <div className={styles.wrap}>
       <span className={styles.end}>
         {fmt(route.doneKm, 1)}
-        <span className={styles.unit}>km</span>
+        <span className={styles.unit}>{unitKm}</span>
       </span>
       <div className={styles.line}>
         <ProgressLine
@@ -23,7 +23,7 @@ export function RouteProgress({ route }: { route: RouteProgressInfo }) {
       </div>
       <span className={styles.end}>
         {fmt(route.remainingKm, 1)}
-        <span className={styles.unit}>km to go</span>
+        <span className={styles.unit}>{unitKm} {toGo}</span>
       </span>
     </div>
   );

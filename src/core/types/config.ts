@@ -60,7 +60,58 @@ export interface CyclingHudConfig {
   // colors, font, corners and shadow of the theme of HeheChat's unified overlay, which take the place of the theme's
   // own; null in the standalone HUD
   look: HudLook | null;
+  // the words shown next to the values
+  texts: HudTexts;
 }
+
+// The words the HUD shows next to its values, each set by a HeheChat HUD block (cyclingHudText<Key> in its settings,
+// e.g. cyclingHudTextSpeed) to change or translate it; breakCount fills in {count}, the number of the break. The units
+// too: unitMinShort is the one of the total break time in the pause gauge.
+export interface HudTexts {
+  speed: string;
+  heartRateShort: string;
+  heartRate: string;
+  power: string;
+  gradient: string;
+  onBreak: string;
+  breakCount: string;
+  distance: string;
+  climbed: string;
+  toGo: string;
+  toClimb: string;
+  unitKm: string;
+  unitM: string;
+  unitKmh: string;
+  unitBpm: string;
+  unitW: string;
+  unitPercent: string;
+  unitSec: string;
+  unitMin: string;
+  unitMinShort: string;
+}
+
+export const defaultTexts: HudTexts = {
+  speed: 'Speed',
+  heartRateShort: 'HR',
+  heartRate: 'Heart rate',
+  power: 'Power',
+  gradient: 'Gradient',
+  onBreak: 'On Break',
+  breakCount: 'Break {count}',
+  distance: 'Distance',
+  climbed: 'Climbed',
+  toGo: 'to go',
+  toClimb: 'to climb',
+  unitKm: 'km',
+  unitM: 'm',
+  unitKmh: 'km/h',
+  unitBpm: 'bpm',
+  unitW: 'W',
+  unitPercent: '%',
+  unitSec: 'sec',
+  unitMin: 'min',
+  unitMinShort: 'm',
+};
 
 // The overlay theme of a HUD block (HeheChat src/components/overlay/theme.ts): a CSS color per role, a font family
 // ('default': the theme's own), corners ('none', 'small', 'round' or 'pill') and the text shadow ('on' or 'off')
@@ -134,4 +185,5 @@ export const defaultConfig: CyclingHudConfig = {
   gpxMapRadius: 50000,
   trackStyle: defaultTrackStyle,
   look: null,
+  texts: defaultTexts,
 };

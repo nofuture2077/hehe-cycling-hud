@@ -1,6 +1,7 @@
 import { IconRoute, IconPin, IconElevationUp, IconElevationDown, IconFlag } from './icons/Icons';
 import { fmt } from './format';
 import { NumberValue } from './NumberValue';
+import { defaultTexts } from '../core/types';
 import styles from './Chips.module.css';
 
 export function StatsCard({
@@ -15,6 +16,8 @@ export function StatsCard({
   splitElevationLossM,
   remainingDistanceKm = null,
   remainingElevationGainM = null,
+  unitKm = defaultTexts.unitKm,
+  unitM = defaultTexts.unitM,
 }: {
   showDistance: boolean;
   showElevation: boolean;
@@ -27,6 +30,8 @@ export function StatsCard({
   splitElevationLossM: number;
   remainingDistanceKm?: number | null;
   remainingElevationGainM?: number | null;
+  unitKm?: string;
+  unitM?: string;
 }) {
   return (
     <div className={styles.statsCard}>
@@ -38,7 +43,7 @@ export function StatsCard({
             </span>
             <span className={styles.value}>
               <NumberValue n={split ? splitDistanceKm : distanceKm} digits={1} />
-              <span className={styles.unit}>km</span>
+              <span className={styles.unit}>{unitKm}</span>
             </span>
           </div>
           {split && (
@@ -48,7 +53,7 @@ export function StatsCard({
               </span>
               <span className={styles.value}>
                 <NumberValue n={distanceKm} digits={1} />
-                <span className={styles.unit}>km</span>
+                <span className={styles.unit}>{unitKm}</span>
               </span>
             </div>
           )}
@@ -59,7 +64,7 @@ export function StatsCard({
               </span>
               <span className={styles.value}>
                 <NumberValue n={remainingDistanceKm} digits={1} />
-                <span className={styles.unit}>km</span>
+                <span className={styles.unit}>{unitKm}</span>
               </span>
             </div>
           )}
@@ -73,7 +78,7 @@ export function StatsCard({
             </span>
             <span className={styles.value}>
               {fmt(Math.max(0, split ? splitElevationGainM : elevationGainM))}
-              <span className={styles.unit}>m</span>
+              <span className={styles.unit}>{unitM}</span>
             </span>
           </div>
           <div className={`${styles.statsElevationRow} ${styles.loss}`}>
@@ -82,7 +87,7 @@ export function StatsCard({
             </span>
             <span className={styles.value}>
               {fmt(Math.max(0, split ? splitElevationLossM : elevationLossM))}
-              <span className={styles.unit}>m</span>
+              <span className={styles.unit}>{unitM}</span>
             </span>
           </div>
           {remainingElevationGainM != null && (
@@ -92,7 +97,7 @@ export function StatsCard({
               </span>
               <span className={styles.value}>
                 {fmt(Math.max(0, remainingElevationGainM))}
-                <span className={styles.unit}>m</span>
+                <span className={styles.unit}>{unitM}</span>
               </span>
             </div>
           )}

@@ -18,6 +18,8 @@ export function StatsCardWidget({ ctx }: { ctx: HudContext }) {
       splitElevationLossM={data.splitElevationLossM}
       remainingDistanceKm={visibility.showGpxRemainingDistance ? gpx.remainingDistanceKm : null}
       remainingElevationGainM={visibility.showGpxRemainingElevation ? gpx.remainingElevationGainM : null}
+      unitKm={ctx.config.texts.unitKm}
+      unitM={ctx.config.texts.unitM}
     />
   );
 }

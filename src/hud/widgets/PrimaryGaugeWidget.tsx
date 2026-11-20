@@ -15,6 +15,7 @@ export function PrimaryGaugeWidget({ ctx }: { ctx: HudContext }) {
         currentSeconds={pause.currentBreakSeconds}
         totalSeconds={pause.totalBreakSeconds}
         breakCount={pause.breakCount}
+        minuteUnit={config.texts.unitMinShort}
       />
     );
   }
@@ -26,7 +27,7 @@ export function PrimaryGaugeWidget({ ctx }: { ctx: HudContext }) {
       big
       fading={visibility.speedFading}
       value={<NumberValue n={Math.max(0, data.speedKmh)} />}
-      unit="km/h"
+      unit={config.texts.unitKmh}
       secondaryValue={config.visible.showMax ? <NumberValue n={Math.max(0, data.maxSpeedKmh)} /> : undefined}
     />
   );
