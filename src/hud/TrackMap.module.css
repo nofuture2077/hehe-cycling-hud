@@ -38,6 +38,7 @@
 }
 
 .waypointLabel {
+  font-family: var(--hud-label-font-family);
   fill: #fff;
   font-size: var(--hud-font-size-map-label, 7px);
   text-anchor: middle;

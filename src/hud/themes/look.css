@@ -1,11 +1,13 @@
 /* the overlay theme of HeheChat's unified overlay source (hud/look.ts sets the --look-* variables and data-look on
-   the root): its colors, font, corners and shadow take the place of the theme's, whatever the theme is. What only the
+   the root): its colors, fonts, corners and shadow take the place of the theme's, whatever the theme is. What only the
    theme has stays its own: clip-paths, glow, glitch, scanlines, weights, sizes, and the colors of grade, elevation,
    distance and pause. Colors that need some see-through are mixed from the overlay's. */
 [data-theme][data-look] {
   --hud-text: var(--look-text);
   --hud-muted: var(--look-muted);
   --hud-font-family: var(--look-font, 'Rajdhani'), 'Rajdhani', sans-serif;
+  --hud-label-font-family: var(--look-label-font, var(--look-font, 'Rajdhani')), 'Rajdhani', sans-serif;
+  --hud-text-font-family: var(--look-text-font, var(--look-font, 'Rajdhani')), 'Rajdhani', sans-serif;
   --hud-radius-chip: var(--look-radius);
   --hud-glass-radius: var(--look-radius);
   --hud-soft-shadow: var(--look-shadow, 0 2px 14px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.35));

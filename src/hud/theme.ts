@@ -53,29 +53,30 @@ function loadStylesheet(href: string): Promise<void> {
   });
 }
 
-// the font of an overlay theme (HudLook.font), any Google font by its family; 'default' keeps the theme's
-const lookFont = (family: string | undefined) => (family && family !== 'default' ? family : undefined);
-const fontKey = (theme: string, look?: string) => `${theme}|${lookFont(look) ?? ''}`;
+// the fonts of an overlay theme (HudLook's font, labelFont, textFont), any Google fonts by their family; 'default'
+// keeps the theme's
+const lookFonts = (looks: (string | undefined)[]) =>
+  [...new Set(looks.filter((family): family is string => !!family && family !== 'default'))];
+const fontKey = (theme: string, looks: (string | undefined)[]) => `${theme}|${lookFonts(looks).join('|')}`;
 
-// true once loadThemeFont(theme, look) has settled - lets the HUD skip hiding on fonts it already loaded
-export function isThemeFontReady(theme: string, look?: string): boolean {
-  return readyThemes.has(fontKey(theme, look));
+// true once loadThemeFont(theme, looks) has settled - lets the HUD skip hiding on fonts it already loaded
+export function isThemeFontReady(theme: string, looks: (string | undefined)[] = []): boolean {
+  return readyThemes.has(fontKey(theme, looks));
 }
 
-// resolves once the theme's font files (not just their stylesheet) and the overlay theme's font are loaded, or after
+// resolves once the theme's font files (not just their stylesheet) and the overlay theme's fonts are loaded, or after
 // the timeout
-export function loadThemeFont(theme: string, look?: string): Promise<void> {
-  const key = fontKey(theme, look);
+export function loadThemeFont(theme: string, looks: (string | undefined)[] = []): Promise<void> {
+  const key = fontKey(theme, looks);
   let promise = themeFontPromises.get(key);
   if (promise) return promise;
   const font = THEME_FONTS[theme];
-  const family = lookFont(look);
   const loading = Promise.all([
     loadFamily(BASE_FONT.family, BASE_FONT.weights),
     font ? loadStylesheet(font.href).then(() => loadFamily(font.family, font.weights)) : undefined,
-    family
-      ? loadStylesheet(`https://fonts.googleapis.com/css2?family=${family.replace(/ /g, '+')}&display=swap`).then(() => loadFamily(family, [400]))
-      : undefined,
+    ...lookFonts(looks).map((family) =>
+      loadStylesheet(`https://fonts.googleapis.com/css2?family=${family.replace(/ /g, '+')}&display=swap`).then(() => loadFamily(family, [400]))
+    ),
   ]).catch(() => undefined);
   const timeout = new Promise((resolve) => setTimeout(resolve, FONT_LOAD_TIMEOUT_MS));
   promise = Promise.race([loading, timeout]).then(() => {

@@ -229,6 +229,7 @@
 }
 
 .gaugeUnit {
+  font-family: var(--hud-label-font-family);
   font-size: var(--hud-font-size-gauge-unit, 18px);
   font-weight: var(--hud-font-weight-bold, 700);
   color: inherit;

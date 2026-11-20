@@ -66,7 +66,10 @@ export interface CyclingHudConfig {
 // ('default': the theme's own), corners ('none', 'small', 'round' or 'pill') and the text shadow ('on' or 'off')
 export interface HudLook {
   colors: Record<'text' | 'muted' | 'background' | 'card' | 'accent' | 'accent2' | 'accent3' | 'onAccent', string>;
+  // headlines and values; labels and units, running text (sent by HeheChat since it has them, the font before)
   font: string;
+  labelFont?: string;
+  textFont?: string;
   radius: string;
   shadow: string;
 }

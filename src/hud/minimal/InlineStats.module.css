@@ -10,6 +10,7 @@
 }
 
 .location {
+  font-family: var(--hud-text-font-family);
   gap: 0;
   font-size: calc(22px * var(--hud-minimal-scale, 1));
   font-weight: var(--hud-font-weight-regular, 500);
@@ -45,6 +46,7 @@
 }
 
 .unit {
+  font-family: var(--hud-label-font-family);
   font-size: 0.5em;
   font-weight: var(--hud-font-weight-semibold, 600);
   color: var(--stat-color);
