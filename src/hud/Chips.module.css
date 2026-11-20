@@ -82,11 +82,11 @@
 }
 
 .statsDistanceItem:nth-child(2) .chipIcon {
-  color: var(--hud-accent, #b0bec5);
+  color: var(--hud-chip-distance, var(--hud-accent, #b0bec5));
 }
 
 .statsDistanceItem:nth-child(3) .chipIcon {
-  color: var(--hud-accent, #f2c94c);
+  color: var(--hud-chip-remaining, var(--hud-accent, #f2c94c));
 }
 
 .statsElevation {
@@ -102,7 +102,7 @@
 }
 
 .remaining {
-  --accent: var(--hud-accent, #f2c94c);
+  --accent: var(--hud-chip-remaining, var(--hud-accent, #f2c94c));
 }
 
 .chipIcon {
@@ -153,18 +153,20 @@
   margin-left: var(--hud-space-1, 2px);
 }
 
+/* the icons of the chips take the theme's accent, unless the overlay's look gives each one of its accents
+   (themes/look.css) */
 .location {
-  --accent: var(--hud-accent, #f39);
+  --accent: var(--hud-chip-location, var(--hud-accent, #f39));
 }
 
 .distance {
-  --accent: var(--hud-accent, #4dd0e1);
+  --accent: var(--hud-chip-distance, var(--hud-accent, #4dd0e1));
 }
 
 .gain {
-  --accent: var(--hud-accent, #81c784);
+  --accent: var(--hud-chip-gain, var(--hud-accent, #81c784));
 }
 
 .loss {
-  --accent: var(--hud-accent, #e57373);
+  --accent: var(--hud-chip-loss, var(--hud-accent, #e57373));
 }
