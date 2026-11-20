@@ -3,6 +3,9 @@ import type { HudLook } from '../core/types';
 
 const RADII: Record<string, string> = { none: '0px', small: '8px', round: '16px', pill: '999px' };
 
+// How far text keeps from a round box's ends, as a share of the box's height (--look-room, read by the boxes' CSS)
+const ROOM: Record<string, number> = { round: 0.08, pill: 0.25 };
+
 // A font of the overlay theme, unless it is the plain one ('default'), which keeps the HUD theme's
 const fontVar = (name: string, font: string | undefined) =>
   font && font !== 'default' ? { [name]: `'${font}'` } : {};
@@ -21,6 +24,15 @@ export function lookStyle(look: HudLook | null): CSSProperties {
     '--look-accent3': accent3,
     '--look-on-accent': onAccent,
     '--look-radius': RADII[look.radius] ?? RADII.small,
+    // round corners: no cut corners or corner brackets of the theme (they only fit square boxes), room for the text
+    ...(ROOM[look.radius]
+      ? {
+          '--look-room': ROOM[look.radius],
+          '--hud-chip-clip-path': 'none',
+          '--hud-chip-ring-display': 'none',
+          '--hud-corner-display': 'none',
+        }
+      : {}),
     ...(look.shadow === 'off' ? { '--look-shadow': 'none' } : {}),
     ...fontVar('--look-font', look.font),
     ...fontVar('--look-label-font', look.labelFont),

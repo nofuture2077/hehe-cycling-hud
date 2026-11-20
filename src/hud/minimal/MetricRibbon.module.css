@@ -1,7 +1,8 @@
 .ribbon {
   position: relative;
   display: flex;
-  padding: 18px 10px 16px;
+  /* round looks keep the text off the round ends (hud/look.ts) */
+  padding: 18px calc(10px + var(--look-room, 0) * 128px) 16px;
   border-radius: var(--hud-glass-radius, 22px);
   background: var(--hud-glass-bg, rgba(255, 255, 255, 0.08));
   border: 1px solid var(--hud-glass-border, rgba(255, 255, 255, 0.14));

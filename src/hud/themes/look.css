@@ -22,9 +22,10 @@
   --hud-glass-border: color-mix(in srgb, var(--look-accent) 30%, transparent);
 
   /* intensity steps: accent, accent 2 and accent 3 and the steps between them */
-  --look-b2: color-mix(in srgb, var(--look-accent) 50%, var(--look-accent2));
-  --look-b4: color-mix(in srgb, var(--look-accent2) 50%, var(--look-accent3));
-  --look-b6: color-mix(in srgb, var(--look-accent3) 50%, var(--look-accent));
+  /* blended in oklch: two far apart accents (green and pink) give a bright color between them, not grey */
+  --look-b2: color-mix(in oklch, var(--look-accent) 50%, var(--look-accent2));
+  --look-b4: color-mix(in oklch, var(--look-accent2) 50%, var(--look-accent3));
+  --look-b6: color-mix(in oklch, var(--look-accent3) 50%, var(--look-accent));
   --hud-b1-color: var(--look-accent);
   --hud-b1-bg: color-mix(in srgb, var(--look-accent) 12%, transparent);
   --hud-b1-border: color-mix(in srgb, var(--look-accent) 80%, transparent);
@@ -52,11 +53,20 @@
   --hud-metric-distance: var(--look-b4);
   --hud-metric-elev: var(--look-b6);
   --hud-metric-pause: var(--look-accent2);
+  --hud-line-track: color-mix(in srgb, var(--look-muted) 18%, transparent);
+  --hud-line-marker: color-mix(in srgb, var(--look-muted) 45%, transparent);
+  --hud-line-head: var(--look-text);
+  --hud-line-head-halo: color-mix(in srgb, var(--look-text) 18%, transparent);
+  --hud-glass-divider: color-mix(in srgb, var(--look-muted) 25%, transparent);
+  --hud-vitals-label-color: var(--look-accent);
+  /* the glow of themes that have one (cyberpunk2077) */
+  --hud-glow-color: color-mix(in srgb, var(--look-accent) 40%, transparent);
   --hud-route-gradient: linear-gradient(90deg, var(--look-accent), var(--look-accent2) 50%, var(--look-accent3));
 
   --hud-map-track-color: var(--look-accent);
   --hud-map-marker-color: var(--look-accent2);
   --hud-map-waypoint-color: var(--look-accent3);
+  --hud-map-grid-color: color-mix(in srgb, var(--look-accent) 55%, transparent);
   /* only shown where the theme turns them on (e.g. cyberpunk2077) */
   --hud-corner-color: var(--look-accent);
   --hud-chip-ring-color: var(--look-accent);

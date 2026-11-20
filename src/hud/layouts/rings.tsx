@@ -54,5 +54,5 @@ export default function RingsLayout({ ctx }: { ctx: HudContext }) {
 
 export const widgets: LayoutWidgets = {
   info: { width: 870, height: 140, Cluster: InfoCluster },
-  gauges: { width: 580, height: 310, Cluster: GaugeCluster },
+  gauges: { width: 310, height: 310, Cluster: GaugeCluster },
 };

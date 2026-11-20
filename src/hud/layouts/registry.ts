@@ -18,7 +18,8 @@ export interface ClusterProps {
 
 // the clusters HeheChat's unified overlay source shows one per frame (layouts/widget.tsx), next to
 // the track map, which is the same in every layout.
-// width/height: what the cluster takes at the HUD's design scale with everything but the map switched on.
+// width/height: what the cluster takes at the HUD's design scale with everything switched on, without the track map
+// and the elevation profile (widgets of their own); HeheChat's block of the cluster has this shape.
 // stretch: the cluster is as wide as its frame (float's route line), not only as wide as what it shows
 export type LayoutWidgets = Record<
   'info' | 'gauges',

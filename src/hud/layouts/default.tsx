@@ -68,5 +68,5 @@ export default function DefaultLayout({ ctx }: { ctx: HudContext }) {
 
 export const widgets: LayoutWidgets = {
   info: { width: 520, height: 150, Cluster: InfoCluster },
-  gauges: { width: 760, height: 140, Cluster: GaugeCluster },
+  gauges: { width: 520, height: 140, Cluster: GaugeCluster },
 };

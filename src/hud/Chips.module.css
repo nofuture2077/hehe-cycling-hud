@@ -12,6 +12,9 @@
   display: flex;
   align-items: center;
   padding: var(--hud-chip-padding, 8px 16px 8px 10px);
+  /* round looks keep the text off the round ends (hud/look.ts) */
+  padding-left: calc(10px + var(--look-room, 0) * 44px);
+  padding-right: calc(16px + var(--look-room, 0) * 44px);
   border-radius: var(--hud-radius-chip, 12px);
   clip-path: var(--hud-chip-clip-path, none);
   background: var(--hud-chip-bg, var(--hud-bg, rgba(20, 22, 26, 0.72)));
