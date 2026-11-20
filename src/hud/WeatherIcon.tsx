@@ -1,9 +1,10 @@
-import type { CSSProperties } from 'react';
+import { type CSSProperties, type ReactNode, useId } from 'react';
 import styles from './WeatherIcon.module.css';
 
 // An animated icon for the weather Moblin sends (WeatherKit's WeatherCondition raw value): turning sun rays, drifting
 // clouds, falling rain or snow, a flashing bolt, moving fog or wind lines. Clouds take the text color, the rest has
 // its own (sun, rain and bolt colors, each a --hud-weather-* variable a theme may set). Nothing for an unknown value.
+// Everything stays inside the 24x24 box, so a big icon is never cut off.
 
 type Kind = 'clear' | 'partly' | 'cloudy' | 'fog' | 'drizzle' | 'rain' | 'heavyRain' | 'snow' | 'storm' | 'wind';
 
@@ -48,7 +49,7 @@ const CLOUD = 'M7 18h10a4 4 0 0 0 .6-7.95A5.5 5.5 0 0 0 7 11a3.5 3.5 0 0 0 0 7z'
 
 function Sun({ small = false }: { small?: boolean }) {
   return (
-    <g className={styles.sunGroup} transform={small ? 'translate(-4 -4) scale(0.75)' : undefined}>
+    <g className={styles.sunGroup} transform={small ? 'scale(0.7)' : undefined}>
       <g className={styles.rays}>
         {[0, 45, 90, 135, 180, 225, 270, 315].map((angle) => (
           <line key={angle} x1="12" y1="2.5" x2="12" y2="4.5" transform={`rotate(${angle} 12 12)`} />
@@ -63,7 +64,7 @@ function Moon({ small = false }: { small?: boolean }) {
   return (
     <path
       className={styles.moon}
-      transform={small ? 'translate(-4 -4) scale(0.75)' : undefined}
+      transform={small ? 'scale(0.7)' : undefined}
       d="M15.5 4.5a7.5 7.5 0 1 0 4 13.5A8 8 0 0 1 15.5 4.5z"
     />
   );
@@ -90,7 +91,24 @@ function Falling({ count, flakes = false }: { count: number; flakes?: boolean })
   );
 }
 
+// what lies behind the front cloud of partly cloudy and cloudy is cut out where the cloud is, so it doesn't show
+// through a see-through cloud (the float layout's big icon)
+function BehindCloud({ id, offset, children }: { id: string; offset: number; children: ReactNode }) {
+  return (
+    <>
+      <mask id={id} maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+        <rect width="24" height="24" fill="#fff" />
+        <g className={styles.drift}>
+          <path d={CLOUD} transform={`translate(0 ${offset})`} fill="#000" stroke="#000" strokeWidth="1.2" />
+        </g>
+      </mask>
+      <g mask={`url(#${id})`}>{children}</g>
+    </>
+  );
+}
+
 export function WeatherIcon({ condition, isDaylight }: { condition: string | null; isDaylight: boolean | null }) {
+  const maskId = useId();
   const kind = condition ? KINDS[condition] : undefined;
   if (!kind) return null;
   const night = isDaylight === false;
@@ -100,7 +118,9 @@ export function WeatherIcon({ condition, isDaylight }: { condition: string | nul
       {kind === 'clear' && (night ? <Moon /> : <Sun />)}
       {kind === 'partly' && (
         <>
-          {night ? <Moon small /> : <Sun small />}
+          <BehindCloud id={maskId} offset={1.5}>
+            {night ? <Moon small /> : <Sun small />}
+          </BehindCloud>
           <g className={styles.drift}>
             <Cloud offset={1.5} />
           </g>
@@ -108,9 +128,11 @@ export function WeatherIcon({ condition, isDaylight }: { condition: string | nul
       )}
       {kind === 'cloudy' && (
         <>
-          <g className={styles.driftSlow} opacity="0.55">
-            <path className={styles.cloud} d={CLOUD} transform="translate(-3 -4) scale(0.8)" />
-          </g>
+          <BehindCloud id={maskId} offset={1}>
+            <g className={styles.driftSlow} opacity="0.55">
+              <path className={styles.cloud} d={CLOUD} transform="translate(0.5 -2) scale(0.8)" />
+            </g>
+          </BehindCloud>
           <g className={styles.drift}>
             <Cloud offset={1} />
           </g>
