@@ -137,10 +137,13 @@
   background: radial-gradient(ellipse, rgba(215, 228, 255, 0.75), transparent 70%);
   opacity: 0;
   animation: atmosphere-flash 6s steps(1) infinite;
+  /* the first lightning soon after the storm begins */
+  animation-delay: -3s;
 }
 
 .storm {
   animation: atmosphere-lit 6s steps(1) infinite;
+  animation-delay: -3s;
 }
 
 @keyframes atmosphere-pulse {
