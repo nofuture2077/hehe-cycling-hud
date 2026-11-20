@@ -121,7 +121,7 @@
 }
 
 .text {
-  font-family: var(--hud-text-font-family);
+  font-family: var(--hud-font-family);
   font-size: var(--hud-font-size-chip-text, 22px);
   font-weight: var(--hud-font-weight-semibold, 600);
   color: var(--hud-text, #fff);
