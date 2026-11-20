@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState, type RefObject } from 'react';
 import type { HudContext } from '../context';
 import { getWidget } from '../widgets/registry';
 import { getLayout, type ClusterProps, type LayoutWidgets } from './registry';
@@ -44,19 +44,30 @@ const OWN_WIDGETS: Record<'map' | 'elevation', LayoutWidgets['info']> = {
   elevation: { width: 240, height: 112, Cluster: ElevationCluster },
 };
 
-// how much the design size has to shrink or grow to fit the frame, and the frame's width at that scale
-function useFrameScale(width: number, height: number) {
+// how much the design size has to shrink or grow to fit the frame, and the frame's width at that scale. A cluster
+// that takes more than its design size (e.g. a long place name) shrinks to fit, instead of being cut off.
+function useFrameScale(width: number, height: number, stretch: boolean | undefined, content: RefObject<HTMLElement | null>) {
   const [frame, setFrame] = useState({ scale: 1, width });
 
   useEffect(() => {
     const update = () => {
-      const scale = Math.min(window.innerWidth / width, window.innerHeight / height);
+      const el = content.current;
+      const needed = {
+        width: Math.max(width, stretch || !el ? 0 : el.offsetWidth),
+        height: Math.max(height, el?.offsetHeight ?? 0),
+      };
+      const scale = Math.min(window.innerWidth / needed.width, window.innerHeight / needed.height);
       setFrame({ scale, width: window.innerWidth / scale });
     };
     update();
+    const observer = new ResizeObserver(update);
+    if (content.current) observer.observe(content.current);
     window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
-  }, [width, height]);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', update);
+    };
+  }, [width, height, stretch, content]);
 
   return frame;
 }
@@ -85,7 +96,8 @@ export default function WidgetLayout({
 }) {
   const { width, height, stretch, Cluster } =
     widget === 'map' || widget === 'elevation' ? OWN_WIDGETS[widget] : getLayout(layout).widgets[widget];
-  const { scale, width: frameWidth } = useFrameScale(width, height);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const { scale, width: frameWidth } = useFrameScale(width, height, stretch, contentRef);
   const [vertical = 'top', horizontal = 'left'] = slot.split('-');
 
   return (
@@ -95,6 +107,7 @@ export default function WidgetLayout({
       style={{ alignItems: FLEX_ALIGN[vertical], justifyContent: FLEX_ALIGN[horizontal] }}
     >
       <div
+        ref={contentRef}
         style={{
           flexShrink: 0,
           width: stretch ? frameWidth : undefined,

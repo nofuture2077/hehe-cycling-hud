@@ -59,6 +59,12 @@
   --hud-line-head-halo: color-mix(in srgb, var(--look-text) 18%, transparent);
   --hud-glass-divider: color-mix(in srgb, var(--look-muted) 25%, transparent);
   --hud-vitals-label-color: var(--look-accent);
+  /* the ride info's chips: an accent each */
+  --hud-chip-location: var(--look-accent);
+  --hud-chip-distance: var(--look-accent2);
+  --hud-chip-gain: var(--look-accent3);
+  --hud-chip-loss: var(--look-accent2);
+  --hud-chip-remaining: var(--look-accent);
   /* the glow of themes that have one (cyberpunk2077) */
   --hud-glow-color: color-mix(in srgb, var(--look-accent) 40%, transparent);
   --hud-route-gradient: linear-gradient(90deg, var(--look-accent), var(--look-accent2) 50%, var(--look-accent3));
