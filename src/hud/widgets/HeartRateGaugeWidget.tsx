@@ -15,7 +15,7 @@ export function HeartRateGaugeWidget({ ctx }: { ctx: HudContext }) {
       backgroundIcon={<IconHeart />}
       backgroundPulseSeconds={heartbeatSeconds(data.heartRateBpm)}
       value={<NumberValue n={data.heartRateBpm} />}
-      unit="bpm"
+      unit={config.texts.unitBpm}
       secondaryValue={config.visible.showMax ? <NumberValue n={data.sessionMaxHeartRateBpm} /> : undefined}
     />
   );

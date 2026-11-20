@@ -46,12 +46,12 @@ export function primaryMetric(ctx: HudContext): MetricDescriptor {
     const { value, decimal } = currentPauseParts(pause.currentBreakSeconds);
     return {
       id: 'pause',
-      label: `break ${pause.breakCount}`,
+      label: ctx.config.texts.breakCount.replace('{count}', String(pause.breakCount)),
       value,
       digits: 0,
       decimal,
       separator: ':',
-      unit: 'min',
+      unit: ctx.config.texts.unitMin,
       percent: clampPct((pause.currentBreakSeconds / 900) * 100),
       zone: 1,
       color: METRIC_COLORS.pause,
@@ -62,10 +62,10 @@ export function primaryMetric(ctx: HudContext): MetricDescriptor {
   const speed = Math.max(0, data.speedKmh);
   return {
     id: 'speed',
-    label: 'speed',
+    label: ctx.config.texts.speed,
     value: speed,
     digits: 0,
-    unit: 'km/h',
+    unit: ctx.config.texts.unitKmh,
     percent: clampPct((speed / 50) * 100),
     zone: clampZone(speedLevel(speed)),
     color: METRIC_COLORS.speed,
@@ -81,10 +81,10 @@ export function vitalMetrics(ctx: HudContext): MetricDescriptor[] {
   return [
     {
       id: 'hr',
-      label: 'heart rate',
+      label: config.texts.heartRate,
       value: data.heartRateBpm,
       digits: 0,
-      unit: 'bpm',
+      unit: config.texts.unitBpm,
       percent: config.maxHeartRateBpm > 0 ? clampPct((data.heartRateBpm / config.maxHeartRateBpm) * 100) : 0,
       zone: heartRateZone(data.heartRateBpm, config.maxHeartRateBpm),
       color: METRIC_COLORS.hr,
@@ -93,10 +93,10 @@ export function vitalMetrics(ctx: HudContext): MetricDescriptor[] {
     },
     {
       id: 'power',
-      label: 'power',
+      label: config.texts.power,
       value: data.powerWatts,
       digits: 0,
-      unit: 'W',
+      unit: config.texts.unitW,
       percent: config.averagePowerWatts > 0 ? clampPct((data.powerWatts / (config.averagePowerWatts * 2)) * 100) : 0,
       zone: clampZone(powerZone(data.powerWatts, config.averagePowerWatts)),
       color: METRIC_COLORS.power,
@@ -105,10 +105,10 @@ export function vitalMetrics(ctx: HudContext): MetricDescriptor[] {
     },
     {
       id: 'grade',
-      label: 'gradient',
+      label: config.texts.gradient,
       value: data.gradientPercent,
       digits: 1,
-      unit: '%',
+      unit: config.texts.unitPercent,
       percent: clampPct((Math.abs(data.gradientPercent) / 20) * 100),
       zone: clampZone(gradientLevel(data.gradientPercent) + 1),
       color: METRIC_COLORS.grade,

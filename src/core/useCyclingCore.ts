@@ -5,9 +5,9 @@ import { version } from '../../package.json';
 import { createGradientSmoother } from './smoothing';
 import type {
   CyclingData, CyclingHudConfig, CyclingHudTheme, CyclingHudLayout, HudLook, LogoData, PauseInfo,
-  GpxTrack, MoblinConnectionStatus, MoblinDebugInfo, TrackStyle,
+  GpxTrack, HudTexts, MoblinConnectionStatus, MoblinDebugInfo, TrackStyle,
 } from './types';
-import { defaultTrackStyle } from './types';
+import { defaultTexts, defaultTrackStyle } from './types';
 
 interface Sections {
   enabled: boolean;
@@ -105,6 +105,16 @@ function trackStyleFromConfig(source: Record<string, unknown> | undefined): Trac
     elevationFromZero: typeof fromZero === 'boolean' ? fromZero : defaultTrackStyle.elevationFromZero,
     elevationMinSpanM: typeof minSpan === 'number' && minSpan > 0 ? minSpan : defaultTrackStyle.elevationMinSpanM,
   };
+}
+
+// the words a block of HeheChat's unified overlay source sets (cyclingHudTextSpeed, ...), the defaults for the rest
+function textsFromConfig(source: Record<string, unknown> | undefined): HudTexts {
+  return Object.fromEntries(
+    Object.entries(defaultTexts).map(([key, text]) => {
+      const value = source?.[`cyclingHudText${key[0].toUpperCase()}${key.slice(1)}`];
+      return [key, typeof value === 'string' ? value : text];
+    }),
+  ) as unknown as HudTexts;
 }
 
 // the overlay theme a block of HeheChat's unified overlay source hands over, null without one
@@ -764,6 +774,7 @@ export function useCyclingCore(settings: Record<string, unknown> | null = null):
     gpxMapRadius,
     trackStyle: trackStyleFromConfig(source),
     look: lookFromConfig(source),
+    texts: textsFromConfig(source),
   };
 
   return { data, config, configLoaded, pause: on ? pause : emptyPause, status, error, debug, debugVisible: sections.debug, gpxTrack, logo };

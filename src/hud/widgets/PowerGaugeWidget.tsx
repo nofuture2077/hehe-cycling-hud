@@ -16,7 +16,7 @@ export function PowerGaugeWidget({ ctx }: { ctx: HudContext }) {
       backgroundIcon={<IconBolt />}
       backgroundPulseSeconds={zone >= 6 ? 0.6 : undefined}
       value={<NumberValue n={data.powerWatts} />}
-      unit="W"
+      unit={config.texts.unitW}
       secondaryValue={config.visible.showMax ? <NumberValue n={data.sessionMaxPowerWatts} /> : undefined}
     />
   );

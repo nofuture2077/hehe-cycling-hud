@@ -12,9 +12,9 @@ export function GradientBarWidget({ ctx }: { ctx: HudContext }) {
   return (
     <VitalsBar
       icon={<IconIncline />}
-      label="Gradient"
+      label={ctx.config.texts.gradient}
       value={<NumberValue n={data.gradientPercent} digits={1} />}
-      unit="%"
+      unit={ctx.config.texts.unitPercent}
       percent={percent}
       level={level}
       extreme={Math.abs(data.gradientPercent) >= 13}

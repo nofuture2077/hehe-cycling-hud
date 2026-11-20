@@ -16,7 +16,7 @@ export function GradientGaugeWidget({ ctx }: { ctx: HudContext }) {
       extreme={Math.abs(data.gradientPercent) >= 13}
       fading={visibility.gradientFading}
       value={<NumberValue n={data.gradientPercent} digits={1} />}
-      unit="%"
+      unit={config.texts.unitPercent}
       secondaryValue={config.visible.showMax ? <NumberValue n={data.maxGradientPercent} digits={1} /> : undefined}
     />
   );

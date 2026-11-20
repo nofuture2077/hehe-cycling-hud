@@ -56,7 +56,7 @@ export function StatsLine({ ctx, skipRemainingDistance = false }: { ctx: HudCont
       {visible.distance && (
         <Stat glyph="→" color={METRIC_COLORS.distance}>
           {fmt(visible.split ? data.splitDistanceKm : data.distanceKm, 1)}
-          <span className={styles.unit}>km</span>
+          <span className={styles.unit}>{config.texts.unitKm}</span>
           {visible.split && (
             <span className={styles.secondary}>
               / {fmt(data.distanceKm, 1)}
@@ -68,24 +68,24 @@ export function StatsLine({ ctx, skipRemainingDistance = false }: { ctx: HudCont
         <>
           <Stat glyph="↑" color={METRIC_COLORS.elev}>
             {fmt(visible.split ? data.splitElevationGainM : data.elevationGainM)}
-            <span className={styles.unit}>m</span>
+            <span className={styles.unit}>{config.texts.unitM}</span>
           </Stat>
           <Stat glyph="↓" color={METRIC_COLORS.hr}>
             {fmt(visible.split ? data.splitElevationLossM : data.elevationLossM)}
-            <span className={styles.unit}>m</span>
+            <span className={styles.unit}>{config.texts.unitM}</span>
           </Stat>
         </>
       )}
       {visibility.showGpxRemainingDistance && !skipRemainingDistance && (
         <Stat glyph="⚑" color={METRIC_COLORS.distance}>
           {fmt(gpx.remainingDistanceKm, 1)}
-          <span className={styles.unit}>km to go</span>
+          <span className={styles.unit}>{config.texts.unitKm} {config.texts.toGo}</span>
         </Stat>
       )}
       {visibility.showGpxRemainingElevation && (
         <Stat glyph="⤒" color={METRIC_COLORS.elev}>
           {fmt(gpx.remainingElevationGainM)}
-          <span className={styles.unit}>m to climb</span>
+          <span className={styles.unit}>{config.texts.unitM} {config.texts.toClimb}</span>
         </Stat>
       )}
     </div>

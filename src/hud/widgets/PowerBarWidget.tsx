@@ -12,9 +12,9 @@ export function PowerBarWidget({ ctx }: { ctx: HudContext }) {
   return (
     <VitalsBar
       icon={<IconBolt />}
-      label="Power"
+      label={ctx.config.texts.power}
       value={<NumberValue n={data.powerWatts} />}
-      unit="W"
+      unit={ctx.config.texts.unitW}
       percent={percent}
       level={Math.min(5, zone)}
       extreme={zone >= 6}

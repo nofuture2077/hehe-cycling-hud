@@ -1,16 +1,20 @@
 import { IconClock, IconPause } from './icons/Icons';
 import { currentPauseParts, durationParts } from './format';
 import { NumberValue } from './NumberValue';
+import { defaultTexts } from '../core/types';
 import styles from './Gauge.module.css';
 
 export function PauseGauge({
   currentSeconds,
   totalSeconds,
   breakCount,
+  minuteUnit = defaultTexts.unitMinShort,
 }: {
   currentSeconds: number;
   totalSeconds: number;
   breakCount: number;
+  // after the total break time while it is under an hour
+  minuteUnit?: string;
 }) {
   const current = currentPauseParts(currentSeconds);
   const total = durationParts(totalSeconds);
@@ -28,7 +32,7 @@ export function PauseGauge({
         <span className={styles.gaugeSecondary}>
           <IconClock />
           <NumberValue n={total.value} decimal={total.decimal} />
-          {total.unit}
+          {total.unit && minuteUnit}
         </span>
       </div>
     </div>
