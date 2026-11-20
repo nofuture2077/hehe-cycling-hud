@@ -88,5 +88,5 @@ export default function NetrunnerLayout({ ctx }: { ctx: HudContext }) {
 
 export const widgets: LayoutWidgets = {
   info: { width: 520, height: 150, Cluster: InfoCluster },
-  gauges: { width: 500, height: 230, Cluster: GaugeCluster },
+  gauges: { width: 250, height: 230, Cluster: GaugeCluster },
 };

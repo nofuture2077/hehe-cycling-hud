@@ -1,6 +1,9 @@
-import type { ReactNode } from 'react';
+import { useLayoutEffect, useRef, type ReactNode } from 'react';
 import { IconMax } from './icons/Icons';
 import styles from './Gauge.module.css';
+
+// how much of the circle's width the value may take
+const VALUE_ROOM = 0.84;
 
 export function Gauge({
   accentClass,
@@ -28,6 +31,17 @@ export function Gauge({
   unit: string;
   secondaryValue?: ReactNode;
 }) {
+  // a wide font (an overlay theme's, e.g. Orbitron) shrinks the value to fit inside the circle
+  const valueRef = useRef<HTMLSpanElement>(null);
+  useLayoutEffect(() => {
+    const el = valueRef.current;
+    const gauge = el?.closest<HTMLElement>(`.${styles.gauge}`);
+    if (!el || !gauge) return;
+    el.style.transform = '';
+    const room = gauge.clientWidth * VALUE_ROOM;
+    if (el.offsetWidth > room) el.style.transform = `scale(${room / el.offsetWidth})`;
+  });
+
   return (
     <div
       className={`${styles.gauge} ${big ? styles.gaugeBig : ''} ${accentClass} ${levelClass ?? ''} ${
@@ -51,7 +65,9 @@ export function Gauge({
                 {secondaryValue}
               </>) : <span>&nbsp;</span>}
           </span>
-        <span className={styles.gaugeValue}>{value}</span>
+        <span ref={valueRef} className={styles.gaugeValue}>
+          {value}
+        </span>
         <span className={styles.gaugeUnit}>{unit}</span>
           
       </div>

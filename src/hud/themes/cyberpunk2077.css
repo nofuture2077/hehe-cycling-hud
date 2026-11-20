@@ -36,7 +36,7 @@
     12px 2px, calc(100% - 2px) 2px, calc(100% - 2px) calc(100% - 12px),
     calc(100% - 12px) calc(100% - 2px), 2px calc(100% - 2px), 2px 12px
   );
-  --hud-glow: 0 0 8px rgba(0, 240, 255, 0.4);
+  --hud-glow: 0 0 8px var(--hud-glow-color, rgba(0, 240, 255, 0.4));
 
   /* floating viewfinder corner brackets outside the panel edge */
   --hud-corner-display: block;
@@ -80,7 +80,7 @@
 
   /* netrunner minimap dressing: cyan trail, pink live-position blip, dashed tick-ring frame */
   --hud-map-track-color: #00f0ff;
-  --hud-map-track-glow: drop-shadow(0 0 3px #00f0ff);
+  --hud-map-track-glow: drop-shadow(0 0 3px var(--hud-glow-color, #00f0ff));
   --hud-map-marker-color: #ff2079;
   --hud-map-waypoint-color: #00f0ff;
   --hud-map-grid-color: rgba(0, 240, 255, 0.55);

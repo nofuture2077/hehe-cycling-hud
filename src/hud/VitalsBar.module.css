@@ -34,7 +34,7 @@
   font-weight: var(--hud-font-weight-bold, 700);
   text-transform: var(--hud-text-transform, uppercase);
   letter-spacing: var(--hud-letter-spacing, 1px);
-  color: var(--bar-color, #fcee09);
+  color: var(--hud-vitals-label-color, #fcee09);
   text-shadow: var(--hud-text-shadow, 0 1px 3px rgba(0, 0, 0, 0.7));
   white-space: nowrap;
 }

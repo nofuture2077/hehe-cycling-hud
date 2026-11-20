@@ -10,8 +10,8 @@ const ElevationProfile = getWidget('elevationProfile');
 // the clusters of the configured layout, each on its own and without the layout's placement, the
 // track map and the elevation profile - for HeheChat's unified overlay source, which shows a cluster in a frame of its
 // own and places that frame per OBS scene (#token=...&widget=gauges&slot=bottom-right).
-// HeheChat gives the frame the shape of the default layout's cluster (BLOCK_TYPES in its
-// src/components/overlay/blocks.tsx), and the cluster is scaled to fit it - by its design size
+// HeheChat gives the frame the shape of the layout's cluster (its src/components/overlay/hud.ts), and the cluster is
+// scaled to fit it - by its design size
 // (`widgets` of each layout), not by what is on screen right now, so it doesn't grow and shrink as
 // gauges come and go.
 const HUD_WIDGET_IDS = ['info', 'gauges', 'map', 'elevation'] as const;

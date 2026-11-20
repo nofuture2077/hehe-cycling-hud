@@ -61,5 +61,5 @@ export default function RibbonLayout({ ctx }: { ctx: HudContext }) {
 
 export const widgets: LayoutWidgets = {
   info: { width: 280, height: 140, Cluster: InfoCluster },
-  gauges: { width: 1300, height: 260, Cluster: GaugeCluster },
+  gauges: { width: 1380, height: 130, Cluster: GaugeCluster },
 };

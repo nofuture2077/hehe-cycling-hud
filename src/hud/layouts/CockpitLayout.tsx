@@ -67,5 +67,5 @@ export default function CockpitLayout({ ctx }: { ctx: HudContext }) {
 
 export const widgets: LayoutWidgets = {
   info: { width: 520, height: 150, Cluster: InfoCluster },
-  gauges: { width: 770, height: 140, Cluster: GaugeCluster },
+  gauges: { width: 520, height: 140, Cluster: GaugeCluster },
 };
