@@ -18,6 +18,7 @@ interface Sections {
   locationFlag: boolean;
   locationTemperature: boolean;
   locationWeather: boolean;
+  locationWeatherBig: boolean;
   locationFeelsLike: boolean;
   locationWind: boolean;
   locationHumidity: boolean;
@@ -50,6 +51,7 @@ const defaultSections: Sections = {
   locationFlag: true,
   locationTemperature: false,
   locationWeather: true,
+  locationWeatherBig: false,
   locationFeelsLike: false,
   locationWind: false,
   locationHumidity: false,
@@ -83,6 +85,7 @@ const CONFIG_KEYS: Record<keyof Sections, string> = {
   locationFlag: 'cyclingHudLocationFlag',
   locationTemperature: 'cyclingHudLocationTemperature',
   locationWeather: 'cyclingHudLocationWeather',
+  locationWeatherBig: 'cyclingHudLocationWeatherBig',
   locationFeelsLike: 'cyclingHudLocationFeelsLike',
   locationWind: 'cyclingHudLocationWind',
   locationHumidity: 'cyclingHudLocationHumidity',
@@ -767,6 +770,7 @@ export function useCyclingCore(settings: Record<string, unknown> | null = null):
       locationFlag: on && sections.locationFlag,
       locationTemperature: on && sections.locationTemperature,
       locationWeather: on && sections.locationWeather,
+      locationWeatherBig: on && sections.locationWeatherBig,
       locationFeelsLike: on && sections.locationFeelsLike,
       locationWind: on && sections.locationWind,
       locationHumidity: on && sections.locationHumidity,

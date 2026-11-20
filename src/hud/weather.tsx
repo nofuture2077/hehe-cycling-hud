@@ -5,15 +5,17 @@ import styles from './WeatherIcon.module.css';
 
 // The weather parts of the location (LocationChip, LocationLine), each shown when its switch is on and Moblin sends
 // it: the weather icon with the temperature, the felt temperature, the wind (an arrow where it blows, the gusts after
-// a dash) and the humidity. `degree` is the unit after a temperature ('°C' in the chip, '°' in the line).
+// a dash) and the humidity. `degree` is the unit after a temperature ('°C' in the chip, '°' in the line); `bigIcon`
+// leaves the icon out where the float layout shows it big behind the text instead (layouts/float.tsx).
 export function weatherParts(
   data: CyclingData,
   visible: CyclingHudVisibility,
   texts: HudTexts,
   degree: string,
+  bigIcon = false,
 ): ReactNode[] {
   const parts: ReactNode[] = [];
-  const icon = visible.locationWeather && data.weatherCondition && (
+  const icon = visible.locationWeather && !bigIcon && data.weatherCondition && (
     <WeatherIcon condition={data.weatherCondition} isDaylight={data.isDaylight} />
   );
   const temperature = visible.locationTemperature && data.temperatureC != null && `${Math.round(data.temperatureC)}${degree}`;
@@ -54,4 +56,9 @@ export function weatherParts(
     );
   }
   return parts;
+}
+
+// whether the float layout shows the weather icon big, partly behind the location and the stats
+export function showBigWeatherIcon(data: CyclingData, visible: CyclingHudVisibility) {
+  return visible.locationWeather && visible.locationWeatherBig && WeatherIcon.knows(data.weatherCondition);
 }

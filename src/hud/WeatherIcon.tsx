@@ -148,3 +148,5 @@ export function WeatherIcon({ condition, isDaylight }: { condition: string | nul
     </svg>
   );
 }
+
+WeatherIcon.knows = (condition: string | null) => !!condition && condition in KINDS;

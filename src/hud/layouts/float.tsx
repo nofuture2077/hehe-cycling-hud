@@ -1,11 +1,12 @@
 import { getWidget } from '../widgets/registry';
 import type { HudContext } from '../context';
-import { StatsLine } from '../minimal/InlineStats';
+import { LocationLine, StatsLine } from '../minimal/InlineStats';
+import { WeatherIcon } from '../WeatherIcon';
+import { showBigWeatherIcon } from '../weather';
 import type { ClusterProps, LayoutWidgets } from './registry';
 import styles from './float.module.css';
 
 const Logo = getWidget('logo');
-const MinimalLocation = getWidget('minimalLocation');
 const HeroSpeed = getWidget('heroSpeed');
 const MetricDots = getWidget('metricDots');
 const RouteProgress = getWidget('routeProgress');
@@ -20,14 +21,21 @@ function showRoute({ visibility, gpx }: HudContext) {
 // route: the full layout shows the remaining distance on its route line, so the stats leave it out. A single widget
 // (layouts/widget.tsx) shows it in the stats, the route line belongs to the gauges cluster.
 function InfoCluster({ ctx, className, route = false }: ClusterProps & { route?: boolean }) {
-  const { visibility } = ctx;
+  const { visibility, data, config } = ctx;
   if (!visibility.showTopChips && !visibility.showLogo) return null;
+  // the weather icon big, partly behind the text (the block's "Big weather icon")
+  const bigWeather = config.visible.location && showBigWeatherIcon(data, config.visible);
 
   return (
     <div className={`${styles.info} ${className}`}>
       <Logo ctx={ctx} />
-      <div>
-        <MinimalLocation ctx={ctx} />
+      <div className={bigWeather ? styles.withWeather : undefined}>
+        {bigWeather && (
+          <div className={styles.bigWeather}>
+            <WeatherIcon condition={data.weatherCondition} isDaylight={data.isDaylight} />
+          </div>
+        )}
+        <LocationLine ctx={ctx} bigWeatherIcon={bigWeather} />
         <StatsLine ctx={ctx} skipRemainingDistance={route} />
       </div>
     </div>

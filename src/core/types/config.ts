@@ -9,6 +9,8 @@ export interface CyclingHudVisibility {
   locationTemperature: boolean;
   // the animated weather icon (WeatherIcon), only when Moblin sends the condition
   locationWeather: boolean;
+  // the float layout shows the icon big, partly behind the location and the stats
+  locationWeatherBig: boolean;
   locationFeelsLike: boolean;
   locationWind: boolean;
   locationHumidity: boolean;
@@ -166,6 +168,7 @@ export const defaultConfig: CyclingHudConfig = {
     locationFlag: true,
     locationTemperature: false,
     locationWeather: true,
+    locationWeatherBig: false,
     locationFeelsLike: false,
     locationWind: false,
     locationHumidity: false,

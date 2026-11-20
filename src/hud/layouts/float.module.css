@@ -7,6 +7,38 @@
   align-items: center;
 }
 
+/* the big weather icon sits at the start of the text, the text partly over it */
+.withWeather {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 104px;
+  padding-left: 64px;
+}
+
+.bigWeather {
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  left: -14px;
+  font-size: 80px;
+  line-height: 0;
+  opacity: 0.9;
+  transform: translateY(-50%);
+}
+
+[data-align='right'] .withWeather {
+  padding-right: 64px;
+  padding-left: 0;
+}
+
+[data-align='right'] .bigWeather {
+  right: -14px;
+  left: auto;
+}
+
 .speed {
   display: flex;
   flex-direction: column;
