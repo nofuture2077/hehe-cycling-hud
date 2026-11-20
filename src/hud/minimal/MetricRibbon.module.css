@@ -58,6 +58,7 @@
 }
 
 .unit {
+  font-family: var(--hud-label-font-family);
   font-size: calc(17px * var(--hud-minimal-scale, 1));
   font-weight: var(--hud-font-weight-semibold, 600);
   letter-spacing: 0.02em;
@@ -65,6 +66,7 @@
 }
 
 .label {
+  font-family: var(--hud-label-font-family);
   margin-top: 6px;
   font-size: 14px;
   font-weight: var(--hud-font-weight-regular, 500);

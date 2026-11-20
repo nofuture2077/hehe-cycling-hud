@@ -37,20 +37,21 @@ export default function CyclingHud({
   const layout = resolveLayout(config.layout);
   const { Layout } = getLayout(layout);
   const theme = resolveTheme(config.theme);
-  const font = config.look?.font;
+  const fonts = [config.look?.font, config.look?.labelFont, config.look?.textFont];
+  const fontsKey = fonts.join('|');
 
   // stay invisible until the theme's fonts are in, so text doesn't flash in a fallback font first
   const [, setFontsLoadedFor] = useState<string | null>(null);
-  const fontsReady = isThemeFontReady(theme, font);
+  const fontsReady = isThemeFontReady(theme, fonts);
   useEffect(() => {
     let cancelled = false;
-    loadThemeFont(theme, font).then(() => {
-      if (!cancelled) setFontsLoadedFor(`${theme}|${font}`);
+    loadThemeFont(theme, fonts).then(() => {
+      if (!cancelled) setFontsLoadedFor(`${theme}|${fontsKey}`);
     });
     return () => {
       cancelled = true;
     };
-  }, [theme, font]);
+  }, [theme, fontsKey]);
 
   const ctx = { data, config, pause, logo, gpx, visibility };
 

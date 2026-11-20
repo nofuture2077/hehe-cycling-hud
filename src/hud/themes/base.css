@@ -7,6 +7,9 @@
    more specific theme file the win). */
 [data-theme] {
   --hud-font-family: 'Rajdhani', sans-serif;
+  /* labels and units, running text (place names): the font of the theme unless the overlay's look has its own */
+  --hud-label-font-family: var(--hud-font-family);
+  --hud-text-font-family: var(--hud-font-family);
   --hud-text: #fff;
   --hud-text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
   --hud-font-weight-regular: 500;

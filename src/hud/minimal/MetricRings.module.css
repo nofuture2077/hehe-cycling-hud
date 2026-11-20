@@ -43,6 +43,7 @@
 }
 
 .legend {
+  font-family: var(--hud-label-font-family);
   display: flex;
   gap: 26px;
 }

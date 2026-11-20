@@ -111,11 +111,13 @@ function trackStyleFromConfig(source: Record<string, unknown> | undefined): Trac
 function lookFromConfig(source: Record<string, unknown> | undefined): HudLook | null {
   const look = source?.cyclingHudLook;
   if (!look || typeof look !== 'object') return null;
-  const { colors, font, radius, shadow } = look as Record<string, unknown>;
+  const { colors, font, labelFont, textFont, radius, shadow } = look as Record<string, unknown>;
   if (!colors || typeof colors !== 'object') return null;
   return {
     colors: colors as HudLook['colors'],
     font: typeof font === 'string' ? font : 'default',
+    labelFont: typeof labelFont === 'string' ? labelFont : undefined,
+    textFont: typeof textFont === 'string' ? textFont : undefined,
     radius: typeof radius === 'string' ? radius : 'small',
     shadow: typeof shadow === 'string' ? shadow : 'on',
   };

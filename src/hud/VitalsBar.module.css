@@ -25,6 +25,7 @@
 }
 
 .label {
+  font-family: var(--hud-label-font-family);
   display: flex;
   align-items: center;
   flex-shrink: 0;
