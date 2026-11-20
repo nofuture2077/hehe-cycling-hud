@@ -18,13 +18,13 @@ const previewData: CyclingData = {
   country: 'Japan',
   countryFlag: '🇯🇵',
   temperatureC: 20,
-  feelsLikeC: null,
-  windKmh: null,
-  windGustKmh: null,
-  windDirectionDeg: null,
-  humidity: null,
-  weatherCondition: null,
-  isDaylight: null,
+  feelsLikeC: 18,
+  windKmh: 12,
+  windGustKmh: 21,
+  windDirectionDeg: 240,
+  humidity: 0.6,
+  weatherCondition: 'clear',
+  isDaylight: true,
   localTime: '09:00',
   gradientPercent: 0,
   maxGradientPercent: 0,
@@ -59,6 +59,34 @@ const demoData: CyclingData = {
   sessionMaxHeartRateBpm: 171,
   sessionMaxPowerWatts: 480,
 };
+
+// the preview goes through the weather icons, one every few seconds, so the streamer sees each of them
+const DEMO_WEATHER: [string, boolean][] = [
+  ['clear', true],
+  ['partlyCloudy', true],
+  ['cloudy', true],
+  ['drizzle', true],
+  ['rain', true],
+  ['heavyRain', true],
+  ['thunderstorms', true],
+  ['snow', true],
+  ['foggy', true],
+  ['windy', true],
+  ['clear', false],
+];
+
+function useDemoWeather(on: boolean) {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    if (!on) return;
+    const timer = setInterval(() => setIndex((i) => (i + 1) % DEMO_WEATHER.length), 4000);
+    return () => clearInterval(timer);
+  }, [on]);
+
+  const [weatherCondition, isDaylight] = DEMO_WEATHER[index];
+  return { weatherCondition, isDaylight };
+}
 
 interface BannerProps {
   background: string;
@@ -168,6 +196,7 @@ function CyclingRoot() {
   const settings = useHashParam(readWidgetSettings);
   const { data, config, configLoaded, pause, status, error, debug, debugVisible, gpxTrack, logo } = useCyclingCore(settings);
   const slot = useHashParam(readSlot);
+  const demoWeather = useDemoWeather(isPreview && !data);
 
   // Long-lived browser-source sessions must pick up a new build without a manual OBS reload.
   useVersionCheck({
@@ -186,7 +215,7 @@ function CyclingRoot() {
       )}
       {configLoaded && (
         <CyclingHud
-          data={data ?? (isPreview ? demoData : previewData)}
+          data={data ?? (isPreview ? { ...demoData, ...demoWeather } : previewData)}
           config={config}
           pause={pause}
           gpxTrack={gpxTrack}
