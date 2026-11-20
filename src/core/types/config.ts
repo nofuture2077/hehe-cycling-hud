@@ -7,6 +7,11 @@ export interface CyclingHudVisibility {
   locationCountry: boolean;
   locationFlag: boolean;
   locationTemperature: boolean;
+  // the animated weather icon (WeatherIcon), only when Moblin sends the condition
+  locationWeather: boolean;
+  locationFeelsLike: boolean;
+  locationWind: boolean;
+  locationHumidity: boolean;
   locationLocalTime: boolean;
   gradient: boolean;
   elevation: boolean;
@@ -79,6 +84,7 @@ export interface HudTexts {
   climbed: string;
   toGo: string;
   toClimb: string;
+  feelsLike: string;
   unitKm: string;
   unitM: string;
   unitKmh: string;
@@ -102,6 +108,7 @@ export const defaultTexts: HudTexts = {
   climbed: 'Climbed',
   toGo: 'to go',
   toClimb: 'to climb',
+  feelsLike: 'feels',
   unitKm: 'km',
   unitM: 'm',
   unitKmh: 'km/h',
@@ -158,6 +165,10 @@ export const defaultConfig: CyclingHudConfig = {
     locationCountry: false,
     locationFlag: true,
     locationTemperature: false,
+    locationWeather: true,
+    locationFeelsLike: false,
+    locationWind: false,
+    locationHumidity: false,
     locationLocalTime: false,
     gradient: true,
     elevation: true,

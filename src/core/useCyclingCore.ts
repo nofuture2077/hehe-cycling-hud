@@ -17,6 +17,10 @@ interface Sections {
   locationCountry: boolean;
   locationFlag: boolean;
   locationTemperature: boolean;
+  locationWeather: boolean;
+  locationFeelsLike: boolean;
+  locationWind: boolean;
+  locationHumidity: boolean;
   locationLocalTime: boolean;
   distance: boolean;
   speed: boolean;
@@ -45,6 +49,10 @@ const defaultSections: Sections = {
   locationCountry: false,
   locationFlag: true,
   locationTemperature: false,
+  locationWeather: true,
+  locationFeelsLike: false,
+  locationWind: false,
+  locationHumidity: false,
   locationLocalTime: false,
   distance: true,
   speed: true,
@@ -74,6 +82,10 @@ const CONFIG_KEYS: Record<keyof Sections, string> = {
   locationCountry: 'cyclingHudLocationCountry',
   locationFlag: 'cyclingHudLocationFlag',
   locationTemperature: 'cyclingHudLocationTemperature',
+  locationWeather: 'cyclingHudLocationWeather',
+  locationFeelsLike: 'cyclingHudLocationFeelsLike',
+  locationWind: 'cyclingHudLocationWind',
+  locationHumidity: 'cyclingHudLocationHumidity',
   locationLocalTime: 'cyclingHudLocationLocalTime',
   distance: 'cyclingHudDistance',
   speed: 'cyclingHudSpeed',
@@ -422,6 +434,13 @@ function toCyclingData(
     country: str(t.data.country),
     countryFlag: str(t.data.countryFlag),
     temperatureC: t.data.temperature ?? null,
+    feelsLikeC: t.data.feelsLikeTemperature ?? null,
+    windKmh: t.data.windSpeed == null ? null : t.data.windSpeed * 3.6,
+    windGustKmh: t.data.windGust == null ? null : t.data.windGust * 3.6,
+    windDirectionDeg: t.data.windDirection ?? null,
+    humidity: t.data.humidity ?? null,
+    weatherCondition: t.data.condition ?? null,
+    isDaylight: t.data.isDaylight ?? null,
     localTime: toLocalTime(t.data.date, t.data.timeZone),
     gradientPercent,
     maxGradientPercent,
@@ -747,6 +766,10 @@ export function useCyclingCore(settings: Record<string, unknown> | null = null):
       locationCountry: on && sections.locationCountry,
       locationFlag: on && sections.locationFlag,
       locationTemperature: on && sections.locationTemperature,
+      locationWeather: on && sections.locationWeather,
+      locationFeelsLike: on && sections.locationFeelsLike,
+      locationWind: on && sections.locationWind,
+      locationHumidity: on && sections.locationHumidity,
       locationLocalTime: on && sections.locationLocalTime,
       gradient: on && sections.gradient,
       elevation: on && sections.elevation,

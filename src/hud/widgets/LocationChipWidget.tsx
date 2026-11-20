@@ -1,5 +1,6 @@
 import { LocationChip } from '../LocationChip';
 import type { HudContext } from '../context';
+import { weatherParts } from '../weather';
 
 export function LocationChipWidget({ ctx }: { ctx: HudContext }) {
   const { visible } = ctx.config;
@@ -10,13 +11,12 @@ export function LocationChipWidget({ ctx }: { ctx: HudContext }) {
       region={ctx.data.region}
       country={ctx.data.country}
       countryFlag={ctx.data.countryFlag}
-      temperatureC={ctx.data.temperatureC}
       localTime={ctx.data.localTime}
       showCity={visible.locationCity}
       showRegion={visible.locationRegion}
       showCountry={visible.locationCountry}
       showFlag={visible.locationFlag}
-      showTemperature={visible.locationTemperature}
+      weather={weatherParts(ctx.data, visible, ctx.config.texts, '°C')}
       showLocalTime={visible.locationLocalTime}
     />
   );

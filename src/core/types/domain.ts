@@ -8,6 +8,16 @@ export interface CyclingData {
   country: string;
   countryFlag: string;
   temperatureC: number | null;
+  feelsLikeC: number | null;
+  windKmh: number | null;
+  windGustKmh: number | null;
+  // where the wind comes from, degrees
+  windDirectionDeg: number | null;
+  // relative humidity 0-1
+  humidity: number | null;
+  // WeatherKit's WeatherCondition raw value (clear, partlyCloudy, rain, ...), null when Moblin doesn't send it
+  weatherCondition: string | null;
+  isDaylight: boolean | null;
   localTime: string;
   gradientPercent: number;
   maxGradientPercent: number;

@@ -16,6 +16,12 @@ export interface MoblinTelemetryData {
     feelsLikeTemperature: number | null;
     windSpeed: number | null;
     windGust: number | null;
+    // sent by Moblin versions after 2026-11 only: degrees the wind comes from, relative humidity 0-1, WeatherKit's
+    // WeatherCondition raw value (clear, partlyCloudy, rain, ...) and whether it is day where the phone is
+    windDirection?: number | null;
+    humidity?: number | null;
+    condition?: string | null;
+    isDaylight?: boolean | null;
     country: string | null;
     countryFlag: string | null;
     state: string | null;
