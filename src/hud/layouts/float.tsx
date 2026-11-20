@@ -1,8 +1,7 @@
 import { getWidget } from '../widgets/registry';
 import type { HudContext } from '../context';
 import { LocationLine, StatsLine } from '../minimal/InlineStats';
-import { WeatherIcon } from '../WeatherIcon';
-import { showBigWeatherIcon } from '../weather';
+import { WeatherAtmosphere } from '../WeatherAtmosphere';
 import type { ClusterProps, LayoutWidgets } from './registry';
 import styles from './float.module.css';
 
@@ -23,21 +22,18 @@ function showRoute({ visibility, gpx }: HudContext) {
 function InfoCluster({ ctx, className, route = false }: ClusterProps & { route?: boolean }) {
   const { visibility, data, config } = ctx;
   if (!visibility.showTopChips && !visibility.showLogo) return null;
-  // the weather icon big, partly behind the text (the block's "Big weather icon")
-  const bigWeather = config.visible.location && showBigWeatherIcon(data, config.visible);
 
   return (
     <div className={`${styles.info} ${className}`}>
       <Logo ctx={ctx} />
-      <div className={bigWeather ? styles.withWeather : undefined}>
-        {bigWeather && (
-          <div className={styles.bigWeather}>
-            <WeatherIcon condition={data.weatherCondition} isDaylight={data.isDaylight} />
-          </div>
-        )}
-        <LocationLine ctx={ctx} bigWeatherIcon={bigWeather} />
+      {/* the block's "Weather around the text" */}
+      <WeatherAtmosphere
+        condition={config.visible.locationWeatherAtmosphere ? data.weatherCondition : null}
+        isDaylight={data.isDaylight}
+      >
+        <LocationLine ctx={ctx} />
         <StatsLine ctx={ctx} skipRemainingDistance={route} />
-      </div>
+      </WeatherAtmosphere>
     </div>
   );
 }

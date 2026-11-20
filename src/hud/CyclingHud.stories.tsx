@@ -83,7 +83,7 @@ export const Default: Story = {
         "locationFlag": true,
         "locationTemperature": true,
         "locationWeather": true,
-        "locationWeatherBig": false,
+        "locationWeatherAtmosphere": false,
         "locationFeelsLike": false,
         "locationWind": false,
         "locationHumidity": false,

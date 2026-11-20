@@ -1,0 +1,242 @@
+/* the weather around the float layout's info text (WeatherAtmosphere.tsx): a scene behind the text with room around
+   it (the padding, so the frame's edge never cuts it), fading out toward its edges so it has no border anywhere */
+
+.atmosphere {
+  position: relative;
+  isolation: isolate;
+  padding: 18px 28px;
+}
+
+.scene {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse farthest-side, #000 62%, transparent 100%);
+}
+
+.scene > span {
+  position: absolute;
+  display: block;
+}
+
+/* --- sun: a warm glow behind the start of the text with slowly turning light rays --- */
+
+.sun,
+.night {
+  top: 50%;
+  left: 18%;
+  width: 280px;
+  height: 280px;
+  margin: -140px 0 0 -140px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 200, 96, 0.75), rgba(255, 150, 50, 0.28) 40%, transparent 68%);
+  animation: atmosphere-pulse 7s ease-in-out infinite alternate;
+}
+
+.sun::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: repeating-conic-gradient(rgba(255, 224, 150, 0.32) 0 5deg, transparent 5deg 20deg);
+  mask-image: radial-gradient(circle, #000 15%, transparent 70%);
+  animation: atmosphere-turn 60s linear infinite;
+}
+
+.night {
+  background: radial-gradient(circle, rgba(150, 175, 255, 0.55), rgba(90, 110, 200, 0.2) 40%, transparent 68%);
+}
+
+.star {
+  top: var(--y);
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 6px #fff;
+  animation: atmosphere-twinkle 3s ease-in-out infinite alternate;
+}
+
+/* --- clouds: soft shadows passing slowly through --- */
+
+.cloud {
+  top: 5%;
+  left: 0;
+  width: 300px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(225, 230, 240, 0.5);
+  filter: blur(16px);
+  animation: atmosphere-pass 28s linear infinite;
+}
+
+.cloudLate {
+  top: 45%;
+  width: 220px;
+  animation-delay: -14s;
+  animation-duration: 34s;
+}
+
+/* --- fog: wide bands drifting past --- */
+
+.fog {
+  top: 15%;
+  left: -50%;
+  width: 200%;
+  height: 40%;
+  background: linear-gradient(90deg, transparent, rgba(235, 238, 242, 0.45) 30%, transparent 50%, rgba(235, 238, 242, 0.45) 75%, transparent);
+  filter: blur(8px);
+  animation: atmosphere-sway 16s ease-in-out infinite alternate;
+}
+
+.fogLate {
+  top: 52%;
+  animation-delay: -8s;
+  animation-direction: alternate-reverse;
+}
+
+/* --- wind: thin gusts streaking across --- */
+
+.gust {
+  top: var(--y);
+  width: 90px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.85), transparent);
+  animation: atmosphere-gust 1.6s linear infinite;
+}
+
+/* --- rain: slanted streaks falling behind the lines --- */
+
+.rain {
+  top: -30px;
+  width: 2px;
+  height: 24px;
+  border-radius: 1px;
+  background: linear-gradient(transparent, rgba(185, 222, 255, 1));
+  animation: atmosphere-rain 0.8s linear infinite;
+}
+
+/* --- snow: flakes drifting down --- */
+
+.snow {
+  top: -10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+  filter: blur(0.6px);
+  animation: atmosphere-snow 5s linear infinite;
+}
+
+/* --- storm: the sky lights up, and the letters with it --- */
+
+.flash {
+  inset: 0;
+  background: radial-gradient(ellipse, rgba(215, 228, 255, 0.75), transparent 70%);
+  opacity: 0;
+  animation: atmosphere-flash 6s steps(1) infinite;
+}
+
+.storm {
+  animation: atmosphere-lit 6s steps(1) infinite;
+}
+
+@keyframes atmosphere-pulse {
+  from {
+    transform: scale(0.9);
+    opacity: 0.8;
+  }
+  to {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
+@keyframes atmosphere-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes atmosphere-twinkle {
+  from {
+    opacity: 0.15;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes atmosphere-pass {
+  from {
+    left: -40%;
+  }
+  to {
+    left: 110%;
+  }
+}
+
+@keyframes atmosphere-sway {
+  from {
+    transform: translateX(-12%);
+  }
+  to {
+    transform: translateX(12%);
+  }
+}
+
+@keyframes atmosphere-gust {
+  from {
+    left: -20%;
+  }
+  to {
+    left: 115%;
+  }
+}
+
+@keyframes atmosphere-rain {
+  from {
+    transform: translate(0, 0) rotate(14deg);
+  }
+  to {
+    transform: translate(-46px, 190px) rotate(14deg);
+  }
+}
+
+@keyframes atmosphere-snow {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(14px, 80px);
+  }
+  100% {
+    transform: translate(-6px, 170px);
+  }
+}
+
+@keyframes atmosphere-flash {
+  0%,
+  62%,
+  68% {
+    opacity: 0;
+  }
+  60%,
+  66% {
+    opacity: 1;
+  }
+}
+
+@keyframes atmosphere-lit {
+  0%,
+  62%,
+  68% {
+    filter: none;
+  }
+  60%,
+  66% {
+    filter: drop-shadow(0 0 10px rgba(210, 225, 255, 0.9)) brightness(1.25);
+  }
+}

@@ -1,14 +1,13 @@
-import { type CSSProperties, type ReactNode, useId } from 'react';
+import type { CSSProperties } from 'react';
 import styles from './WeatherIcon.module.css';
 
 // An animated icon for the weather Moblin sends (WeatherKit's WeatherCondition raw value): turning sun rays, drifting
 // clouds, falling rain or snow, a flashing bolt, moving fog or wind lines. Clouds take the text color, the rest has
 // its own (sun, rain and bolt colors, each a --hud-weather-* variable a theme may set). Nothing for an unknown value.
-// Everything stays inside the 24x24 box, so a big icon is never cut off.
 
-type Kind = 'clear' | 'partly' | 'cloudy' | 'fog' | 'drizzle' | 'rain' | 'heavyRain' | 'snow' | 'storm' | 'wind';
+export type WeatherKind = 'clear' | 'partly' | 'cloudy' | 'fog' | 'drizzle' | 'rain' | 'heavyRain' | 'snow' | 'storm' | 'wind';
 
-const KINDS: Record<string, Kind> = {
+const KINDS: Record<string, WeatherKind> = {
   clear: 'clear',
   mostlyClear: 'clear',
   hot: 'clear',
@@ -91,25 +90,13 @@ function Falling({ count, flakes = false }: { count: number; flakes?: boolean })
   );
 }
 
-// what lies behind the front cloud of partly cloudy and cloudy is cut out where the cloud is, so it doesn't show
-// through a see-through cloud (the float layout's big icon)
-function BehindCloud({ id, offset, children }: { id: string; offset: number; children: ReactNode }) {
-  return (
-    <>
-      <mask id={id} maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
-        <rect width="24" height="24" fill="#fff" />
-        <g className={styles.drift}>
-          <path d={CLOUD} transform={`translate(0 ${offset})`} fill="#000" stroke="#000" strokeWidth="1.2" />
-        </g>
-      </mask>
-      <g mask={`url(#${id})`}>{children}</g>
-    </>
-  );
+// the kind of weather a condition shows as, undefined for one it doesn't know
+export function weatherKind(condition: string | null): WeatherKind | undefined {
+  return condition ? KINDS[condition] : undefined;
 }
 
 export function WeatherIcon({ condition, isDaylight }: { condition: string | null; isDaylight: boolean | null }) {
-  const maskId = useId();
-  const kind = condition ? KINDS[condition] : undefined;
+  const kind = weatherKind(condition);
   if (!kind) return null;
   const night = isDaylight === false;
 
@@ -118,9 +105,7 @@ export function WeatherIcon({ condition, isDaylight }: { condition: string | nul
       {kind === 'clear' && (night ? <Moon /> : <Sun />)}
       {kind === 'partly' && (
         <>
-          <BehindCloud id={maskId} offset={1.5}>
-            {night ? <Moon small /> : <Sun small />}
-          </BehindCloud>
+          {night ? <Moon small /> : <Sun small />}
           <g className={styles.drift}>
             <Cloud offset={1.5} />
           </g>
@@ -128,11 +113,9 @@ export function WeatherIcon({ condition, isDaylight }: { condition: string | nul
       )}
       {kind === 'cloudy' && (
         <>
-          <BehindCloud id={maskId} offset={1}>
-            <g className={styles.driftSlow} opacity="0.55">
-              <path className={styles.cloud} d={CLOUD} transform="translate(0.5 -2) scale(0.8)" />
-            </g>
-          </BehindCloud>
+          <g className={styles.driftSlow} opacity="0.55">
+            <path className={styles.cloud} d={CLOUD} transform="translate(0.5 -2) scale(0.8)" />
+          </g>
           <g className={styles.drift}>
             <Cloud offset={1} />
           </g>
@@ -170,5 +153,3 @@ export function WeatherIcon({ condition, isDaylight }: { condition: string | nul
     </svg>
   );
 }
-
-WeatherIcon.knows = (condition: string | null) => !!condition && condition in KINDS;

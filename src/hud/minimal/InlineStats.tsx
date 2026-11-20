@@ -7,7 +7,7 @@ import styles from './InlineStats.module.css';
 
 // location as a single line of plain text ("🇩🇪 Zugspitze · ☀ 18° · 14:32") - honors the same
 // visible.location* flags LocationChip does, just without the chip
-export function LocationLine({ ctx, bigWeatherIcon = false }: { ctx: HudContext; bigWeatherIcon?: boolean }) {
+export function LocationLine({ ctx }: { ctx: HudContext }) {
   const { data, config } = ctx;
   const { visible } = config;
   if (!visible.location) return null;
@@ -17,7 +17,7 @@ export function LocationLine({ ctx, bigWeatherIcon = false }: { ctx: HudContext;
     .join(', ');
   const parts: ReactNode[] = [];
   if (place) parts.push(place);
-  parts.push(...weatherParts(data, visible, config.texts, '°', bigWeatherIcon));
+  parts.push(...weatherParts(data, visible, config.texts, '°'));
   if (visible.locationLocalTime && data.localTime) parts.push(data.localTime);
   const flag = visible.locationFlag && data.countryFlag;
   if (parts.length === 0 && !flag) return null;
