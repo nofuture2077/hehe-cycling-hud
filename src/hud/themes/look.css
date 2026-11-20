@@ -1,7 +1,7 @@
 /* the overlay theme of HeheChat's unified overlay source (hud/look.ts sets the --look-* variables and data-look on
    the root): its colors, fonts, corners and shadow take the place of the theme's, whatever the theme is. What only the
-   theme has stays its own: clip-paths, glow, glitch, scanlines, weights, sizes, and the colors of grade, elevation,
-   distance and pause. Colors that need some see-through are mixed from the overlay's. */
+   theme has stays its own: clip-paths, glow, glitch, scanlines, weights and sizes. Every metric takes a color of the
+   overlay's accents or a blend of two of them. Colors that need some see-through are mixed from the overlay's. */
 [data-theme][data-look] {
   --hud-text: var(--look-text);
   --hud-muted: var(--look-muted);
@@ -24,6 +24,7 @@
   /* intensity steps: accent, accent 2 and accent 3 and the steps between them */
   --look-b2: color-mix(in srgb, var(--look-accent) 50%, var(--look-accent2));
   --look-b4: color-mix(in srgb, var(--look-accent2) 50%, var(--look-accent3));
+  --look-b6: color-mix(in srgb, var(--look-accent3) 50%, var(--look-accent));
   --hud-b1-color: var(--look-accent);
   --hud-b1-bg: color-mix(in srgb, var(--look-accent) 12%, transparent);
   --hud-b1-border: color-mix(in srgb, var(--look-accent) 80%, transparent);
@@ -47,10 +48,18 @@
   --hud-metric-speed: var(--look-accent);
   --hud-metric-hr: var(--look-accent2);
   --hud-metric-power: var(--look-accent3);
+  --hud-metric-grade: var(--look-b2);
+  --hud-metric-distance: var(--look-b4);
+  --hud-metric-elev: var(--look-b6);
+  --hud-metric-pause: var(--look-accent2);
   --hud-route-gradient: linear-gradient(90deg, var(--look-accent), var(--look-accent2) 50%, var(--look-accent3));
 
   --hud-map-track-color: var(--look-accent);
   --hud-map-marker-color: var(--look-accent2);
+  --hud-map-waypoint-color: var(--look-accent3);
+  /* only shown where the theme turns them on (e.g. cyberpunk2077) */
+  --hud-corner-color: var(--look-accent);
+  --hud-chip-ring-color: var(--look-accent);
   --hud-pausebadge-bg: color-mix(in srgb, var(--look-accent) 60%, transparent);
   --hud-pausebadge-border: color-mix(in srgb, var(--look-accent) 90%, transparent);
 }
