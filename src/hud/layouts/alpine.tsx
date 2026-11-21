@@ -143,7 +143,7 @@ function Issue({ ctx }: { ctx: HudContext }) {
     </div>
   ) : (
     <div className={styles.issue}>
-      <span className={styles.issueLabel}>{texts.runs} Nº</span>
+      <span className={styles.issueLabel}>{texts.runs}</span>
       {String(data.runCount).padStart(2, '0')}
     </div>
   );
