@@ -130,7 +130,7 @@ export const defaultTexts: HudTexts = {
   feelsLike: 'feels',
   altitude: 'Altitude',
   vertical: 'Vertical',
-  runs: 'Run',
+  runs: 'Run Nº',
   slope: 'Slope',
   max: 'Max',
   onLift: 'Lift',
