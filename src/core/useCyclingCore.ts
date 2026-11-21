@@ -822,6 +822,10 @@ export function useCyclingCore(settings: Record<string, unknown> | null = null):
     trackStyle: trackStyleFromConfig(source),
     look: lookFromConfig(source),
     texts: textsFromConfig(source),
+    locationName: typeof source?.cyclingHudLocationName === 'string' ? source.cyclingHudLocationName.trim() : '',
+    runCount: typeof source?.cyclingHudRunCount === 'number' && Number.isFinite(source.cyclingHudRunCount)
+      ? Math.max(0, Math.round(source.cyclingHudRunCount))
+      : null,
   };
 
   return { data, config, configLoaded, pause: on ? pause : emptyPause, status, error, debug, debugVisible: sections.debug, gpxTrack, logo };

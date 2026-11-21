@@ -73,6 +73,12 @@ export interface CyclingHudConfig {
   look: HudLook | null;
   // the words shown next to the values
   texts: HudTexts;
+  // a place name of the streamer's own (e.g. 'Matterhorn' instead of Zermatt), shown in place of the city, region and
+  // country Moblin sends; '' shows those
+  locationName: string;
+  // the run number HeheChat's info block hands over (the server counts it, the streamer may set it live), in place of
+  // the one this HUD counts; null without one (the standalone HUD)
+  runCount: number | null;
 }
 
 // The words the HUD shows next to its values, each set by a HeheChat HUD block (cyclingHudText<Key> in its settings,
@@ -221,4 +227,6 @@ export const defaultConfig: CyclingHudConfig = {
   trackStyle: defaultTrackStyle,
   look: null,
   texts: defaultTexts,
+  locationName: '',
+  runCount: null,
 };
