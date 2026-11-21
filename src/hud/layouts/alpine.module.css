@@ -1,0 +1,384 @@
+/* alpine layout - a page of a snowboard magazine (alpine.tsx), its type set on bars like cut-out labels stacked
+   without gaps, so it reads on a dark blue sky and on white snow alike: the theme's text on bars of the paper color
+   (--hud-paper; the overlay's panel color), the headline on --hud-type-bar-accent where a theme sets one (lift
+   ticket, riso: the accent), the accents as spot colors. The riso theme prints the headline and the speed a little
+   off register (--hud-misregister). */
+
+.info,
+.gauges {
+  --ink: var(--hud-text, #fff);
+  --paper: var(--hud-paper, rgba(8, 18, 34, 0.86));
+  --spot: var(--hud-accent, #e8501a);
+  --spot2: var(--hud-accent2, #d6006f);
+  --on-spot: var(--hud-on-accent, var(--paper));
+  --off: calc(var(--hud-misregister, 0) * 4px);
+
+  display: flex;
+  flex-direction: var(--hud-row, row);
+  color: var(--ink);
+  font-family: var(--hud-font-family);
+  font-variant-numeric: tabular-nums;
+}
+
+.info {
+  align-items: center;
+}
+
+.gauges {
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: var(--hud-align, flex-start);
+}
+
+/* a number's place (alpine.tsx, Num): the number over invisible copies of its longest value in every digit, in one
+   cell as wide as the widest of them, the number against its label */
+.num {
+  display: inline-grid;
+  white-space: nowrap;
+}
+
+.num > * {
+  grid-area: 1 / 1;
+}
+
+.numFits {
+  visibility: hidden;
+}
+
+.numValue {
+  justify-self: end;
+}
+
+.numAfterLabel > .numValue {
+  justify-self: start;
+}
+
+/* --- headline and issue number --- */
+
+.head {
+  display: flex;
+  flex-direction: var(--hud-row, row);
+  align-items: flex-start;
+}
+
+.place {
+  margin: 0;
+  /* above and below: as much room as the font leaves around its capitals evens out (alpine.tsx, useCapOffset) */
+  position: relative;
+  padding: 0 18px;
+  background: var(--hud-type-bar-accent, var(--paper));
+  font-size: 88px;
+  font-weight: var(--hud-font-weight-bold, 700);
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-shadow: var(--off) calc(var(--off) * 0.6) 0 var(--spot2);
+}
+
+/* an empty mark on the headline's baseline (alpine.tsx, useCapOffset) */
+.baseline {
+  display: inline-block;
+  width: 0;
+  height: 0;
+}
+
+.issue {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 12px 8px;
+  background: var(--paper);
+  border: 2px solid var(--spot);
+  color: var(--spot);
+  font-size: 40px;
+  line-height: 1;
+}
+
+.issueLabel {
+  margin-bottom: 4px;
+  font-family: var(--hud-label-font-family);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* while riding up: a lift ticket in the issue's place */
+.lift {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 6px 12px;
+  background: var(--spot);
+  color: var(--on-spot);
+  font-family: var(--hud-label-font-family);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transform: rotate(4deg);
+}
+
+.liftArrow {
+  font-family: var(--hud-font-family);
+  font-size: 24px;
+  animation: alpine-climb 1.6s ease-in-out infinite;
+}
+
+@keyframes alpine-climb {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(3px, -3px);
+  }
+}
+
+/* --- the dek: small type under the headline --- */
+
+.dek {
+  display: flex;
+  align-items: center;
+  padding: 8px 14px;
+  background: var(--paper);
+  font-family: var(--hud-label-font-family);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--hud-muted, rgba(255, 255, 255, 0.78));
+  white-space: nowrap;
+}
+
+.slash {
+  margin: 0 12px;
+  color: var(--spot);
+}
+
+/* --- the altimeter: as wide as its tag needs (a wide font such as japan's makes it wider), at least 150px --- */
+
+.altimeter {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  min-width: 150px;
+  height: 216px;
+  box-sizing: border-box;
+  background: var(--paper);
+}
+
+.tape {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  mask-image: linear-gradient(transparent, #000 22%, #000 78%, transparent);
+}
+
+.major,
+.minor {
+  position: absolute;
+  right: 0;
+  height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  transition: top 1s linear;
+}
+
+.minor::after,
+.major::after {
+  content: '';
+  height: 2px;
+  background: var(--ink);
+}
+
+.minor::after {
+  width: 12px;
+  opacity: 0.5;
+}
+
+.major::after {
+  width: 26px;
+}
+
+.major span {
+  margin-right: 10px;
+  font-family: var(--hud-label-font-family);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--hud-muted, rgba(255, 255, 255, 0.78));
+}
+
+/* the current altitude, a tag pointing at the tape */
+.tag {
+  position: relative;
+  flex: 1;
+  height: 52px;
+  margin-right: 18px;
+  padding: 0 22px 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  white-space: nowrap;
+  background: var(--spot);
+  color: var(--on-spot);
+  font-size: 38px;
+  line-height: 1;
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 0 100%);
+}
+
+.tagUnit {
+  font-family: var(--hud-label-font-family);
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.altLabel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 6px 12px 8px;
+  background: var(--paper);
+  font-family: var(--hud-label-font-family);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--spot);
+}
+
+/* on the right of the screen the tape is mirrored, its ticks and the tag's point toward the speed */
+:global([data-align='right']) .major,
+:global([data-align='right']) .minor {
+  right: auto;
+  left: 0;
+  flex-direction: row-reverse;
+}
+
+:global([data-align='right']) .major span {
+  margin: 0 0 0 10px;
+}
+
+:global([data-align='right']) .tag {
+  margin: 0 0 0 18px;
+  padding: 0 10px 0 22px;
+  clip-path: polygon(14px 0, 100% 0, 100% 100%, 14px 100%, 0 50%);
+}
+
+:global([data-align='right']) .altLabel {
+  text-align: right;
+}
+
+/* --- speed --- */
+
+.speedRow {
+  display: flex;
+}
+
+.speed {
+  display: flex;
+  flex-direction: var(--hud-row, row);
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 18px;
+  background: var(--paper);
+}
+
+/* while not riding the speed goes, its bar stays, so the page keeps its shape */
+.speed > * {
+  transition: opacity 0.6s ease;
+}
+
+.hidden > * {
+  opacity: 0;
+}
+
+.speedValue {
+  font-size: 132px;
+  font-weight: var(--hud-font-weight-bold, 700);
+  line-height: 0.85;
+  letter-spacing: -0.01em;
+  text-shadow: var(--off) calc(var(--off) * 0.6) 0 var(--spot2);
+}
+
+/* the unit, a sticker slapped on at an angle */
+.sticker {
+  align-self: center;
+  padding: 6px 12px;
+  background: var(--spot);
+  color: var(--on-spot);
+  font-family: var(--hud-label-font-family);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transform: rotate(-7deg);
+}
+
+.max {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-end;
+  margin-bottom: 6px;
+  font-size: 40px;
+  line-height: 1;
+}
+
+.maxLabel {
+  font-family: var(--hud-label-font-family);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--spot);
+}
+
+/* --- the captions --- */
+
+.facts {
+  display: flex;
+  align-items: baseline;
+  padding: 8px 16px;
+  background: var(--paper);
+  font-family: var(--hud-label-font-family);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--hud-muted, rgba(255, 255, 255, 0.78));
+  white-space: nowrap;
+}
+
+.fact b {
+  margin-right: 8px;
+  font-family: var(--hud-font-family);
+  font-size: 26px;
+  font-weight: var(--hud-font-weight-bold, 700);
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+
+/* where the clusters sit in the full layout - a single widget (layouts/widget.tsx) leaves these out */
+.topLeft {
+  position: absolute;
+  top: 48px;
+  left: 64px;
+}
+
+.bottomLeft {
+  position: absolute;
+  bottom: 56px;
+  left: 64px;
+}

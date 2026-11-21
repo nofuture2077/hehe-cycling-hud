@@ -14,6 +14,11 @@
   --hud-text-shadow: var(--look-shadow, 0 1px 3px rgba(0, 0, 0, 0.7));
 
   --hud-accent: var(--look-accent);
+  --hud-accent2: var(--look-accent2);
+  --hud-accent3: var(--look-accent3);
+  /* the bars the alpine layout sets its type on, and the text on its accent */
+  --hud-paper: var(--look-card);
+  --hud-on-accent: var(--look-on-accent);
   --hud-bg: var(--look-card);
   --hud-chip-bg: var(--look-card);
   --hud-gauge-bg: var(--look-card);

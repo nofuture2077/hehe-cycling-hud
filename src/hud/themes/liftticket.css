@@ -1,0 +1,42 @@
+/* lift ticket theme: white type on bars of color, like the labels of a lift ticket or cut-out magazine type - stays
+   readable on anything, the bright sky and snow of a slope included. Navy bars (the paper), the headline on a bar of
+   signal orange, electric blue and hot pink as the other spot colors; Anton headlines and Space Mono captions. The
+   alpine layout's headline sits on the accent (--hud-type-bar-accent); boxes of the other layouts are navy. */
+[data-theme='liftticket'] {
+  --hud-font-family: 'Anton', 'Rajdhani', sans-serif;
+  --hud-label-font-family: 'Space Mono', monospace;
+  --hud-text-font-family: 'Space Mono', monospace;
+  --hud-numeral-weight: 400;
+  --hud-font-weight-regular: 400;
+  --hud-font-weight-semibold: 400;
+  --hud-font-weight-bold: 400;
+  --hud-font-weight-black: 400;
+  --hud-text: #ffffff;
+  --hud-muted: rgba(255, 255, 255, 0.78);
+  --hud-text-shadow: none;
+  --hud-soft-shadow: none;
+
+  --hud-accent: #e63d00;
+  --hud-accent2: #0057ff;
+  --hud-accent3: #ff2d87;
+  --hud-paper: #0b1d33;
+  --hud-on-accent: #ffffff;
+  --hud-type-bar-accent: var(--hud-accent);
+
+  --hud-metric-speed: #e63d00;
+  --hud-metric-hr: #ff2d87;
+  --hud-metric-power: #0057ff;
+  --hud-metric-grade: #0057ff;
+  --hud-metric-elev: #e63d00;
+  --hud-metric-distance: #ffffff;
+  --hud-metric-pause: #ff2d87;
+
+  --hud-bg: rgba(11, 29, 51, 0.92);
+  --hud-chip-bg: rgba(11, 29, 51, 0.92);
+  --hud-gauge-bg: rgba(11, 29, 51, 0.92);
+  --hud-glass-bg: rgba(11, 29, 51, 0.92);
+  --hud-border: #e63d00;
+  --hud-glass-border: rgba(255, 255, 255, 0.2);
+  --hud-radius-chip: 0;
+  --hud-glass-radius: 0;
+}

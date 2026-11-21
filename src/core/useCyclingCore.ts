@@ -3,6 +3,7 @@ import type { MoblinTelemetryData } from '../types/moblin';
 import { parseMessage, isSystemMessageType, HeheChatMessage, SystemMessage } from '../commons/message';
 import { version } from '../../package.json';
 import { createGradientSmoother } from './smoothing';
+import { createRunTracker, type RunState } from './runs';
 import type {
   CyclingData, CyclingHudConfig, CyclingHudTheme, CyclingHudLayout, HudLook, LogoData, PauseInfo,
   GpxTrack, HudTexts, MoblinConnectionStatus, MoblinDebugInfo, TrackStyle,
@@ -29,6 +30,9 @@ interface Sections {
   elevation: boolean;
   heartRate: boolean;
   power: boolean;
+  altitude: boolean;
+  runs: boolean;
+  vertical: boolean;
   split: boolean;
   showMax: boolean;
   debug: boolean;
@@ -62,6 +66,9 @@ const defaultSections: Sections = {
   elevation: true,
   heartRate: true,
   power: true,
+  altitude: true,
+  runs: true,
+  vertical: true,
   split: false,
   showMax: false,
   debug: false,
@@ -96,6 +103,9 @@ const CONFIG_KEYS: Record<keyof Sections, string> = {
   elevation: 'cyclingHudElevation',
   heartRate: 'cyclingHudHeartRate',
   power: 'cyclingHudPower',
+  altitude: 'cyclingHudAltitude',
+  runs: 'cyclingHudRuns',
+  vertical: 'cyclingHudVertical',
   split: 'cyclingHudSplit',
   showMax: 'cyclingHudShowMax',
   debug: 'cyclingHudDebug',
@@ -426,6 +436,7 @@ function toCyclingData(
   maxGradientPercent: number,
   sessionMaxHeartRateBpm: number,
   sessionMaxPowerWatts: number,
+  runs: RunState,
 ): CyclingData {
   return {
     speedKmh: num(t.data.speed) * 3.6,
@@ -451,6 +462,9 @@ function toCyclingData(
     elevationLossM: num(t.data.altitudeDescent),
     splitElevationGainM: num(t.data.splitAltitudeAscent),
     splitElevationLossM: num(t.data.splitAltitudeDescent),
+    altitudeM: num(t.data.altitude),
+    runCount: runs.runCount,
+    onLift: runs.onLift,
     heartRateBpm: firstHeartRate(t.data.heartRates),
     powerWatts: num(t.data.cyclingPower),
     sessionMaxHeartRateBpm,
@@ -535,12 +549,14 @@ export function useCyclingCore(settings: Record<string, unknown> | null = null):
   const maxHeartRateSessionRef = useRef(0);
   const maxPowerSessionRef = useRef(0);
   const gradientSmootherRef = useRef(createGradientSmoother());
+  const runTrackerRef = useRef(createRunTracker());
   useEffect(() => {
     maxSpeedRef.current = 0;
     maxGradientRef.current = 0;
     maxHeartRateSessionRef.current = 0;
     maxPowerSessionRef.current = 0;
     gradientSmootherRef.current.reset();
+    runTrackerRef.current.reset();
   }, [streamStartSignal]);
 
   // telemetry comes from HeheServer over a plain WebSocket, using the same
@@ -638,6 +654,7 @@ export function useCyclingCore(settings: Record<string, unknown> | null = null):
             maxGradientRef.current,
             maxHeartRateSessionRef.current,
             maxPowerSessionRef.current,
+            runTrackerRef.current.push(msg.data.altitude),
           ),
         });
       }
@@ -779,6 +796,9 @@ export function useCyclingCore(settings: Record<string, unknown> | null = null):
       elevation: on && sections.elevation,
       heartRate: on && sections.heartRate,
       power: on && sections.power,
+      altitude: on && sections.altitude,
+      runs: on && sections.runs,
+      vertical: on && sections.vertical,
       split: on && sections.split,
       showMax: on && sections.showMax,
       showGpxMap: on && sections.showGpxMap,

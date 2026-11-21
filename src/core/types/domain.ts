@@ -25,6 +25,10 @@ export interface CyclingData {
   elevationLossM: number;
   splitElevationGainM: number;
   splitElevationLossM: number;
+  // the current altitude (m above sea level), and the runs and lift rides it shows (core/runs.ts)
+  altitudeM: number;
+  runCount: number;
+  onLift: boolean;
   heartRateBpm: number;
   powerWatts: number;
   sessionMaxHeartRateBpm: number;

@@ -3,12 +3,19 @@ import './themes/index.css';
 // theme names this HUD layout ships CSS for (see the *.module.css `[data-theme='...']` blocks) -
 // this is HUD-layer policy, not core policy: core only passes through whatever string the user
 // configured. A third-party layout can support a completely different set of names.
-export const VALID_THEMES = ['classic', 'mono', 'matrix', 'japan', 'cyberpunk2077', 'vivid'] as const;
+export const VALID_THEMES = ['classic', 'mono', 'matrix', 'japan', 'cyberpunk2077', 'vivid', 'powder', 'riso', 'liftticket'] as const;
 export const DEFAULT_THEME = 'classic';
 
 export function resolveTheme(theme: string | undefined): string {
   return theme && (VALID_THEMES as readonly string[]).includes(theme) ? theme : DEFAULT_THEME;
 }
+
+// the snowboard magazine themes' (powder, riso, liftticket): a condensed headline face and typewriter captions
+const MAGAZINE_FONTS = {
+  href: 'https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&display=swap',
+  family: 'Anton',
+  weights: [400],
+};
 
 // fonts only some themes need - loaded on demand so themes that don't use them never pay for them
 const THEME_FONTS: Partial<Record<string, { href: string; family: string; weights: number[] }>> = {
@@ -27,6 +34,9 @@ const THEME_FONTS: Partial<Record<string, { href: string; family: string; weight
     family: 'Outfit',
     weights: [300, 400, 500, 600, 700],
   },
+  powder: MAGAZINE_FONTS,
+  riso: MAGAZINE_FONTS,
+  liftticket: MAGAZINE_FONTS,
 };
 
 // every theme falls back to Rajdhani, whose stylesheet index.html already links
