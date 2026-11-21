@@ -15,8 +15,8 @@ import styles from './CyclingHud.module.css';
 export type { CyclingData, CyclingHudVisibility, CyclingHudConfig, CyclingHudTheme, LogoData, PauseInfo } from '../core/types';
 
 export default function CyclingHud({
-  data,
-  config = defaultConfig,
+  data: telemetry,
+  config: configured = defaultConfig,
   pause = defaultPause,
   gpxTrack = null,
   logo = null,
@@ -32,6 +32,12 @@ export default function CyclingHud({
   widget?: HudWidgetId;
   slot?: string;
 }) {
+  // the streamer's own place name takes the place of the city, and of the region and country (the flag stays); the
+  // run number HeheChat hands over that of the HUD's own count (which still says when the rider is on the lift)
+  const own = configured.locationName;
+  const counted = configured.runCount === null ? telemetry : { ...telemetry, runCount: configured.runCount };
+  const data = own ? { ...counted, city: own, region: '', country: '' } : counted;
+  const config = own ? { ...configured, visible: { ...configured.visible, locationCity: true } } : configured;
   const gpx = useGpxProgress(gpxTrack, data, config);
   const visibility = useHudVisibility(data, config, pause, gpx, logo !== null);
   const layout = resolveLayout(config.layout);

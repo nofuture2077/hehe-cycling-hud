@@ -121,7 +121,9 @@ export const Default: Story = {
       "gpxMapRadius": 50000,
       "trackStyle": defaultConfig.trackStyle,
       "look": null,
-      "texts": defaultConfig.texts
+      "texts": defaultConfig.texts,
+      "locationName": "",
+      "runCount": null
     },
     data: { ...sampleData, distanceKm: 950, latitude: gpxMidPoint.lat, longitude: gpxMidPoint.lon },
   },
