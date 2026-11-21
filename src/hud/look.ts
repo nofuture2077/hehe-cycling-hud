@@ -1,7 +1,8 @@
 import type { CSSProperties } from 'react';
 import type { HudLook } from '../core/types';
 
-const RADII: Record<string, string> = { none: '0px', small: '8px', round: '16px', pill: '999px' };
+// The overlay theme's corners, as low as those of HeheChat's blocks (RADIUS_SCALE in its overlay/style.ts)
+const RADII: Record<string, string> = { none: '0px', small: '4px', round: '10px', pill: '999px' };
 
 // How far text keeps from a round box's ends, as a share of the box's height (--look-room, read by the boxes' CSS)
 const ROOM: Record<string, number> = { round: 0.08, pill: 0.25 };
