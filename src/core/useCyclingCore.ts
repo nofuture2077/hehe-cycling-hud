@@ -3,6 +3,7 @@ import type { MoblinTelemetryData } from '../types/moblin';
 import { parseMessage, isSystemMessageType, HeheChatMessage, SystemMessage } from '../commons/message';
 import { version } from '../../package.json';
 import { createGradientSmoother } from './smoothing';
+import { createRunTracker, type RunState } from './runs';
 import type {
   CyclingData, CyclingHudConfig, CyclingHudTheme, CyclingHudLayout, HudLook, LogoData, PauseInfo,
   GpxTrack, HudTexts, MoblinConnectionStatus, MoblinDebugInfo, TrackStyle,
@@ -17,6 +18,11 @@ interface Sections {
   locationCountry: boolean;
   locationFlag: boolean;
   locationTemperature: boolean;
+  locationWeather: boolean;
+  locationWeatherAtmosphere: boolean;
+  locationFeelsLike: boolean;
+  locationWind: boolean;
+  locationHumidity: boolean;
   locationLocalTime: boolean;
   distance: boolean;
   speed: boolean;
@@ -24,6 +30,9 @@ interface Sections {
   elevation: boolean;
   heartRate: boolean;
   power: boolean;
+  altitude: boolean;
+  runs: boolean;
+  vertical: boolean;
   split: boolean;
   showMax: boolean;
   debug: boolean;
@@ -45,6 +54,11 @@ const defaultSections: Sections = {
   locationCountry: false,
   locationFlag: true,
   locationTemperature: false,
+  locationWeather: true,
+  locationWeatherAtmosphere: false,
+  locationFeelsLike: false,
+  locationWind: false,
+  locationHumidity: false,
   locationLocalTime: false,
   distance: true,
   speed: true,
@@ -52,6 +66,9 @@ const defaultSections: Sections = {
   elevation: true,
   heartRate: true,
   power: true,
+  altitude: true,
+  runs: true,
+  vertical: true,
   split: false,
   showMax: false,
   debug: false,
@@ -74,6 +91,11 @@ const CONFIG_KEYS: Record<keyof Sections, string> = {
   locationCountry: 'cyclingHudLocationCountry',
   locationFlag: 'cyclingHudLocationFlag',
   locationTemperature: 'cyclingHudLocationTemperature',
+  locationWeather: 'cyclingHudLocationWeather',
+  locationWeatherAtmosphere: 'cyclingHudLocationWeatherAtmosphere',
+  locationFeelsLike: 'cyclingHudLocationFeelsLike',
+  locationWind: 'cyclingHudLocationWind',
+  locationHumidity: 'cyclingHudLocationHumidity',
   locationLocalTime: 'cyclingHudLocationLocalTime',
   distance: 'cyclingHudDistance',
   speed: 'cyclingHudSpeed',
@@ -81,6 +103,9 @@ const CONFIG_KEYS: Record<keyof Sections, string> = {
   elevation: 'cyclingHudElevation',
   heartRate: 'cyclingHudHeartRate',
   power: 'cyclingHudPower',
+  altitude: 'cyclingHudAltitude',
+  runs: 'cyclingHudRuns',
+  vertical: 'cyclingHudVertical',
   split: 'cyclingHudSplit',
   showMax: 'cyclingHudShowMax',
   debug: 'cyclingHudDebug',
@@ -411,6 +436,7 @@ function toCyclingData(
   maxGradientPercent: number,
   sessionMaxHeartRateBpm: number,
   sessionMaxPowerWatts: number,
+  runs: RunState,
 ): CyclingData {
   return {
     speedKmh: num(t.data.speed) * 3.6,
@@ -422,6 +448,13 @@ function toCyclingData(
     country: str(t.data.country),
     countryFlag: str(t.data.countryFlag),
     temperatureC: t.data.temperature ?? null,
+    feelsLikeC: t.data.feelsLikeTemperature ?? null,
+    windKmh: t.data.windSpeed == null ? null : t.data.windSpeed * 3.6,
+    windGustKmh: t.data.windGust == null ? null : t.data.windGust * 3.6,
+    windDirectionDeg: t.data.windDirection ?? null,
+    humidity: t.data.humidity ?? null,
+    weatherCondition: t.data.condition ?? null,
+    isDaylight: t.data.isDaylight ?? null,
     localTime: toLocalTime(t.data.date, t.data.timeZone),
     gradientPercent,
     maxGradientPercent,
@@ -429,6 +462,9 @@ function toCyclingData(
     elevationLossM: num(t.data.altitudeDescent),
     splitElevationGainM: num(t.data.splitAltitudeAscent),
     splitElevationLossM: num(t.data.splitAltitudeDescent),
+    altitudeM: num(t.data.altitude),
+    runCount: runs.runCount,
+    onLift: runs.onLift,
     heartRateBpm: firstHeartRate(t.data.heartRates),
     powerWatts: num(t.data.cyclingPower),
     sessionMaxHeartRateBpm,
@@ -513,12 +549,14 @@ export function useCyclingCore(settings: Record<string, unknown> | null = null):
   const maxHeartRateSessionRef = useRef(0);
   const maxPowerSessionRef = useRef(0);
   const gradientSmootherRef = useRef(createGradientSmoother());
+  const runTrackerRef = useRef(createRunTracker());
   useEffect(() => {
     maxSpeedRef.current = 0;
     maxGradientRef.current = 0;
     maxHeartRateSessionRef.current = 0;
     maxPowerSessionRef.current = 0;
     gradientSmootherRef.current.reset();
+    runTrackerRef.current.reset();
   }, [streamStartSignal]);
 
   // telemetry comes from HeheServer over a plain WebSocket, using the same
@@ -616,6 +654,7 @@ export function useCyclingCore(settings: Record<string, unknown> | null = null):
             maxGradientRef.current,
             maxHeartRateSessionRef.current,
             maxPowerSessionRef.current,
+            runTrackerRef.current.push(msg.data.altitude),
           ),
         });
       }
@@ -747,11 +786,19 @@ export function useCyclingCore(settings: Record<string, unknown> | null = null):
       locationCountry: on && sections.locationCountry,
       locationFlag: on && sections.locationFlag,
       locationTemperature: on && sections.locationTemperature,
+      locationWeather: on && sections.locationWeather,
+      locationWeatherAtmosphere: on && sections.locationWeatherAtmosphere,
+      locationFeelsLike: on && sections.locationFeelsLike,
+      locationWind: on && sections.locationWind,
+      locationHumidity: on && sections.locationHumidity,
       locationLocalTime: on && sections.locationLocalTime,
       gradient: on && sections.gradient,
       elevation: on && sections.elevation,
       heartRate: on && sections.heartRate,
       power: on && sections.power,
+      altitude: on && sections.altitude,
+      runs: on && sections.runs,
+      vertical: on && sections.vertical,
       split: on && sections.split,
       showMax: on && sections.showMax,
       showGpxMap: on && sections.showGpxMap,

@@ -1,0 +1,42 @@
+/* riso theme: a risograph print - medium blue ink with fluorescent pink, yellow and teal, slightly off register like
+   a print run (the alpine layout offsets its headline and speed, the headline on a pink bar), Anton headlines and Space Mono captions. Made
+   for the light sky and snow of a slope; boxes of the other layouts are paper white. */
+[data-theme='riso'] {
+  --hud-font-family: 'Anton', 'Rajdhani', sans-serif;
+  --hud-label-font-family: 'Space Mono', monospace;
+  --hud-text-font-family: 'Space Mono', monospace;
+  --hud-numeral-weight: 400;
+  --hud-font-weight-regular: 400;
+  --hud-font-weight-semibold: 400;
+  --hud-font-weight-bold: 400;
+  --hud-font-weight-black: 400;
+  --hud-text: #1d2a8c;
+  --hud-muted: #3a4596;
+  --hud-text-shadow: none;
+  --hud-soft-shadow: none;
+
+  --hud-accent: #ff48b0;
+  --hud-accent2: #ffe800;
+  --hud-accent3: #00a5a8;
+  --hud-paper: #fffdf5;
+  --hud-on-accent: #1d2a8c;
+  --hud-type-bar-accent: var(--hud-accent);
+  --hud-misregister: 1;
+
+  --hud-metric-speed: #ff48b0;
+  --hud-metric-hr: #ff48b0;
+  --hud-metric-power: #00a5a8;
+  --hud-metric-grade: #00a5a8;
+  --hud-metric-elev: #ff48b0;
+  --hud-metric-distance: #1d2a8c;
+  --hud-metric-pause: #ff48b0;
+
+  --hud-bg: rgba(255, 253, 245, 0.85);
+  --hud-chip-bg: rgba(255, 253, 245, 0.85);
+  --hud-gauge-bg: rgba(255, 253, 245, 0.85);
+  --hud-glass-bg: rgba(255, 253, 245, 0.85);
+  --hud-border: #1d2a8c;
+  --hud-glass-border: rgba(29, 42, 140, 0.25);
+  --hud-radius-chip: 0;
+  --hud-glass-radius: 0;
+}

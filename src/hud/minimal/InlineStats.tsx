@@ -2,9 +2,10 @@ import type { CSSProperties, ReactNode } from 'react';
 import { fmt } from '../format';
 import { METRIC_COLORS } from './metrics';
 import type { HudContext } from '../context';
+import { weatherParts } from '../weather';
 import styles from './InlineStats.module.css';
 
-// location as a single line of plain text ("🇩🇪 Zugspitze · 18° · 14:32") - honors the same
+// location as a single line of plain text ("🇩🇪 Zugspitze · ☀ 18° · 14:32") - honors the same
 // visible.location* flags LocationChip does, just without the chip
 export function LocationLine({ ctx }: { ctx: HudContext }) {
   const { data, config } = ctx;
@@ -16,7 +17,7 @@ export function LocationLine({ ctx }: { ctx: HudContext }) {
     .join(', ');
   const parts: ReactNode[] = [];
   if (place) parts.push(place);
-  if (visible.locationTemperature && data.temperatureC != null) parts.push(`${Math.round(data.temperatureC)}°`);
+  parts.push(...weatherParts(data, visible, config.texts, '°'));
   if (visible.locationLocalTime && data.localTime) parts.push(data.localTime);
   const flag = visible.locationFlag && data.countryFlag;
   if (parts.length === 0 && !flag) return null;

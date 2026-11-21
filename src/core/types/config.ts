@@ -7,11 +7,22 @@ export interface CyclingHudVisibility {
   locationCountry: boolean;
   locationFlag: boolean;
   locationTemperature: boolean;
+  // the animated weather icon (WeatherIcon), only when Moblin sends the condition
+  locationWeather: boolean;
+  // the float layout lets the weather happen around the location and the stats (WeatherAtmosphere)
+  locationWeatherAtmosphere: boolean;
+  locationFeelsLike: boolean;
+  locationWind: boolean;
+  locationHumidity: boolean;
   locationLocalTime: boolean;
   gradient: boolean;
   elevation: boolean;
   heartRate: boolean;
   power: boolean;
+  // the snowboard layout's (alpine): the altitude, the runs, the vertical meters ridden down
+  altitude: boolean;
+  runs: boolean;
+  vertical: boolean;
   // when on, distance/elevation also show today's split values alongside the overall ones
   split: boolean;
   // when on, the speed/gradient gauges also show the ride's max as a secondary value
@@ -79,6 +90,13 @@ export interface HudTexts {
   climbed: string;
   toGo: string;
   toClimb: string;
+  feelsLike: string;
+  altitude: string;
+  vertical: string;
+  runs: string;
+  slope: string;
+  max: string;
+  onLift: string;
   unitKm: string;
   unitM: string;
   unitKmh: string;
@@ -88,6 +106,7 @@ export interface HudTexts {
   unitSec: string;
   unitMin: string;
   unitMinShort: string;
+  unitDeg: string;
 }
 
 export const defaultTexts: HudTexts = {
@@ -102,6 +121,13 @@ export const defaultTexts: HudTexts = {
   climbed: 'Climbed',
   toGo: 'to go',
   toClimb: 'to climb',
+  feelsLike: 'feels',
+  altitude: 'Altitude',
+  vertical: 'Vertical',
+  runs: 'Run',
+  slope: 'Slope',
+  max: 'Max',
+  onLift: 'Lift',
   unitKm: 'km',
   unitM: 'm',
   unitKmh: 'km/h',
@@ -111,6 +137,7 @@ export const defaultTexts: HudTexts = {
   unitSec: 'sec',
   unitMin: 'min',
   unitMinShort: 'm',
+  unitDeg: '°',
 };
 
 // The overlay theme of a HUD block (HeheChat src/components/overlay/theme.ts): a CSS color per role, a font family
@@ -158,11 +185,19 @@ export const defaultConfig: CyclingHudConfig = {
     locationCountry: false,
     locationFlag: true,
     locationTemperature: false,
+    locationWeather: true,
+    locationWeatherAtmosphere: false,
+    locationFeelsLike: false,
+    locationWind: false,
+    locationHumidity: false,
     locationLocalTime: false,
     gradient: true,
     elevation: true,
     heartRate: true,
     power: true,
+    altitude: true,
+    runs: true,
+    vertical: true,
     split: false,
     showMax: false,
     showGpxMap: false,

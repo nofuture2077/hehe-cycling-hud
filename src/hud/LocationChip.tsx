@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { IconPin } from './icons/Icons';
 import styles from './Chips.module.css';
 
@@ -6,37 +7,33 @@ export function LocationChip({
   region,
   country,
   countryFlag,
-  temperatureC,
   localTime,
+  weather = [],
   showCity = true,
   showRegion = false,
   showCountry = false,
   showFlag = true,
-  showTemperature = false,
   showLocalTime = false,
 }: {
   city: string;
   region: string;
   country: string;
   countryFlag: string;
-  temperatureC: number | null;
   localTime: string;
+  // the weather parts (weather.tsx), each after its own dash
   showCity?: boolean;
   showRegion?: boolean;
   showCountry?: boolean;
   showFlag?: boolean;
-  showTemperature?: boolean;
   showLocalTime?: boolean;
+  weather?: ReactNode[];
 }) {
   const place = [showCity && city, showRegion && region, showCountry && country]
     .filter(Boolean)
     .join(', ');
   const flag = showFlag && countryFlag ? countryFlag : undefined;
-  // Local time and temperature each after a dash, unless nothing comes before; '—' only while nothing else shows
-  const extras = [
-    showLocalTime && localTime,
-    showTemperature && temperatureC !== null && `${Math.round(temperatureC)}°C`,
-  ].filter(Boolean);
+  // Local time and the weather parts each after a dash, unless nothing comes before; '—' only while nothing else shows
+  const extras = [showLocalTime && localTime, ...weather].filter(Boolean);
   const text = place || (extras.length === 0 && !flag ? '—' : '');
 
   return (

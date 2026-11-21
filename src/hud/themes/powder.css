@@ -1,0 +1,40 @@
+/* powder theme: a snowboard magazine printed on the stream - navy ink on the light blue sky and the white snow of a
+   slope, a condensed headline face (Anton) with typewriter captions (Space Mono), fluoro orange, magenta and blue
+   spot colors and no shadows; the alpine layout sets the ink on paper-white bars, readable on a dark sky too.
+   Boxes of the other layouts are paper white. */
+[data-theme='powder'] {
+  --hud-font-family: 'Anton', 'Rajdhani', sans-serif;
+  --hud-label-font-family: 'Space Mono', monospace;
+  --hud-text-font-family: 'Space Mono', monospace;
+  --hud-numeral-weight: 400;
+  --hud-font-weight-regular: 400;
+  --hud-font-weight-semibold: 400;
+  --hud-font-weight-bold: 400;
+  --hud-font-weight-black: 400;
+  --hud-text: #0b1d33;
+  --hud-muted: #3d5069;
+  --hud-text-shadow: none;
+  --hud-soft-shadow: none;
+
+  --hud-accent: #e8501a;
+  --hud-accent2: #d6006f;
+  --hud-accent3: #0070c0;
+  --hud-paper: #ffffff;
+
+  --hud-metric-speed: #e8501a;
+  --hud-metric-hr: #d6006f;
+  --hud-metric-power: #0070c0;
+  --hud-metric-grade: #0070c0;
+  --hud-metric-elev: #e8501a;
+  --hud-metric-distance: #0b1d33;
+  --hud-metric-pause: #d6006f;
+
+  --hud-bg: rgba(255, 255, 255, 0.85);
+  --hud-chip-bg: rgba(255, 255, 255, 0.85);
+  --hud-gauge-bg: rgba(255, 255, 255, 0.85);
+  --hud-glass-bg: rgba(255, 255, 255, 0.85);
+  --hud-border: #0b1d33;
+  --hud-glass-border: rgba(11, 29, 51, 0.25);
+  --hud-radius-chip: 0;
+  --hud-glass-radius: 0;
+}

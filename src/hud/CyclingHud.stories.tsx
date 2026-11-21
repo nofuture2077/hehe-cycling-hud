@@ -21,6 +21,13 @@ const sampleData: CyclingData = {
   country: 'Germany',
   countryFlag: '🇩🇪',
   temperatureC: 18,
+  feelsLikeC: 16,
+  windKmh: 14,
+  windGustKmh: 25,
+  windDirectionDeg: 240,
+  humidity: 0.62,
+  weatherCondition: 'partlyCloudy',
+  isDaylight: true,
   localTime: '14:32',
   gradientPercent: 6.5,
   maxGradientPercent: 9.2,
@@ -28,6 +35,9 @@ const sampleData: CyclingData = {
   elevationLossM: 210,
   splitElevationGainM: 140,
   splitElevationLossM: 60,
+  altitudeM: 1240,
+  runCount: 0,
+  onLift: false,
   heartRateBpm: 145,
   powerWatts: 255,
   sessionMaxHeartRateBpm: 168,
@@ -75,11 +85,19 @@ export const Default: Story = {
         "locationCountry": true,
         "locationFlag": true,
         "locationTemperature": true,
+        "locationWeather": true,
+        "locationWeatherAtmosphere": false,
+        "locationFeelsLike": false,
+        "locationWind": false,
+        "locationHumidity": false,
         "locationLocalTime": false,
         "gradient": true,
         "elevation": false,
         "heartRate": true,
         "power": false,
+        "altitude": false,
+        "runs": false,
+        "vertical": false,
         "split": true,
         "showMax": false,
         "showGpxMap": true,
@@ -183,6 +201,63 @@ export const VividRingsPause: Story = {
 
 export const VividRibbon: Story = {
   args: { config: vividConfig('ribbon'), data: vividData },
+};
+
+// a snowboarder in Zermatt, on what a snowboard stream mostly shows: deep blue sky above, white snow below
+const alpineData: CyclingData = {
+  ...sampleData,
+  speedKmh: 43,
+  maxSpeedKmh: 78,
+  distanceKm: 3.9,
+  city: 'Zermatt',
+  country: 'Switzerland',
+  countryFlag: '🇨🇭',
+  temperatureC: -8,
+  feelsLikeC: -14,
+  windKmh: 22,
+  windGustKmh: 35,
+  windDirectionDeg: 300,
+  weatherCondition: 'snow',
+  isDaylight: true,
+  gradientPercent: -32,
+  elevationLossM: 1240,
+  altitudeM: 2937,
+  runCount: 7,
+  heartRateBpm: 126,
+};
+const alpineConfig = (theme: string): CyclingHudConfig => ({
+  ...defaultConfig,
+  theme,
+  layout: 'alpine',
+  visible: {
+    ...defaultConfig.visible,
+    locationTemperature: true,
+    locationFeelsLike: true,
+    locationWind: true,
+    showMax: true,
+    showLogo: false,
+  },
+});
+const slopeBackdrop = (Story: React.ComponentType) => (
+  <>
+    <div style={{ position: 'absolute', width: 1920, height: 1080, background: 'linear-gradient(#123a8c, #2f6fc4 30%, #9cc6ea 48%, #eef4f8 52%, #fff)' }} />
+    <Story />
+  </>
+);
+
+export const AlpinePowder: Story = {
+  args: { config: alpineConfig('powder'), data: alpineData, gpxTrack: null },
+  decorators: [slopeBackdrop],
+};
+
+export const AlpineRisoOnLift: Story = {
+  args: { config: alpineConfig('riso'), data: { ...alpineData, speedKmh: 18, gradientPercent: 45, onLift: true }, gpxTrack: null },
+  decorators: [slopeBackdrop],
+};
+
+export const AlpineLiftTicket: Story = {
+  args: { config: alpineConfig('liftticket'), data: alpineData, gpxTrack: null },
+  decorators: [slopeBackdrop],
 };
 
 export const SplitMode: Story = {

@@ -6,6 +6,7 @@ import NetrunnerLayout, { widgets as netrunnerWidgets } from './netrunner';
 import FloatLayout, { widgets as floatWidgets } from './float';
 import RingsLayout, { widgets as ringsWidgets } from './rings';
 import RibbonLayout, { widgets as ribbonWidgets } from './ribbon';
+import AlpineLayout, { widgets as alpineWidgets } from './alpine';
 
 export type Layout = ComponentType<{ ctx: HudContext }>;
 
@@ -40,6 +41,7 @@ const layouts: Record<string, LayoutEntry> = {
   float: { Layout: FloatLayout, widgets: floatWidgets },
   rings: { Layout: RingsLayout, widgets: ringsWidgets },
   ribbon: { Layout: RibbonLayout, widgets: ribbonWidgets },
+  alpine: { Layout: AlpineLayout, widgets: alpineWidgets },
 };
 
 export function registerLayout(id: string, layout: LayoutEntry) {

@@ -8,6 +8,16 @@ export interface CyclingData {
   country: string;
   countryFlag: string;
   temperatureC: number | null;
+  feelsLikeC: number | null;
+  windKmh: number | null;
+  windGustKmh: number | null;
+  // where the wind comes from, degrees
+  windDirectionDeg: number | null;
+  // relative humidity 0-1
+  humidity: number | null;
+  // WeatherKit's WeatherCondition raw value (clear, partlyCloudy, rain, ...), null when Moblin doesn't send it
+  weatherCondition: string | null;
+  isDaylight: boolean | null;
   localTime: string;
   gradientPercent: number;
   maxGradientPercent: number;
@@ -15,6 +25,10 @@ export interface CyclingData {
   elevationLossM: number;
   splitElevationGainM: number;
   splitElevationLossM: number;
+  // the current altitude (m above sea level), and the runs and lift rides it shows (core/runs.ts)
+  altitudeM: number;
+  runCount: number;
+  onLift: boolean;
   heartRateBpm: number;
   powerWatts: number;
   sessionMaxHeartRateBpm: number;
