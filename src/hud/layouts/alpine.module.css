@@ -35,6 +35,11 @@
   align-items: var(--hud-align, flex-start);
 }
 
+/* the speed and the captions under it as two cut-outs, apart like the altimeter beside them */
+.gauges .body {
+  gap: 8px;
+}
+
 /* a number's place (alpine.tsx, Num): the number over invisible copies of its longest value in every digit, in one
    cell as wide as the widest of them, the number against its label */
 .num {
