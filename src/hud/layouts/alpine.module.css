@@ -2,7 +2,8 @@
    without gaps, so it reads on a dark blue sky and on white snow alike: the theme's text on bars of the paper color
    (--hud-paper; the overlay's panel color), the headline on --hud-type-bar-accent where a theme sets one (lift
    ticket, riso: the accent), the accents as spot colors. The riso theme prints the headline and the speed a little
-   off register (--hud-misregister). */
+   off register (--hud-misregister). The bars take the corners of HeheChat's overlay theme (--look-radius, hud/look.ts;
+   square without it), no rounder than --corner allows, so a pill theme still gives labels, not capsules. */
 
 .info,
 .gauges {
@@ -12,6 +13,7 @@
   --spot2: var(--hud-accent2, #d6006f);
   --on-spot: var(--hud-on-accent, var(--paper));
   --off: calc(var(--hud-misregister, 0) * 4px);
+  --corner: min(var(--look-radius, 0px), 24px);
 
   display: flex;
   flex-direction: var(--hud-row, row);
@@ -77,6 +79,7 @@
   /* above and below: as much room as the font leaves around its capitals evens out (alpine.tsx, useCapOffset) */
   position: relative;
   padding: 0 18px;
+  border-radius: var(--corner);
   background: var(--hud-type-bar-accent, var(--paper));
   font-size: 88px;
   font-weight: var(--hud-font-weight-bold, 700);
@@ -100,6 +103,7 @@
   align-items: center;
   padding: 6px 12px 8px;
   background: var(--paper);
+  border-radius: var(--corner);
   border: 2px solid var(--spot);
   color: var(--spot);
   font-size: 40px;
@@ -122,6 +126,7 @@
   gap: 6px;
   margin-top: 10px;
   padding: 6px 12px;
+  border-radius: var(--corner);
   background: var(--spot);
   color: var(--on-spot);
   font-family: var(--hud-label-font-family);
@@ -154,6 +159,7 @@
   display: flex;
   align-items: center;
   padding: 8px 14px;
+  border-radius: var(--corner);
   background: var(--paper);
   font-family: var(--hud-label-font-family);
   font-size: 17px;
@@ -180,6 +186,9 @@
   height: 216px;
   box-sizing: border-box;
   background: var(--paper);
+  /* the label at its foot keeps to the corners */
+  border-radius: var(--corner);
+  overflow: hidden;
 }
 
 .tape {
@@ -298,6 +307,7 @@
   flex-direction: var(--hud-row, row);
   align-items: flex-start;
   gap: 14px;
+  border-radius: var(--corner);
   padding: 14px 18px;
   background: var(--paper);
 }
@@ -323,6 +333,7 @@
 .sticker {
   align-self: center;
   padding: 6px 12px;
+  border-radius: var(--corner);
   background: var(--spot);
   color: var(--on-spot);
   font-family: var(--hud-label-font-family);
@@ -356,6 +367,7 @@
 .facts {
   display: flex;
   align-items: baseline;
+  border-radius: var(--corner);
   padding: 8px 16px;
   background: var(--paper);
   font-family: var(--hud-label-font-family);
